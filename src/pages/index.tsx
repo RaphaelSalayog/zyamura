@@ -1,10 +1,17 @@
 import Head from "next/head";
-import { Inter } from "next/font/google";
-import { Button } from "antd";
-
-const inter = Inter({ subsets: ["latin"] });
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Home() {
+  const router = useRouter();
+  useEffect(() => {
+    const auth = localStorage.getItem("token");
+    if (auth === undefined || auth === null) {
+      router.push("/login");
+    } else {
+      router.push("/dashboard");
+    }
+  }, []);
   return (
     <>
       <Head>
@@ -13,11 +20,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div className="App">
-          <Button type="primary">Button</Button>
-        </div>
-      </main>
     </>
   );
 }
