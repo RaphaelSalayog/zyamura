@@ -3,3 +3,17 @@
   padding: 0;
   margin: 0;
 }
+
+.ant-layout-header {
+  background-color: #003a8c;
+  color: #fff;
+}
+
+.ant-layout-header .ant-typography {
+  color: #fff;
+}
+
+.dashboard-statistic {
+  color: #0095f0;
+  font-size: 2rem;
+}
