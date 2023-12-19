@@ -14,6 +14,13 @@ export default function App({ Component, pageProps }: AppProps) {
       router.push("/dashboard");
     }
   }, []);
+
+  const isNotMenu = router.pathname === "/login";
+
+  if (isNotMenu) {
+    return <Component {...pageProps} />;
+  }
+
   return (
     <MainLayout>
       <Component {...pageProps} />
