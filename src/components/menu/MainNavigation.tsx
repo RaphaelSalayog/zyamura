@@ -16,7 +16,7 @@ const items = [
   {
     key: "/inventory",
     icon: <VideoCameraOutlined />,
-    label: "Iventory",
+    label: "Inventory",
   },
   {
     key: "/point-of-sales",

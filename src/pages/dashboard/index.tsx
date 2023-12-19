@@ -1,11 +1,5 @@
-import MainLayout from "@/components/layout/MainLayout";
-
 const Dashboard = () => {
-  return (
-    <MainLayout>
-      <>QWEQWE</>
-    </MainLayout>
-  );
+  return <>QWEQWE</>;
 };
 
 export default Dashboard;
