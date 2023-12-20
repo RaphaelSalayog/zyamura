@@ -1,9 +1,9 @@
 import ItemCard from "@/components/card/ItemCard";
-import { Button, Dropdown, Typography } from "antd";
+import { Typography } from "antd";
 import style from "@/styles/inventory.module.css";
 import AddButton from "@/components/filter/inventory/AddButton";
 import SearchBar from "@/components/filter/inventory/SearchBar";
-import SortDropdown from "@/components/filter/inventory/SortDropdown";
+import DropdownMenu from "@/components/util/DropdownMenu";
 
 const { Title } = Typography;
 
@@ -114,9 +114,44 @@ const itemsQ = [
   },
 ];
 
+const inventorySortItems = [
+  {
+    label: "Latest",
+    key: "1",
+  },
+  {
+    label: "Oldest",
+    key: "2",
+  },
+  {
+    label: "Name (A-Z)",
+    key: "3",
+  },
+  {
+    label: "Name (Z-A)",
+    key: "4",
+  },
+  {
+    label: "Highest Price",
+    key: "5",
+  },
+  {
+    label: "Lowest Price",
+    key: "6",
+  },
+  {
+    label: "Highest Quantity",
+    key: "7",
+  },
+  {
+    label: "Lowest Quantity",
+    key: "8",
+  },
+];
+
 const Inventory = () => {
   return (
-    <div style={{ padding: "2rem" }}>
+    <div style={{ padding: "2rem 2rem 0" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Title level={2}>INVENTORY</Title>
         <div
@@ -127,7 +162,11 @@ const Inventory = () => {
         >
           <SearchBar />
           <AddButton />
-          <SortDropdown />
+          <DropdownMenu
+            items={inventorySortItems}
+            trigger="hover"
+            style={{ height: "40px", marginLeft: "10px", width: "158.52px" }}
+          />
         </div>
       </div>
       <div className={style.itemCardParent}>

@@ -24,7 +24,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               </Col>
             </Row>
           </Header>
-          <Content>{children}</Content>
+          <Content className="main-content">{children}</Content>
         </Layout>
       </Layout>
     </>

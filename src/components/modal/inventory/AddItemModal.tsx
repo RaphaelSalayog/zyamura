@@ -1,41 +1,46 @@
-import { Modal } from "antd";
+import { Input, Modal } from "antd";
+import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 
 interface AddItemModal {
-  open: boolean;
-  setOpen: (boolean: boolean) => void;
+  openItemModal: boolean;
+  setOpenItemModal: (boolean: boolean) => void;
 }
 
-const AddItemModal: React.FC<AddItemModal> = ({ open, setOpen }) => {
+const AddItemModal: React.FC<AddItemModal> = ({
+  openItemModal,
+  setOpenItemModal,
+}) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   useEffect(() => {
-    if (open) {
-      setOpen(true);
+    if (openItemModal) {
+      setOpenItemModal(true);
     }
-  }, [open]);
+  }, [openItemModal]);
 
   const handleOk = () => {
     setConfirmLoading(true);
     setTimeout(() => {
-      setOpen(false);
+      setOpenItemModal(false);
       setConfirmLoading(false);
     }, 2000);
   };
   const handleCancel = () => {
     console.log("Clicked cancel button");
-    setOpen(false);
+    setOpenItemModal(false);
   };
   return (
     <>
       <Modal
-        title="Title"
-        open={open}
+        title="Add New Pet"
+        open={openItemModal}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        width={800}
       >
-        <div>qweqwe</div>
+        ITEM
       </Modal>
     </>
   );

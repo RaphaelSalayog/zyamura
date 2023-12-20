@@ -2,6 +2,7 @@ import Document, { Html, Head, Main, NextScript } from "next/document";
 import { createCache, extractStyle, StyleProvider } from "@ant-design/cssinjs";
 
 export default class MyDocument extends Document {
+  //To Fix SSR Issue
   static async getInitialProps(ctx: any) {
     const cache = createCache();
     const originalRenderPage = ctx.renderPage;

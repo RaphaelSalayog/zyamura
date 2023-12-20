@@ -1,16 +1,18 @@
-import AddItemModal from "@/components/modal/AddItemModal";
+import AddItemModal from "@/components/modal/inventory/AddItemModal";
+import AddPetModal from "@/components/modal/inventory/AddPetModal";
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Dropdown, Modal } from "antd";
+import { Button, Dropdown } from "antd";
 import { useState } from "react";
 
 const AddButton = () => {
-  const [open, setOpen] = useState(false);
+  const [openPetModal, setOpenPetModal] = useState(false);
+  const [openItemModal, setOpenItemModal] = useState(false);
   const items = [
     {
       key: "1",
       label: "Add New Pet",
       onClick: () => {
-        setOpen(true);
+        setOpenPetModal(true);
         console.log("Add New Pet");
       },
     },
@@ -18,7 +20,7 @@ const AddButton = () => {
       key: "2",
       label: "Add New Item",
       onClick: () => {
-        setOpen(true);
+        setOpenItemModal(true);
       },
     },
   ];
@@ -30,7 +32,14 @@ const AddButton = () => {
           <PlusOutlined /> Add Listing
         </Button>
       </Dropdown>
-      <AddItemModal open={open} setOpen={setOpen} />
+      <AddPetModal
+        openPetModal={openPetModal}
+        setOpenPetModal={setOpenPetModal}
+      />
+      <AddItemModal
+        openItemModal={openItemModal}
+        setOpenItemModal={setOpenItemModal}
+      />
     </>
   );
 };
