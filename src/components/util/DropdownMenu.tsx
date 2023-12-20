@@ -8,27 +8,19 @@ interface DropdownMenu {
     key: string;
   }[];
   trigger: "hover" | "click";
-  style?: any;
+  style?: React.CSSProperties;
 }
 
 const DropdownMenu: React.FC<DropdownMenu> = ({ items, style, trigger }) => {
   const [sortName, setSortName] = useState(items[0].label);
   const handleMenuClick = ({ key }: any) => {
     const selectedItem = items.find((item) => item.key === key);
-    setSortName((prev) => (selectedItem ? selectedItem.label : prev));
+    setSortName((prevState) => (selectedItem ? selectedItem.label : prevState));
   };
-
-  const menu = (
-    <Menu onClick={handleMenuClick}>
-      {items.map((item) => (
-        <Menu.Item key={item.key}>{item.label}</Menu.Item>
-      ))}
-    </Menu>
-  );
 
   return (
     <>
-      <Dropdown overlay={menu} trigger={[trigger]}>
+      <Dropdown menu={{ items, onClick: handleMenuClick }} trigger={[trigger]}>
         <Button style={style}>
           <Space
             align="center"

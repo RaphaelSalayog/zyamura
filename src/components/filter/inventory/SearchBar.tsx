@@ -50,17 +50,16 @@ const SearchBar: React.FC = () => {
   return (
     <AutoComplete
       popupMatchSelectWidth={252}
-      style={{ width: 500 }}
       options={options}
       onSelect={onSelect}
       onSearch={handleSearch}
-      size="large"
     >
       <Input.Search
         size="large"
         placeholder="input here"
         enterButton
         className="remove-border-radius"
+        style={{ width: 500 }}
       />
     </AutoComplete>
   );
