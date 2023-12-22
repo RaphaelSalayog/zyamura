@@ -8,11 +8,19 @@ interface DropdownMenu {
     key: string;
   }[];
   trigger: "hover" | "click";
+  type: "category" | "sort";
   style?: React.CSSProperties;
 }
 
-const DropdownMenu: React.FC<DropdownMenu> = ({ items, style, trigger }) => {
-  const [sortName, setSortName] = useState(items[0].label);
+const DropdownMenu: React.FC<DropdownMenu> = ({
+  type,
+  items,
+  trigger,
+  style,
+}) => {
+  const [sortName, setSortName] = useState(
+    type === "sort" ? items[0].label : ""
+  );
   const handleMenuClick = ({ key }: any) => {
     const selectedItem = items.find((item) => item.key === key);
     setSortName((prevState) => (selectedItem ? selectedItem.label : prevState));
@@ -26,7 +34,7 @@ const DropdownMenu: React.FC<DropdownMenu> = ({ items, style, trigger }) => {
             align="center"
             style={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: sortName ? "space-between" : "flex-end",
             }}
           >
             {sortName}

@@ -163,6 +163,7 @@ const Inventory = () => {
           <SearchBar />
           <AddButton />
           <DropdownMenu
+            type="sort"
             items={inventorySortItems}
             trigger="hover"
             style={{ height: "40px", marginLeft: "10px", width: "158.52px" }}
