@@ -1,5 +1,5 @@
 import { Form, Input, InputNumber, Modal, Radio } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DropdownMenu from "@/components/util/DropdownMenu";
 import TextArea from "antd/es/input/TextArea";
 import ImageUploader from "@/components/util/ImageUploader";
@@ -47,7 +47,7 @@ const AddPetModal: React.FC<AddPetModal> = ({
   setOpenPetModal,
 }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [petType, setPetType] = useState("");
+  const [petType, setPetType] = useState("Unique");
   const [petSupplier, setPetSupplier] = useState("");
   const [petCategory, setPetCategory] = useState("");
   const [petGender, setPetGender] = useState("");
@@ -76,31 +76,39 @@ const AddPetModal: React.FC<AddPetModal> = ({
   };
 
   //<--MODAL-->
-  useEffect(() => {
-    if (openPetModal) {
-      setOpenPetModal(true);
-    }
-  }, [openPetModal]);
+  const resetState = () => {
+    setPetType("");
+    setPetSupplier("");
+    setPetCategory("");
+    setPetGender("");
+    setPetImage([]);
+  };
 
   const handleOk = (value: any) => {
     const data = {
       ...value,
+      petQuantity: value.petType === "Unique" ? 1 : value?.petQuantity,
       petCategory: petCategory,
       petGender: petGender,
       petSupplier: petSupplier,
-      petPicture: petImage,
+      petImage: petImage,
     };
     console.log("data >> ", data);
+    console.log("value >> ", value);
 
     setConfirmLoading(true);
     setTimeout(() => {
+      resetState();
       form.resetFields();
       setOpenPetModal(false);
       setConfirmLoading(false);
     }, 1000);
   };
+
   const handleCancel = () => {
     // console.log("Clicked cancel button");
+    resetState();
+    form.resetFields();
     setOpenPetModal(false);
   };
   return (
@@ -195,12 +203,30 @@ const AddPetModal: React.FC<AddPetModal> = ({
             </Form.Item>
           </div>
           <Form.Item name="petType" label="Type">
-            <Radio.Group onChange={onChange} value={petType}>
+            <Radio.Group
+              onChange={onChange}
+              value={petType}
+              defaultValue={petType}
+            >
               <Radio value={"Unique"}>Unique</Radio>
               <Radio value={"Group"}>Group</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item name="petPicture" label="Picture">
+          {petType === "Group" && (
+            <Form.Item
+              name="petQuantity"
+              label="Quantity"
+              style={{ width: "23%" }}
+            >
+              <InputNumber
+                min={0}
+                precision={0}
+                placeholder="0"
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          )}
+          <Form.Item name="petImage" label="Image">
             <ImageUploader getValue={petImageHandler} />
           </Form.Item>
         </Form>
