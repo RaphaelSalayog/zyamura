@@ -27,7 +27,7 @@ const AddItemModal: React.FC<AddItemModal> = ({
     }, 2000);
   };
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    // console.log("Clicked cancel button");
     setOpenItemModal(false);
   };
   return (

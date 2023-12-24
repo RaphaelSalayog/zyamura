@@ -30,7 +30,7 @@ const LoginForms = () => {
       localStorage.setItem("token", "qwe");
       router.push("/dashboard");
     } else {
-      console.log("error");
+      // console.log("error");
     }
   };
 

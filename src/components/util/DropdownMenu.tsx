@@ -10,6 +10,7 @@ interface DropdownMenu {
   trigger: "hover" | "click";
   type: "category" | "sort";
   style?: React.CSSProperties;
+  getValue: (value: any) => void;
 }
 
 const DropdownMenu: React.FC<DropdownMenu> = ({
@@ -17,6 +18,7 @@ const DropdownMenu: React.FC<DropdownMenu> = ({
   items,
   trigger,
   style,
+  getValue,
 }) => {
   const [sortName, setSortName] = useState(
     type === "sort" ? items[0].label : ""
@@ -24,6 +26,7 @@ const DropdownMenu: React.FC<DropdownMenu> = ({
   const handleMenuClick = ({ key }: any) => {
     const selectedItem = items.find((item) => item.key === key);
     setSortName((prevState) => (selectedItem ? selectedItem.label : prevState));
+    getValue(selectedItem?.key);
   };
 
   return (

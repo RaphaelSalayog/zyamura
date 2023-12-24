@@ -1,44 +1,43 @@
-import { Input, InputNumber, Modal, Radio } from "antd";
-import TextArea from "antd/es/input/TextArea";
+import { Form, Input, InputNumber, Modal, Radio } from "antd";
 import { useEffect, useState } from "react";
 import DropdownMenu from "@/components/util/DropdownMenu";
+import TextArea from "antd/es/input/TextArea";
 import ImageUploader from "@/components/util/ImageUploader";
-import style from "@/styles/addPet.module.css";
 
 interface AddPetModal {
   openPetModal: boolean;
   setOpenPetModal: (boolean: boolean) => void;
 }
 
-const petSupplier = [
+const petSupplierOption = [
   {
-    key: "1",
+    key: "JXC Corporation",
     label: "JXC Corporation",
   },
   {
-    key: "2",
+    key: "QC Corporation",
     label: "QC Corporation",
   },
 ];
 
-const petCategory = [
+const petCategoryOption = [
   {
-    key: "1",
+    key: "Dog",
     label: "Dog",
   },
   {
-    key: "2",
+    key: "Cat",
     label: "Cat",
   },
 ];
 
-const petGender = [
+const petGenderOption = [
   {
-    key: "1",
+    key: "Male",
     label: "Male",
   },
   {
-    key: "2",
+    key: "Female",
     label: "Female",
   },
 ];
@@ -48,114 +47,163 @@ const AddPetModal: React.FC<AddPetModal> = ({
   setOpenPetModal,
 }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [petType, setPetType] = useState("");
+  const [petSupplier, setPetSupplier] = useState("");
+  const [petCategory, setPetCategory] = useState("");
+  const [petGender, setPetGender] = useState("");
+  const [petImage, setPetImage] = useState([]);
+  const [form] = Form.useForm();
 
+  // <--FORMS-->
+  // >>To get value from child custom component to parent
+  const petSupplierHandler = (value: any) => {
+    setPetSupplier(value);
+  };
+  const petCategoryHandler = (value: any) => {
+    setPetCategory(value);
+  };
+  const petGenderHandler = (value: any) => {
+    setPetGender(value);
+  };
+  const petImageHandler = (value: any) => {
+    setPetImage(value);
+  };
+
+  // >>Radio Button
+  const onChange = (e: any) => {
+    // console.log("radio checked", e.target.value);
+    setPetType(e.target.value);
+  };
+
+  //<--MODAL-->
   useEffect(() => {
     if (openPetModal) {
       setOpenPetModal(true);
     }
   }, [openPetModal]);
 
-  const handleOk = () => {
+  const handleOk = (value: any) => {
+    const data = {
+      ...value,
+      petCategory: petCategory,
+      petGender: petGender,
+      petSupplier: petSupplier,
+      petPicture: petImage,
+    };
+    console.log("data >> ", data);
+
     setConfirmLoading(true);
     setTimeout(() => {
+      form.resetFields();
       setOpenPetModal(false);
       setConfirmLoading(false);
-    }, 2000);
+    }, 1000);
   };
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    // console.log("Clicked cancel button");
     setOpenPetModal(false);
-  };
-
-  //Radio Button
-  const [value, setValue] = useState(1);
-
-  const onChange = (e: any) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
   };
   return (
     <>
       <Modal
         title="Add New Pet"
         open={openPetModal}
-        onOk={handleOk}
+        onOk={form.submit}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         width={800}
         okText="Add New Pet"
       >
-        {/* ADD FORM HERE */}
-        <div className={style.modalContent}>
-          <div>
-            <p>Pet Name</p>
+        <Form
+          form={form}
+          onFinish={handleOk}
+          id="addPetForm"
+          // labelCol={{ span: 4 }}
+          // wrapperCol={{ span: 14 }}
+          layout="vertical"
+        >
+          <Form.Item
+            name="petName"
+            label="Pet Name"
+            rules={[
+              {
+                required: true,
+                message: "Please enter the pet name.",
+              },
+            ]}
+          >
             <Input allowClear />
-          </div>
-          <div>
-            <p>Supplier</p>
+          </Form.Item>
+          <Form.Item name="petSupplier" label="Supplier">
             <DropdownMenu
               type="category"
-              items={petSupplier}
+              items={petSupplierOption}
               trigger="click"
               style={{ width: "100%" }}
+              getValue={petSupplierHandler}
             />
-          </div>
-          <div>
-            <p>Pet Description</p>
+          </Form.Item>
+          <Form.Item name="petDescription" label="Pet Description">
             <TextArea allowClear autoSize={{ minRows: 3, maxRows: 7 }} />
-          </div>
+          </Form.Item>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div style={{ width: "23%" }}>
-              <p>Selling Price</p>
+            <Form.Item
+              name="petSellingPrice"
+              label="Selling Price"
+              style={{ width: "23%" }}
+            >
               <InputNumber
                 addonBefore="₱"
-                min={1}
+                min={0}
                 precision={2}
-                defaultValue={3}
-                onChange={() => {}}
+                placeholder="0.00"
               />
-            </div>
-            <div style={{ width: "23%" }}>
-              <p>Investment Cost</p>
+            </Form.Item>
+            <Form.Item
+              name="petInvestmentCost"
+              label="Investment Cost"
+              style={{ width: "23%" }}
+            >
               <InputNumber
                 addonBefore="₱"
-                min={1}
+                min={0}
                 precision={2}
-                defaultValue={3}
-                onChange={() => {}}
+                placeholder="0.00"
               />
-            </div>
-            <div style={{ width: "23%" }}>
-              <p>Category</p>
+            </Form.Item>
+            <Form.Item
+              name="petCategory"
+              label="Category"
+              style={{ width: "23%" }}
+            >
               <DropdownMenu
                 type="category"
-                items={petCategory}
+                items={petCategoryOption}
                 trigger="click"
                 style={{ width: "100%" }}
+                getValue={petCategoryHandler}
               />
-            </div>
-            <div style={{ width: "23%" }}>
-              <p>Gender</p>
+            </Form.Item>
+            <Form.Item name="petGender" label="Gender" style={{ width: "23%" }}>
               <DropdownMenu
                 type="category"
-                items={petGender}
+                items={petGenderOption}
                 trigger="click"
                 style={{ width: "100%" }}
+                getValue={petGenderHandler}
               />
-            </div>
+            </Form.Item>
           </div>
-          <div>
-            <p>Type</p>
-            <Radio.Group onChange={onChange} value={value}>
-              <Radio value={1}>Unique</Radio>
-              <Radio value={2}>Group</Radio>
+          <Form.Item name="petType" label="Type">
+            <Radio.Group onChange={onChange} value={petType}>
+              <Radio value={"Unique"}>Unique</Radio>
+              <Radio value={"Group"}>Group</Radio>
             </Radio.Group>
-          </div>
-          <div>
-            <p>Picture</p>
-            <ImageUploader />
-          </div>
-        </div>
+          </Form.Item>
+          <Form.Item name="petPicture" label="Picture">
+            <ImageUploader getValue={petImageHandler} />
+          </Form.Item>
+        </Form>
       </Modal>
     </>
   );

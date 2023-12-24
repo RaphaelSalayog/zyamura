@@ -1,15 +1,19 @@
 import ImgCrop from "antd-img-crop";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Upload } from "antd";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
 
-const ImageUploader: React.FC = () => {
+interface ImageUploader {
+  getValue: (value: any[]) => void;
+}
+
+const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([
     {
       uid: "-1",
       name: "image.png",
       status: "done",
-      url: "",
+      url: "https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png",
     },
   ]);
 
@@ -17,6 +21,9 @@ const ImageUploader: React.FC = () => {
     setFileList(newFileList);
   };
 
+  useEffect(() => {
+    getValue(fileList);
+  }, [fileList]);
   // const onPreview = async (file: UploadFile) => {
   //   let src = file.url as string;
   //   if (!src) {
@@ -32,7 +39,7 @@ const ImageUploader: React.FC = () => {
   //   imgWindow?.document.write(image.outerHTML);
   // };
 
-  console.log(fileList);
+  // console.log(fileList);
   return (
     <ImgCrop>
       <Upload

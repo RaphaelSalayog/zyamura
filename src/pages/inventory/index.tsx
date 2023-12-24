@@ -4,6 +4,7 @@ import style from "@/styles/inventory.module.css";
 import AddButton from "@/components/filter/inventory/AddButton";
 import SearchBar from "@/components/filter/inventory/SearchBar";
 import DropdownMenu from "@/components/util/DropdownMenu";
+import { useState } from "react";
 
 const { Title } = Typography;
 
@@ -150,6 +151,10 @@ const inventorySortItems = [
 ];
 
 const Inventory = () => {
+  const [inventorySort, setInventorySort] = useState();
+  const inventorySortHandler = (value: any) => {
+    setInventorySort(value);
+  };
   return (
     <div style={{ padding: "2rem 2rem 0" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -167,6 +172,7 @@ const Inventory = () => {
             items={inventorySortItems}
             trigger="hover"
             style={{ height: "40px", marginLeft: "10px", width: "158.52px" }}
+            getValue={inventorySortHandler}
           />
         </div>
       </div>

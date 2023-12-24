@@ -13,7 +13,7 @@ const AddButton = () => {
       label: "Add New Pet",
       onClick: () => {
         setOpenPetModal(true);
-        console.log("Add New Pet");
+        // console.log("Add New Pet");
       },
     },
     {

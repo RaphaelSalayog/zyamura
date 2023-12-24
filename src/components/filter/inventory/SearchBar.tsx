@@ -44,7 +44,7 @@ const SearchBar: React.FC = () => {
   };
 
   const onSelect = (value: string) => {
-    console.log("onSelect", value);
+    // console.log("onSelect", value);
   };
 
   return (
