@@ -3,6 +3,8 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { Provider } from "react-redux";
+import store from "@/store/store";
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -18,12 +20,18 @@ export default function App({ Component, pageProps }: AppProps) {
   const isNotMenu = router.pathname === "/login";
 
   if (isNotMenu) {
-    return <Component {...pageProps} />;
+    return (
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    );
   }
 
   return (
-    <MainLayout>
-      <Component {...pageProps} />
-    </MainLayout>
+    <Provider store={store}>
+      <MainLayout>
+        <Component {...pageProps} />
+      </MainLayout>
+    </Provider>
   );
 }

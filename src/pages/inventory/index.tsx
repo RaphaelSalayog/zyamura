@@ -5,6 +5,7 @@ import AddButton from "@/components/filter/inventory/AddButton";
 import SearchBar from "@/components/filter/inventory/SearchBar";
 import DropdownMenu from "@/components/util/DropdownMenu";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const { Title } = Typography;
 
@@ -152,6 +153,9 @@ const inventorySortItems = [
 
 const Inventory = () => {
   const [inventorySort, setInventorySort] = useState();
+
+  const inventory = useSelector((store: any) => store.inventory.inventory);
+
   const inventorySortHandler = (value: any) => {
     setInventorySort(value);
   };
@@ -177,13 +181,13 @@ const Inventory = () => {
         </div>
       </div>
       <div className={style.itemCardParent}>
-        {itemsQ.map((items) => (
+        {inventory.map((items: any) => (
           <ItemCard
-            key={items.key}
-            image={items.image}
-            title={items.title}
-            quantity={items.quantity}
-            price={items.price}
+            key={items.inventoryId}
+            image={items.inventoryImage[0].thumbUrl}
+            title={items.inventoryName}
+            quantity={items.inventoryQuantity}
+            price={items.inventorySellingPrice}
           />
         ))}
       </div>

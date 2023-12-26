@@ -3,6 +3,8 @@ import { useState } from "react";
 import DropdownMenu from "@/components/util/DropdownMenu";
 import TextArea from "antd/es/input/TextArea";
 import ImageUploader from "@/components/util/ImageUploader";
+import { addPet } from "@/store/reducers/inventorySlice";
+import { useDispatch } from "react-redux";
 
 interface AddPetModal {
   openPetModal: boolean;
@@ -53,6 +55,7 @@ const AddPetModal: React.FC<AddPetModal> = ({
   const [petGender, setPetGender] = useState("");
   const [petImage, setPetImage] = useState([]);
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
 
   // <--FORMS-->
   // >>To get value from child custom component to parent
@@ -93,8 +96,8 @@ const AddPetModal: React.FC<AddPetModal> = ({
       petSupplier: petSupplier,
       petImage: petImage,
     };
-    console.log("data >> ", data);
-    console.log("value >> ", value);
+    //Add data to Inventory Slice in Redux
+    dispatch(addPet(data));
 
     setConfirmLoading(true);
     setTimeout(() => {

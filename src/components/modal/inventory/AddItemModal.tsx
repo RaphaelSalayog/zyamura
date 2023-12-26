@@ -3,6 +3,8 @@ import ImageUploader from "@/components/util/ImageUploader";
 import { Form, Input, InputNumber, Modal } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "@/store/reducers/inventorySlice";
 
 interface AddItemModal {
   openItemModal: boolean;
@@ -29,6 +31,8 @@ const AddItemModal: React.FC<AddItemModal> = ({
   const [itemImage, setItemImage] = useState([]);
   const [form] = Form.useForm();
 
+  const dispatch = useDispatch();
+
   // <--FORMS-->
   // >>To get value from child custom component to parent
   const itemSupplierHandler = (value: any) => {
@@ -50,8 +54,8 @@ const AddItemModal: React.FC<AddItemModal> = ({
       itemSupplier: itemSupplier,
       itemImage: itemImage,
     };
-    // console.log("data >> ", data);
-    // console.log("data >> ", value);
+    //Add data to Inventory Slice in Redux
+    dispatch(addItem(data));
 
     setConfirmLoading(true);
     setTimeout(() => {
@@ -67,6 +71,7 @@ const AddItemModal: React.FC<AddItemModal> = ({
     form.resetFields();
     setOpenItemModal(false);
   };
+
   return (
     <>
       <Modal
