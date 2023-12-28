@@ -49,7 +49,7 @@ const AddPetModal: React.FC<AddPetModal> = ({
   setOpenPetModal,
 }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [petType, setPetType] = useState("Unique");
+  const [petType, setPetType] = useState("");
   const [petSupplier, setPetSupplier] = useState("");
   const [petCategory, setPetCategory] = useState("");
   const [petGender, setPetGender] = useState("");
@@ -132,6 +132,7 @@ const AddPetModal: React.FC<AddPetModal> = ({
           // labelCol={{ span: 4 }}
           // wrapperCol={{ span: 14 }}
           layout="vertical"
+          initialValues={{ petType: "Unique" }}
         >
           <Form.Item
             name="petName"
@@ -206,11 +207,7 @@ const AddPetModal: React.FC<AddPetModal> = ({
             </Form.Item>
           </div>
           <Form.Item name="petType" label="Type">
-            <Radio.Group
-              onChange={onChange}
-              value={petType}
-              defaultValue={petType}
-            >
+            <Radio.Group onChange={onChange} value={petType}>
               <Radio value={"Unique"}>Unique</Radio>
               <Radio value={"Group"}>Group</Radio>
             </Radio.Group>

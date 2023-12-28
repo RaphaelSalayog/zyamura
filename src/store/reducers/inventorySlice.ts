@@ -27,7 +27,7 @@ interface addPet {
   petGender: string;
   petType: string;
   petQuantity: number;
-  petImage: object[];
+  petImage: any[];
 }
 
 interface addItem {
@@ -37,7 +37,7 @@ interface addItem {
   itemSellingPrice: number;
   itemInvestmentCost: number;
   itemQuantity: number;
-  itemImage: object[];
+  itemImage: any[];
 }
 
 const initialState: inventoryInitialState = {

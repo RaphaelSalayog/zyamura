@@ -1,10 +1,10 @@
 .itemCardParent {
   margin-top: 1rem;
   height: 81vh;
-  overflow-y: scroll;
+  overflow-y: auto;
   display: flex;
   flex-flow: row wrap;
   position: relative;
-  justify-content: space-evenly;
-  align-items: center;
+  justify-content: center;
+  /* align-items: center; */
 }
