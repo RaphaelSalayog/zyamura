@@ -54,6 +54,12 @@ const AddPetModal: React.FC<AddPetModal> = ({
   const [petCategory, setPetCategory] = useState("");
   const [petGender, setPetGender] = useState("");
   const [petImage, setPetImage] = useState([]);
+  //State for validation. To change the border color of custom Dropdown component
+  const [isSupplierNotValid, setIsSupplierNotValid] = useState(false);
+  const [isCategoryNotValid, setIsCategoryNotValid] = useState(false);
+  const [isGenderNotValid, setIsGenderNotValid] = useState(false);
+  const [isImageNotValid, setIsImageNotValid] = useState(false);
+
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
@@ -61,15 +67,23 @@ const AddPetModal: React.FC<AddPetModal> = ({
   // >>To get value from child custom component to parent
   const petSupplierHandler = (value: any) => {
     setPetSupplier(value);
+    setIsSupplierNotValid(value && false);
+    form.setFieldsValue({ petSupplier: value }); // To set the value of Form.Item from custom Dropdown component
   };
   const petCategoryHandler = (value: any) => {
     setPetCategory(value);
+    setIsCategoryNotValid(value && false);
+    form.setFieldsValue({ petCategory: value }); // To set the value of Form.Item from custom Dropdown component
   };
   const petGenderHandler = (value: any) => {
     setPetGender(value);
+    setIsGenderNotValid(value && false);
+    form.setFieldsValue({ petGender: value }); // To set the value of Form.Item from custom Dropdown component
   };
   const petImageHandler = (value: any) => {
     setPetImage(value);
+    setIsImageNotValid(value && false);
+    form.setFieldsValue({ petImage: value }); // To set the value of Form.Item from custom Dropdown component
   };
 
   // >>Radio Button
@@ -85,6 +99,11 @@ const AddPetModal: React.FC<AddPetModal> = ({
     setPetCategory("");
     setPetGender("");
     setPetImage([]);
+
+    setIsSupplierNotValid(false);
+    setIsCategoryNotValid(false);
+    setIsGenderNotValid(false);
+    setIsImageNotValid(false);
   };
 
   const handleOk = (value: any) => {
@@ -114,6 +133,14 @@ const AddPetModal: React.FC<AddPetModal> = ({
     form.resetFields();
     setOpenPetModal(false);
   };
+
+  // To change the border color of custom Dropdown component
+  const onFinishFailed = (errorInfo: any) => {
+    setIsSupplierNotValid(errorInfo.values.petSupplier === undefined);
+    setIsCategoryNotValid(errorInfo.values.petCategory === undefined);
+    setIsGenderNotValid(errorInfo.values.petGender === undefined);
+    setIsImageNotValid(errorInfo.values.petImage.length === 0);
+  };
   return (
     <>
       <Modal
@@ -129,10 +156,9 @@ const AddPetModal: React.FC<AddPetModal> = ({
           form={form}
           onFinish={handleOk}
           id="addPetForm"
-          // labelCol={{ span: 4 }}
-          // wrapperCol={{ span: 14 }}
           layout="vertical"
           initialValues={{ petType: "Unique" }}
+          onFinishFailed={onFinishFailed}
         >
           <Form.Item
             name="petName"
@@ -146,12 +172,25 @@ const AddPetModal: React.FC<AddPetModal> = ({
           >
             <Input allowClear />
           </Form.Item>
-          <Form.Item name="petSupplier" label="Supplier">
+          <Form.Item
+            name="petSupplier"
+            label="Supplier"
+            rules={[
+              {
+                required: true,
+                message: "Please enter the supplier.",
+              },
+            ]}
+            dependencies={["petSupplier"]}
+          >
             <DropdownMenu
               type="category"
               items={petSupplierOption}
               trigger="click"
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                borderColor: isSupplierNotValid ? "#ff4d4f" : "#d9d9d9",
+              }}
               getValue={petSupplierHandler}
             />
           </Form.Item>
@@ -163,6 +202,12 @@ const AddPetModal: React.FC<AddPetModal> = ({
               name="petSellingPrice"
               label="Selling Price"
               style={{ width: "23%" }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the selling price.",
+                },
+              ]}
             >
               <InputNumber
                 addonBefore="₱"
@@ -175,6 +220,12 @@ const AddPetModal: React.FC<AddPetModal> = ({
               name="petInvestmentCost"
               label="Investment Cost"
               style={{ width: "23%" }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the investment cost.",
+                },
+              ]}
             >
               <InputNumber
                 addonBefore="₱"
@@ -187,21 +238,45 @@ const AddPetModal: React.FC<AddPetModal> = ({
               name="petCategory"
               label="Category"
               style={{ width: "23%" }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the category.",
+                },
+              ]}
+              dependencies={["petCategory"]}
             >
               <DropdownMenu
                 type="category"
                 items={petCategoryOption}
                 trigger="click"
-                style={{ width: "100%" }}
+                style={{
+                  width: "100%",
+                  borderColor: isCategoryNotValid ? "#ff4d4f" : "#d9d9d9",
+                }}
                 getValue={petCategoryHandler}
               />
             </Form.Item>
-            <Form.Item name="petGender" label="Gender" style={{ width: "23%" }}>
+            <Form.Item
+              name="petGender"
+              label="Gender"
+              style={{ width: "23%" }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the gender.",
+                },
+              ]}
+              dependencies={["petGender"]}
+            >
               <DropdownMenu
                 type="category"
                 items={petGenderOption}
                 trigger="click"
-                style={{ width: "100%" }}
+                style={{
+                  width: "100%",
+                  borderColor: isGenderNotValid ? "#ff4d4f" : "#d9d9d9",
+                }}
                 getValue={petGenderHandler}
               />
             </Form.Item>
@@ -217,6 +292,12 @@ const AddPetModal: React.FC<AddPetModal> = ({
               name="petQuantity"
               label="Quantity"
               style={{ width: "23%" }}
+              rules={[
+                {
+                  required: true,
+                  message: "Please enter the quantity.",
+                },
+              ]}
             >
               <InputNumber
                 min={0}
@@ -226,7 +307,17 @@ const AddPetModal: React.FC<AddPetModal> = ({
               />
             </Form.Item>
           )}
-          <Form.Item name="petImage" label="Image">
+          <Form.Item
+            name="petImage"
+            label="Image"
+            rules={[
+              {
+                required: true,
+                message: "Please upload an image.",
+              },
+            ]}
+            dependencies={["petImage"]}
+          >
             <ImageUploader getValue={petImageHandler} />
           </Form.Item>
         </Form>
