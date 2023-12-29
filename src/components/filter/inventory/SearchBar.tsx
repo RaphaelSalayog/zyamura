@@ -4,21 +4,18 @@ import type { SelectProps } from "antd/es/select";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 
 interface SearchBar {
-  getValue: (value: string) => void;
+  getValueOnClick: (value: string) => void;
+  getValueOnChange: (value: string) => void;
   sortedAndSearchedItems?: inventoryInitialState[] | undefined;
 }
 
 const SearchBar: React.FC<SearchBar> = ({
-  getValue,
+  getValueOnClick,
+  getValueOnChange,
   sortedAndSearchedItems,
 }) => {
   const [options, setOptions] = useState<SelectProps<object>["options"]>([]);
   const [searchValue, setSearchValue] = useState<string>();
-
-  const handleSearch = (value: string) => {
-    getValue(value);
-    setSearchValue(value);
-  };
 
   // I used useEffect to update the data of useState from Inventory component (The issue is related to the asynchronous nature of state updates in React.)
   useEffect(() => {
@@ -75,8 +72,16 @@ const SearchBar: React.FC<SearchBar> = ({
       });
   };
 
+  // get search key from keystroke
+  const handleSearch = (value: string) => {
+    getValueOnChange(value);
+    getValueOnClick("");
+    setSearchValue(value);
+  };
+
+  // get search key from on click
   const onSelect = (value: string) => {
-    getValue(value);
+    getValueOnClick(value);
   };
 
   return (

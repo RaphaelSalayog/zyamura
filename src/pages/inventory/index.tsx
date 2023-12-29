@@ -48,14 +48,19 @@ const inventorySortItems = [
 
 const Inventory = () => {
   const [inventorySort, setInventorySort] = useState();
-  const [searchItem, setSearchItem] = useState("");
+  const [searchItemOnChange, setSearchItemOnChange] = useState("");
+  const [searchItemOnClick, setSearchItemOnClick] = useState("");
   const [sortedAndSearchedItems, setSortedAndSearchedItems] =
     useState<inventoryInitialState[]>();
 
   const inventory = useSelector((store: any) => store.inventory.inventory);
 
-  const inventorySearchHandler = (value: string) => {
-    setSearchItem(value);
+  const itemSearchOnChangeHandler = (value: string) => {
+    setSearchItemOnChange(value);
+  };
+
+  const itemSearchOnClickHandler = (value: string) => {
+    setSearchItemOnClick(value);
   };
 
   const inventorySortHandler = (value: any) => {
@@ -66,11 +71,16 @@ const Inventory = () => {
     // sorted items
     const sortedItems = InventorySort(inventorySort, inventory);
     // filter the sorted items by search key
-    const sortedAndSearchedItem = sortedItems.filter((items: any) =>
-      items.inventoryName.includes(searchItem)
-    );
+    const sortedAndSearchedItem = sortedItems.filter((items: any) => {
+      if (searchItemOnClick.localeCompare("")) {
+        return items.inventoryName === searchItemOnClick;
+      } else {
+        return items.inventoryName.includes(searchItemOnChange);
+      }
+    });
     setSortedAndSearchedItems(sortedAndSearchedItem);
-  }, [inventorySort, inventory, searchItem]);
+  }, [inventorySort, inventory, searchItemOnChange, searchItemOnClick]);
+
   return (
     <div style={{ padding: "2rem 2rem 0" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -82,7 +92,8 @@ const Inventory = () => {
           }}
         >
           <SearchBar
-            getValue={inventorySearchHandler}
+            getValueOnChange={itemSearchOnChangeHandler}
+            getValueOnClick={itemSearchOnClickHandler}
             sortedAndSearchedItems={sortedAndSearchedItems}
           />
           <AddButton />
