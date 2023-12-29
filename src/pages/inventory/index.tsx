@@ -7,6 +7,7 @@ import DropdownMenu from "@/components/util/DropdownMenu";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { InventorySort } from "@/components/util/SortItems";
+import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 
 const { Title } = Typography;
 
@@ -47,18 +48,29 @@ const inventorySortItems = [
 
 const Inventory = () => {
   const [inventorySort, setInventorySort] = useState();
-  const [sortedItems, setSortedItems] = useState<any>();
+  const [searchItem, setSearchItem] = useState("");
+  const [sortedAndSearchedItems, setSortedAndSearchedItems] =
+    useState<inventoryInitialState[]>();
 
   const inventory = useSelector((store: any) => store.inventory.inventory);
+
+  const inventorySearchHandler = (value: string) => {
+    setSearchItem(value);
+  };
 
   const inventorySortHandler = (value: any) => {
     setInventorySort(value);
   };
 
   useEffect(() => {
-    const items = InventorySort(inventorySort, inventory);
-    setSortedItems(items);
-  }, [inventorySort, inventory]);
+    // sorted items
+    const sortedItems = InventorySort(inventorySort, inventory);
+    // filter the sorted items by search key
+    const sortedAndSearchedItem = sortedItems.filter((items: any) =>
+      items.inventoryName.includes(searchItem)
+    );
+    setSortedAndSearchedItems(sortedAndSearchedItem);
+  }, [inventorySort, inventory, searchItem]);
   return (
     <div style={{ padding: "2rem 2rem 0" }}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -69,7 +81,10 @@ const Inventory = () => {
             justifyContent: "flex-end",
           }}
         >
-          <SearchBar />
+          <SearchBar
+            getValue={inventorySearchHandler}
+            sortedAndSearchedItems={sortedAndSearchedItems}
+          />
           <AddButton />
           <DropdownMenu
             type="sort"
@@ -81,18 +96,15 @@ const Inventory = () => {
         </div>
       </div>
       <div className={style.itemCardParent}>
-        {sortedItems?.map((items: any) => {
-          // console.log(">> qwe >> ", items.inventoryImage[0]?.thumbUrl);
-          return (
-            <ItemCard
-              key={items.inventoryId}
-              image={items.inventoryImage[0]?.thumbUrl}
-              title={items.inventoryName}
-              quantity={items.inventoryQuantity}
-              price={items.inventorySellingPrice}
-            />
-          );
-        })}
+        {sortedAndSearchedItems?.map((filteredItem: any) => (
+          <ItemCard
+            key={filteredItem.inventoryId}
+            image={filteredItem.inventoryImage[0]?.thumbUrl}
+            title={filteredItem.inventoryName}
+            quantity={filteredItem.inventoryQuantity}
+            price={filteredItem.inventorySellingPrice}
+          />
+        ))}
       </div>
     </div>
   );

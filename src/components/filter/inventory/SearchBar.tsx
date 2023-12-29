@@ -1,55 +1,87 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AutoComplete, Input } from "antd";
 import type { SelectProps } from "antd/es/select";
+import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 
-const getRandomInt = (max: number, min = 0) =>
-  Math.floor(Math.random() * (max - min + 1)) + min;
+interface SearchBar {
+  getValue: (value: string) => void;
+  sortedAndSearchedItems?: inventoryInitialState[] | undefined;
+}
 
-const searchResult = (query: string) =>
-  new Array(getRandomInt(5))
-    .join(".")
-    .split(".")
-    .map((_, idx) => {
-      const category = `${query}${idx}`;
-      return {
-        value: category,
-        label: (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <span>
-              Found {query} on{" "}
-              <a
-                href={`https://s.taobao.com/search?q=${query}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {category}
-              </a>
-            </span>
-            <span>{getRandomInt(200, 100)} results</span>
-          </div>
-        ),
-      };
-    });
-
-const SearchBar: React.FC = () => {
+const SearchBar: React.FC<SearchBar> = ({
+  getValue,
+  sortedAndSearchedItems,
+}) => {
   const [options, setOptions] = useState<SelectProps<object>["options"]>([]);
+  const [searchValue, setSearchValue] = useState<string>();
 
   const handleSearch = (value: string) => {
-    setOptions(value ? searchResult(value) : []);
+    getValue(value);
+    setSearchValue(value);
+  };
+
+  // I used useEffect to update the data of useState from Inventory component (The issue is related to the asynchronous nature of state updates in React.)
+  useEffect(() => {
+    setOptions(
+      searchValue ? searchResult(searchValue, sortedAndSearchedItems) : []
+    );
+  }, [sortedAndSearchedItems]);
+
+  const searchResult = (
+    query: string | undefined,
+    sortedAndSearchedItems: any[] | undefined
+  ) => {
+    // To know if the item is duplicate. If it is, it will just increment the number
+    const array: { itemName: string; number: number }[] = [];
+    sortedAndSearchedItems?.forEach((item) => {
+      const existingItem = array.find(
+        (existing) => existing.itemName === item.inventoryName
+      );
+
+      if (existingItem) {
+        // If item exists, increment the number
+        existingItem.number += 1;
+      } else {
+        // If item doesn't exist, add a new object to the array
+        array.push({
+          itemName: item.inventoryName,
+          number: 1, // Assuming you start with 1 when adding a new item
+        });
+      }
+    });
+
+    return new Array(array?.length)
+      .join(".")
+      .split(".")
+      .map((_, idx) => {
+        const category = array[idx] ? array[idx].itemName : "none";
+        return {
+          key: idx,
+          value: category,
+          label: (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <span>
+                Found {query} on {category}
+              </span>
+              <span>{array[idx] ? array[idx].number : "0"} results</span>
+            </div>
+          ),
+        };
+      });
   };
 
   const onSelect = (value: string) => {
-    // console.log("onSelect", value);
+    getValue(value);
   };
 
   return (
     <AutoComplete
-      popupMatchSelectWidth={252}
+      popupMatchSelectWidth={480}
       options={options}
       onSelect={onSelect}
       onSearch={handleSearch}
