@@ -30,7 +30,7 @@ const SearchBar: React.FC<SearchBar> = ({
   ) => {
     // To know if the item is duplicate. If it is, it will just increment the number
     const array: { itemName: string; number: number }[] = [];
-    sortedAndSearchedItems?.forEach((item) => {
+    sortedAndSearchedItems?.map((item) => {
       const existingItem = array.find(
         (existing) => existing.itemName === item.inventoryName
       );
@@ -63,7 +63,9 @@ const SearchBar: React.FC<SearchBar> = ({
               }}
             >
               <span>
-                Found {query} on {category}
+                {category.localeCompare("none")
+                  ? `Found ${query} on ${category}`
+                  : `Couldn't find ${query}`}
               </span>
               <span>{array[idx] ? array[idx].number : "0"} results</span>
             </div>
