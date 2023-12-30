@@ -1,4 +1,4 @@
-const InventorySort = (inventorySort: any, inventory: any[]) => {
+function inventorySortItem(inventorySort: any, inventory: any[]) {
   const items = [...inventory];
   switch (inventorySort) {
     case "Latest":
@@ -36,6 +36,13 @@ const InventorySort = (inventorySort: any, inventory: any[]) => {
     default:
       return items;
   }
-};
+}
 
-export { InventorySort };
+function capitalizeFirstLetter(string: string) {
+  const word = string.split(" ");
+  return word
+    .map((item: string) => item.charAt(0).toUpperCase() + item.slice(1))
+    .join(" ");
+}
+
+export { capitalizeFirstLetter, inventorySortItem };

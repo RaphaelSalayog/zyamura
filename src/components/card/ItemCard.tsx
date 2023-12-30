@@ -16,7 +16,7 @@ const ItemCard: React.FC<ItemCard> = ({ image, title, quantity, price }) => {
           src={image}
           style={{ objectFit: "cover", width: "100%", height: "70%" }}
         />
-        <div style={{ padding: "1.5rem" }}>
+        <div style={{ padding: "1.15rem", height: "30%" }}>
           <p>{title}</p>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <p>Quantity : {quantity}</p>

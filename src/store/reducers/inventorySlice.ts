@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from "@/components/util/customMethods";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface inventoryInitialState {
@@ -52,7 +53,7 @@ const inventorySlice = createSlice({
       state.inventory.push({
         inventoryId: state.inventory.length,
         inventoryObject: "PET",
-        inventoryName: payload.petName,
+        inventoryName: capitalizeFirstLetter(payload.petName),
         inventorySupplier: payload.petSupplier,
         inventoryDescription: payload.petDescription,
         inventorySellingPrice: payload.petSellingPrice,
@@ -68,7 +69,7 @@ const inventorySlice = createSlice({
       state.inventory.push({
         inventoryId: state.inventory.length,
         inventoryObject: "ITEM",
-        inventoryName: payload.itemName,
+        inventoryName: capitalizeFirstLetter(payload.itemName),
         inventorySupplier: payload.itemSupplier,
         inventoryDescription: payload.itemDescription,
         inventorySellingPrice: payload.itemSellingPrice,

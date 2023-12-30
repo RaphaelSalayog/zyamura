@@ -51,7 +51,7 @@ const SearchBar: React.FC<SearchBar> = ({
       .join(".")
       .split(".")
       .map((_, idx) => {
-        const category = array[idx] ? array[idx].itemName : "none";
+        const category = array[idx] ? array[idx].itemName : query;
         return {
           key: idx,
           value: category,
@@ -63,11 +63,11 @@ const SearchBar: React.FC<SearchBar> = ({
               }}
             >
               <span>
-                {category.localeCompare("none")
+                {array[idx]
                   ? `Found ${query} on ${category}`
                   : `Couldn't find ${query}`}
               </span>
-              <span>{array[idx] ? array[idx].number : "0"} results</span>
+              <span>{array[idx] ? array[idx].number : 0} results</span>
             </div>
           ),
         };

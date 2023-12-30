@@ -6,8 +6,8 @@ import SearchBar from "@/components/filter/inventory/SearchBar";
 import DropdownMenu from "@/components/util/DropdownMenu";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { InventorySort } from "@/components/util/SortItems";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
+import { inventorySortItem } from "@/components/util/customMethods";
 
 const { Title } = Typography;
 
@@ -69,13 +69,15 @@ const Inventory = () => {
 
   useEffect(() => {
     // sorted items
-    const sortedItems = InventorySort(inventorySort, inventory);
+    const sortedItems = inventorySortItem(inventorySort, inventory);
     // filter the sorted items by search key
     const sortedAndSearchedItem = sortedItems.filter((items: any) => {
-      if (searchItemOnClick.localeCompare("")) {
-        return items.inventoryName === searchItemOnClick;
+      if (searchItemOnClick == "") {
+        return items.inventoryName
+          .toLowerCase()
+          .includes(searchItemOnChange.toLowerCase());
       } else {
-        return items.inventoryName.includes(searchItemOnChange);
+        return items.inventoryName === searchItemOnClick;
       }
     });
     setSortedAndSearchedItems(sortedAndSearchedItem);
