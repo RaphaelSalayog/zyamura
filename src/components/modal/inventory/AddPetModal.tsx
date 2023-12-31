@@ -5,6 +5,7 @@ import TextArea from "antd/es/input/TextArea";
 import ImageUploader from "@/components/util/ImageUploader";
 import { addPet } from "@/store/reducers/inventorySlice";
 import { useDispatch } from "react-redux";
+import { capitalizeFirstLetter } from "@/components/util/customMethods";
 
 interface AddPetModal {
   openPetModal: boolean;
@@ -54,7 +55,8 @@ const AddPetModal: React.FC<AddPetModal> = ({
   const [petCategory, setPetCategory] = useState("");
   const [petGender, setPetGender] = useState("");
   const [petImage, setPetImage] = useState([]);
-  //State for validation. To change the border color of custom Dropdown component
+
+  // State for validation. To change the border color of custom Dropdown component
   const [isSupplierNotValid, setIsSupplierNotValid] = useState(false);
   const [isCategoryNotValid, setIsCategoryNotValid] = useState(false);
   const [isGenderNotValid, setIsGenderNotValid] = useState(false);
@@ -159,6 +161,15 @@ const AddPetModal: React.FC<AddPetModal> = ({
           layout="vertical"
           initialValues={{ petType: "Unique" }}
           onFinishFailed={onFinishFailed}
+          onValuesChange={(changedValues, allValues) => {
+            // To capitalize the first letter for every word
+            if (changedValues && changedValues.petName) {
+              form.setFieldsValue({
+                ...allValues,
+                petName: capitalizeFirstLetter(changedValues.petName),
+              });
+            }
+          }}
         >
           <Form.Item
             name="petName"

@@ -5,6 +5,7 @@ import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItem } from "@/store/reducers/inventorySlice";
+import { capitalizeFirstLetter } from "@/components/util/customMethods";
 
 interface AddItemModal {
   openItemModal: boolean;
@@ -90,6 +91,15 @@ const AddItemModal: React.FC<AddItemModal> = ({
           // labelCol={{ span: 4 }}
           // wrapperCol={{ span: 14 }}
           layout="vertical"
+          onValuesChange={(changedValues, allValues) => {
+            // To capitalize the first letter for every word
+            if (changedValues && changedValues.itemName) {
+              form.setFieldsValue({
+                ...allValues,
+                itemName: capitalizeFirstLetter(changedValues.itemName),
+              });
+            }
+          }}
         >
           <Form.Item
             name="itemName"
