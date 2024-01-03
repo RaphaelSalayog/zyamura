@@ -24,31 +24,18 @@ const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
   useEffect(() => {
     getValue(fileList);
   }, [fileList]);
-  // const onPreview = async (file: UploadFile) => {
-  //   let src = file.url as string;
-  //   if (!src) {
-  //     src = await new Promise((resolve) => {
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(file.originFileObj as RcFile);
-  //       reader.onload = () => resolve(reader.result as string);
-  //     });
-  //   }
-  //   const image = new Image();
-  //   image.src = src;
-  //   const imgWindow = window.open(src);
-  //   imgWindow?.document.write(image.outerHTML);
-  // };
-
-  // console.log(fileList);
   return (
     <ImgCrop>
       <Upload
-        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+        // action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188" for API call only
         listType="picture-card"
         fileList={fileList}
         onChange={onChange}
         showUploadList={{
           showPreviewIcon: false,
+        }}
+        beforeUpload={() => {
+          return false;
         }}
         // onPreview={onPreview}
       >
