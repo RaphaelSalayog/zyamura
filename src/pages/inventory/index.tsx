@@ -110,13 +110,7 @@ const Inventory = () => {
       </div>
       <div className={style.itemCardParent}>
         {sortedAndSearchedItems?.map((filteredItem: any) => (
-          <ItemCard
-            key={filteredItem.inventoryId}
-            image={filteredItem.inventoryImage[0]?.thumbUrl}
-            title={filteredItem.inventoryName}
-            quantity={filteredItem.inventoryQuantity}
-            price={filteredItem.inventorySellingPrice}
-          />
+          <ItemCard key={filteredItem.inventoryId} data={filteredItem} />
         ))}
       </div>
     </div>

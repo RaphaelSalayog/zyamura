@@ -51,7 +51,7 @@ const inventorySlice = createSlice({
     addPet: (state, { payload }: PayloadAction<addPet>) => {
       state.inventory.push({
         inventoryId: state.inventory.length,
-        inventoryObject: "PET",
+        inventoryObject: "Pet",
         inventoryName: payload.petName,
         inventorySupplier: payload.petSupplier,
         inventoryDescription: payload.petDescription,
@@ -67,7 +67,7 @@ const inventorySlice = createSlice({
     addItem: (state, { payload }: PayloadAction<addItem>) => {
       state.inventory.push({
         inventoryId: state.inventory.length,
-        inventoryObject: "ITEM",
+        inventoryObject: "Item",
         inventoryName: payload.itemName,
         inventorySupplier: payload.itemSupplier,
         inventoryDescription: payload.itemDescription,

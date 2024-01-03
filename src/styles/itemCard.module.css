@@ -4,6 +4,7 @@
   max-width: 230px;
   height: 350px;
   border-radius: 8px;
+  border: 1px solid #f0f0f0;
   overflow: hidden;
   margin: 20px;
   flex: 0 1 calc(20% - 40px);
