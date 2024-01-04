@@ -53,7 +53,7 @@ const Inventory = () => {
   const [sortedAndSearchedItems, setSortedAndSearchedItems] =
     useState<inventoryInitialState[]>();
 
-  const inventory = useSelector((store: any) => store.inventory.inventory);
+  const data = useSelector((store: any) => store.inventory.inventory);
 
   const itemSearchOnChangeHandler = (value: string) => {
     setSearchItemOnChange(value);
@@ -69,7 +69,7 @@ const Inventory = () => {
 
   useEffect(() => {
     // sorted items
-    const sortedItems = inventorySortItem(inventorySort, inventory);
+    const sortedItems = inventorySortItem(inventorySort, data);
     // filter the sorted items by search key
     const sortedAndSearchedItem = sortedItems.filter((items: any) => {
       if (searchItemOnClick == "") {
@@ -81,7 +81,7 @@ const Inventory = () => {
       }
     });
     setSortedAndSearchedItems(sortedAndSearchedItem);
-  }, [inventorySort, inventory, searchItemOnChange, searchItemOnClick]);
+  }, [inventorySort, data, searchItemOnChange, searchItemOnClick]);
 
   return (
     <div style={{ padding: "2rem 2rem 0" }}>
@@ -109,8 +109,8 @@ const Inventory = () => {
         </div>
       </div>
       <div className={style.itemCardParent}>
-        {sortedAndSearchedItems?.map((filteredItem: any) => (
-          <ItemCard key={filteredItem.inventoryId} data={filteredItem} />
+        {sortedAndSearchedItems?.map((filteredData: any) => (
+          <ItemCard key={filteredData.inventoryId} data={filteredData} />
         ))}
       </div>
     </div>

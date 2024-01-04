@@ -58,7 +58,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
               display: "flex",
             }}
           >
-            {data.inventoryObject === "Pet" ? (
+            {inventoryObject === "Pet" ? (
               <>
                 <InventoryTag data={inventoryCategory} color="#1677ff" />
                 <InventoryTag data={inventoryGender} color="#1677ff" />
@@ -69,7 +69,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
           </div>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Text>Qty: {addCommas(inventoryQuantity)}</Text>
+            <Text>Quantity: {addCommas(inventoryQuantity)}</Text>
             <Text style={{ fontWeight: "bold", color: "#237804" }}>
               ₱{addCommas(inventorySellingPrice)}
             </Text>
