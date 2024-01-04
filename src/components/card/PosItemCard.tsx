@@ -1,7 +1,7 @@
 import style from "@/styles/posItemCard.module.css";
 import InventoryTag from "../util/InventoryTag";
 import { Button, Form, InputNumber, Typography } from "antd";
-import { addCommas } from "../util/customMethods";
+import { addCommas, truncateString } from "../util/customMethods";
 import { useState } from "react";
 const { Text, Title } = Typography;
 
@@ -72,7 +72,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Title level={5}>{inventoryName}</Title>
+              <Title level={5}>{truncateString(inventoryName, 48)}</Title>
               <div>
                 <div
                   style={{

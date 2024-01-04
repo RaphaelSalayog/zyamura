@@ -1,7 +1,7 @@
 import style from "@/styles/itemCard.module.css";
 import Title from "antd/es/typography/Title";
 import InventoryTag from "../util/InventoryTag";
-import { addCommas } from "../util/customMethods";
+import { addCommas, truncateString } from "../util/customMethods";
 import { Typography } from "antd";
 
 const { Text } = Typography;
@@ -25,7 +25,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
   return (
     <>
       <div className={style.card}>
-        <div style={{ position: "relative", width: "100%", height: "65%" }}>
+        <div style={{ position: "relative", width: "100%", height: "60%" }}>
           <div
             style={{
               position: "absolute",
@@ -46,33 +46,41 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
         <div
           style={{
             padding: "1rem",
-            height: "35%",
+            height: "40%",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
           }}
         >
-          <Title level={5}>{inventoryName}</Title>
-          <div
-            style={{
-              display: "flex",
-            }}
-          >
-            {inventoryObject === "Pet" ? (
-              <>
-                <InventoryTag data={inventoryCategory} color="#1677ff" />
-                <InventoryTag data={inventoryGender} color="#1677ff" />
-              </>
-            ) : (
-              <InventoryTag data={inventoryObject} color="#1677ff" />
-            )}
-          </div>
+          <Title level={5}>{truncateString(inventoryName, 53)}</Title>
+          <div>
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              {inventoryObject === "Pet" ? (
+                <>
+                  <InventoryTag data={inventoryCategory} color="#1677ff" />
+                  <InventoryTag data={inventoryGender} color="#1677ff" />
+                </>
+              ) : (
+                <InventoryTag data={inventoryObject} color="#1677ff" />
+              )}
+            </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Text>Quantity: {addCommas(inventoryQuantity)}</Text>
-            <Text style={{ fontWeight: "bold", color: "#237804" }}>
-              ₱{addCommas(inventorySellingPrice)}
-            </Text>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "5px",
+              }}
+            >
+              <Text>Quantity: {addCommas(inventoryQuantity)}</Text>
+              <Text style={{ fontWeight: "bold", color: "#237804" }}>
+                ₱{addCommas(inventorySellingPrice)}
+              </Text>
+            </div>
           </div>
         </div>
       </div>

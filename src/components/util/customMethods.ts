@@ -49,4 +49,12 @@ function addCommas(number: number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-export { capitalizeFirstLetter, inventorySortItem, addCommas };
+function truncateString(string: string, maxLength: number) {
+  if (string.length > maxLength) {
+    return string.slice(0, maxLength - 3) + "...";
+  } else {
+    return string;
+  }
+}
+
+export { capitalizeFirstLetter, inventorySortItem, addCommas, truncateString };
