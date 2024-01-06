@@ -19,9 +19,9 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     inventoryImage,
   } = data;
 
-  const inputNumberHandler = (event: string | null) => {
-    if (event) {
-      setValue(event);
+  const inputNumberHandler = (value: string | null) => {
+    if (value && value <= inventoryQuantity) {
+      setValue(value);
     }
   };
 
@@ -102,7 +102,8 @@ const PosItemCard: React.FC<any> = ({ data }) => {
         <div
           style={{
             display: "flex",
-            height: "25%",
+            marginTop: "5px",
+            height: `calc(25% - 5px)`,
             alignItems: "center",
             justifyContent: "space-between",
           }}
