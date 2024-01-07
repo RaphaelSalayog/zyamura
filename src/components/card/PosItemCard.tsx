@@ -6,12 +6,13 @@ import {
   onKeyDownTypeNumber,
   truncateString,
 } from "../util/customMethods";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WarningTooltip from "../util/WarningTooltip";
 const { Text, Title } = Typography;
 
 const PosItemCard: React.FC<any> = ({ data }) => {
-  const [value, setValue] = useState<any>("1");
+  const [quantity, setQuantity] = useState<any>("1");
+  const [stock, setStock] = useState(0);
   const {
     inventoryName,
     inventoryQuantity,
@@ -24,16 +25,22 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     inventoryImage,
   } = data;
 
+  useEffect(() => {
+    setStock(inventoryQuantity);
+  }, [inventoryQuantity]);
+
   const inputNumberHandler = (value: string | null) => {
     if (value || value == "0") {
-      setValue(value);
+      setQuantity(value);
     } else {
-      setValue(null);
+      setQuantity(null);
     }
   };
 
   const addHandler = () => {
-    if (value <= inventoryQuantity) {
+    if (quantity <= stock) {
+      setStock((prevState) => prevState - quantity);
+      setQuantity("1");
       console.log("ADD");
     }
   };
@@ -79,7 +86,9 @@ const PosItemCard: React.FC<any> = ({ data }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Title level={5}>{truncateString(inventoryName, 36)}</Title>
+              <Title level={5} style={{ margin: "0" }}>
+                {truncateString(inventoryName, 36)}
+              </Title>
               <div>
                 <div
                   style={{
@@ -95,7 +104,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
                     <InventoryTag data={inventoryObject} color="#1677ff" />
                   )}
                 </div>
-                <p style={{ marginTop: "5px" }}>Stock: {inventoryQuantity}</p>
+                <p style={{ marginTop: "5px" }}>Stock: {stock}</p>
               </div>
             </div>
             <Text style={{ fontWeight: "bold", color: "#237804" }}>
@@ -118,25 +127,27 @@ const PosItemCard: React.FC<any> = ({ data }) => {
               type="number"
               min={"0"}
               precision={0}
-              value={value}
+              value={quantity}
               style={{ width: "36%" }}
               onChange={inputNumberHandler}
               onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
             />
-            {+value > inventoryQuantity && (
+            {+quantity > stock && (
               <WarningTooltip
                 text="You have reached the maximum quantity available for this
                         item."
               />
             )}
-            {value == "0" && <WarningTooltip text="Minimum of 1 quantity." />}
+            {quantity == "0" && (
+              <WarningTooltip text="Minimum of 1 quantity." />
+            )}
           </div>
 
           <Button
             type="primary"
             style={{ height: "100%" }}
             onClick={addHandler}
-            disabled={!value || value > inventoryQuantity}
+            disabled={!quantity || quantity > stock}
           >
             Add
           </Button>
