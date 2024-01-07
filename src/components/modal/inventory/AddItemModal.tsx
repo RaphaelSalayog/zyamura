@@ -5,7 +5,10 @@ import TextArea from "antd/es/input/TextArea";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addItem } from "@/store/reducers/inventorySlice";
-import { capitalizeFirstLetter } from "@/components/util/customMethods";
+import {
+  capitalizeFirstLetter,
+  onKeyDownTypeNumber,
+} from "@/components/util/customMethods";
 
 interface AddItemModal {
   openItemModal: boolean;
@@ -132,10 +135,12 @@ const AddItemModal: React.FC<AddItemModal> = ({
               style={{ width: "31.33%" }}
             >
               <InputNumber
+                type="number"
                 addonBefore="₱"
                 min={0}
                 precision={2}
                 placeholder="0.00"
+                onKeyDown={(event) => onKeyDownTypeNumber(event, "price")}
               />
             </Form.Item>
             <Form.Item
@@ -144,10 +149,12 @@ const AddItemModal: React.FC<AddItemModal> = ({
               style={{ width: "31.33%" }}
             >
               <InputNumber
+                type="number"
                 addonBefore="₱"
                 min={0}
                 precision={2}
                 placeholder="0.00"
+                onKeyDown={(event) => onKeyDownTypeNumber(event, "price")}
               />
             </Form.Item>
             <Form.Item
@@ -156,10 +163,12 @@ const AddItemModal: React.FC<AddItemModal> = ({
               style={{ width: "31.33%" }}
             >
               <InputNumber
+                type="number"
                 min={0}
                 precision={0}
                 placeholder="0"
                 style={{ width: "100%" }}
+                onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
               />
             </Form.Item>
           </div>

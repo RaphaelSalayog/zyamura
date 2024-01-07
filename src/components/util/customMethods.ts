@@ -57,8 +57,13 @@ function truncateString(string: string, maxLength: number) {
   }
 }
 
-function onKeyDownTypeNumber(event: any) {
-  if (event.key === "e" || event.key === "-" || event.key === "+") {
+function onKeyDownTypeNumber(event: any, type: string) {
+  if (
+    event.key === "e" ||
+    event.key === "-" ||
+    event.key === "+" ||
+    (type == "quantity" && event.key === ".")
+  ) {
     event.preventDefault();
   }
 }

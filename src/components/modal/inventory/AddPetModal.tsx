@@ -229,7 +229,7 @@ const AddPetModal: React.FC<AddPetModal> = ({
                 min={0}
                 precision={2}
                 placeholder="0.00"
-                onKeyDown={onKeyDownTypeNumber}
+                onKeyDown={(event) => onKeyDownTypeNumber(event, "price")}
               />
             </Form.Item>
             <Form.Item
@@ -249,7 +249,7 @@ const AddPetModal: React.FC<AddPetModal> = ({
                 min={0}
                 precision={2}
                 placeholder="0.00"
-                onKeyDown={onKeyDownTypeNumber}
+                onKeyDown={(event) => onKeyDownTypeNumber(event, "price")}
               />
             </Form.Item>
             <Form.Item
@@ -318,10 +318,12 @@ const AddPetModal: React.FC<AddPetModal> = ({
               ]}
             >
               <InputNumber
+                type="number"
                 min={0}
                 precision={0}
                 placeholder="0"
                 style={{ width: "100%" }}
+                onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
               />
             </Form.Item>
           )}

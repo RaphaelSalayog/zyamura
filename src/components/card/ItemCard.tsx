@@ -52,7 +52,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
             justifyContent: "space-between",
           }}
         >
-          <Title level={5}>{truncateString(inventoryName, 53)}</Title>
+          <Title level={5}>{truncateString(inventoryName, 40)}</Title>
           <div>
             <div
               style={{
@@ -76,7 +76,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
                 marginTop: "5px",
               }}
             >
-              <Text>Quantity: {addCommas(inventoryQuantity)}</Text>
+              <Text>Quantity: {inventoryQuantity}</Text>
               <Text style={{ fontWeight: "bold", color: "#237804" }}>
                 ₱{addCommas(inventorySellingPrice)}
               </Text>

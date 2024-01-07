@@ -79,7 +79,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Title level={5}>{truncateString(inventoryName, 48)}</Title>
+              <Title level={5}>{truncateString(inventoryName, 36)}</Title>
               <div>
                 <div
                   style={{
@@ -95,9 +95,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
                     <InventoryTag data={inventoryObject} color="#1677ff" />
                   )}
                 </div>
-                <p style={{ marginTop: "5px" }}>
-                  Quantity: {inventoryQuantity}
-                </p>
+                <p style={{ marginTop: "5px" }}>Stock: {inventoryQuantity}</p>
               </div>
             </div>
             <Text style={{ fontWeight: "bold", color: "#237804" }}>
@@ -123,7 +121,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
               value={value}
               style={{ width: "36%" }}
               onChange={inputNumberHandler}
-              onKeyDown={onKeyDownTypeNumber}
+              onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
             />
             {+value > inventoryQuantity && (
               <WarningTooltip
