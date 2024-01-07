@@ -1,12 +1,17 @@
 import style from "@/styles/posItemCard.module.css";
 import InventoryTag from "../util/InventoryTag";
-import { Button, Form, InputNumber, Typography } from "antd";
-import { addCommas, truncateString } from "../util/customMethods";
+import { Button, InputNumber, Typography } from "antd";
+import {
+  addCommas,
+  onKeyDownTypeNumber,
+  truncateString,
+} from "../util/customMethods";
 import { useState } from "react";
+import WarningTooltip from "../util/WarningTooltip";
 const { Text, Title } = Typography;
 
 const PosItemCard: React.FC<any> = ({ data }) => {
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState<any>("1");
   const {
     inventoryName,
     inventoryQuantity,
@@ -20,8 +25,10 @@ const PosItemCard: React.FC<any> = ({ data }) => {
   } = data;
 
   const inputNumberHandler = (value: string | null) => {
-    if (value && value <= inventoryQuantity) {
+    if (value || value == "0") {
       setValue(value);
+    } else {
+      setValue(null);
     }
   };
 
@@ -108,17 +115,30 @@ const PosItemCard: React.FC<any> = ({ data }) => {
             justifyContent: "space-between",
           }}
         >
-          <InputNumber
-            min={"0"}
-            precision={0}
-            value={value}
-            style={{ width: "30%" }}
-            onChange={inputNumberHandler}
-          />
+          <div style={{ width: "100%" }}>
+            <InputNumber
+              type="number"
+              min={"0"}
+              precision={0}
+              value={value}
+              style={{ width: "36%" }}
+              onChange={inputNumberHandler}
+              onKeyDown={onKeyDownTypeNumber}
+            />
+            {+value > inventoryQuantity && (
+              <WarningTooltip
+                text="You have reached the maximum quantity available for this
+                        item."
+              />
+            )}
+            {value == "0" && <WarningTooltip text="Minimum of 1 quantity." />}
+          </div>
+
           <Button
             type="primary"
             style={{ height: "100%" }}
             onClick={addHandler}
+            disabled={!value || value > inventoryQuantity}
           >
             Add
           </Button>

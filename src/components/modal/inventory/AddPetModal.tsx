@@ -5,7 +5,10 @@ import TextArea from "antd/es/input/TextArea";
 import ImageUploader from "@/components/util/ImageUploader";
 import { addPet } from "@/store/reducers/inventorySlice";
 import { useDispatch } from "react-redux";
-import { capitalizeFirstLetter } from "@/components/util/customMethods";
+import {
+  capitalizeFirstLetter,
+  onKeyDownTypeNumber,
+} from "@/components/util/customMethods";
 
 interface AddPetModal {
   openPetModal: boolean;
@@ -221,10 +224,12 @@ const AddPetModal: React.FC<AddPetModal> = ({
               ]}
             >
               <InputNumber
+                type="number"
                 addonBefore="₱"
                 min={0}
                 precision={2}
                 placeholder="0.00"
+                onKeyDown={onKeyDownTypeNumber}
               />
             </Form.Item>
             <Form.Item
@@ -239,10 +244,12 @@ const AddPetModal: React.FC<AddPetModal> = ({
               ]}
             >
               <InputNumber
+                type="number"
                 addonBefore="₱"
                 min={0}
                 precision={2}
                 placeholder="0.00"
+                onKeyDown={onKeyDownTypeNumber}
               />
             </Form.Item>
             <Form.Item

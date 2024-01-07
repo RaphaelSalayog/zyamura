@@ -57,4 +57,16 @@ function truncateString(string: string, maxLength: number) {
   }
 }
 
-export { capitalizeFirstLetter, inventorySortItem, addCommas, truncateString };
+function onKeyDownTypeNumber(event: any) {
+  if (event.key === "e" || event.key === "-" || event.key === "+") {
+    event.preventDefault();
+  }
+}
+
+export {
+  capitalizeFirstLetter,
+  inventorySortItem,
+  addCommas,
+  truncateString,
+  onKeyDownTypeNumber,
+};
