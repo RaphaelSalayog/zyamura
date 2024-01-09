@@ -5,10 +5,16 @@ import SearchBar from "@/components/filter/inventory/SearchBar";
 import { Button, Divider } from "antd";
 import Title from "antd/es/typography/Title";
 import { useSelector } from "react-redux";
+import { addCommas } from "@/components/util/customMethods";
 
 const PointOfSales = () => {
   const data = useSelector((store: any) => store.inventory.inventory);
+  const orderedItem = useSelector(
+    (store: any) => store.pointOfSales.orderedItems
+  );
+  const totalPrice = useSelector((store: any) => store.pointOfSales.totalPrice);
 
+  console.log(orderedItem);
   return (
     <>
       <div className={style.container}>
@@ -39,21 +45,16 @@ const PointOfSales = () => {
           <Divider style={{ margin: "0.5rem 0" }} />
 
           <div className={style.rightPaneContent}>
-            <PosOrderedItemCard />
-            <PosOrderedItemCard />
-            <PosOrderedItemCard />
-            <PosOrderedItemCard />
-            <PosOrderedItemCard />
-            <PosOrderedItemCard />
-            <PosOrderedItemCard />
-            <PosOrderedItemCard />
+            {orderedItem.map((item: any) => (
+              <PosOrderedItemCard orderedItem={item} />
+            ))}
           </div>
 
           <Divider style={{ margin: "0.5rem 0" }} />
           <div className={style.rightPaneFooter}>
             <div className={style.rightPaneFooterContent}>
               <p>Total</p>
-              <p>P0</p>
+              <p>₱{addCommas(totalPrice)}</p>
             </div>
             <Button type="primary" className={style.rightPaneFooterButton}>
               Confirm Transaction

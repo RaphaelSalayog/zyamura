@@ -7,19 +7,33 @@ import {
 } from "../util/customMethods";
 import InventoryTag from "../util/InventoryTag";
 import { CloseOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 const { Text, Title } = Typography;
 
-const PosOrderedItemCard = () => {
+const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
+  const data = useSelector((store: any) => store.inventory.inventory);
+  const item = data.find(
+    (item: any) => item.inventoryId === orderedItem.productId
+  );
+
+  const { quantity: orderedItemQuantity, totalItemPrice } = orderedItem;
+
+  const {
+    inventoryName,
+    inventoryObject,
+    inventoryCategory,
+    inventoryGender,
+    inventoryImage,
+  } = item;
+
   return (
     <>
       <div className={style.container}>
         <div className={style.image}>
           <img
             alt="example"
-            src={
-              "https://buffer.com/cdn-cgi/image/w=1000,fit=contain,q=90,f=auto/library/content/images/size/w1200/2023/10/free-images.jpg"
-            }
+            src={inventoryImage[0].thumbUrl}
             style={{ objectFit: "cover", height: "100%", width: "100%" }}
           />
         </div>
@@ -28,7 +42,7 @@ const PosOrderedItemCard = () => {
           <div className={style.contentSection1}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Title level={5} style={{ margin: "0" }}>
-                {truncateString("qweqweqwe", 36)}
+                {truncateString(inventoryName, 36)}
               </Title>
               <Button>
                 <CloseOutlined />
@@ -41,13 +55,13 @@ const PosOrderedItemCard = () => {
                   display: "flex",
                 }}
               >
-                {"Pet" === "Pet" ? (
+                {inventoryObject === "Pet" ? (
                   <>
-                    <InventoryTag data={"Pet"} color="#1677ff" />
-                    <InventoryTag data={"Female"} color="#1677ff" />
+                    <InventoryTag data={inventoryCategory} color="#1677ff" />
+                    <InventoryTag data={inventoryGender} color="#1677ff" />
                   </>
                 ) : (
-                  <InventoryTag data={"Pet"} color="#1677ff" />
+                  <InventoryTag data={inventoryObject} color="#1677ff" />
                 )}
               </div>
               <div className={style.contentSection2}>
@@ -55,13 +69,13 @@ const PosOrderedItemCard = () => {
                   type="number"
                   min={"0"}
                   precision={0}
-                  value={"2"}
+                  value={orderedItemQuantity}
                   style={{ width: "36%" }}
                   onChange={() => {}}
                   onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
                 />
                 <Text style={{ fontWeight: "bold", color: "#237804" }}>
-                  ₱{addCommas(12331332)}
+                  ₱{addCommas(totalItemPrice)}
                 </Text>
               </div>
             </div>

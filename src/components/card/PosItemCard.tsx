@@ -8,12 +8,18 @@ import {
 } from "../util/customMethods";
 import { useEffect, useState } from "react";
 import WarningTooltip from "../util/WarningTooltip";
+import { addOrder } from "@/store/reducers/pointOfSalesSlice";
+import { useDispatch } from "react-redux";
 const { Text, Title } = Typography;
 
 const PosItemCard: React.FC<any> = ({ data }) => {
   const [quantity, setQuantity] = useState<any>("1");
   const [stock, setStock] = useState(0);
+
+  const dispatch = useDispatch();
+
   const {
+    inventoryId,
     inventoryName,
     inventoryQuantity,
     inventorySellingPrice,
@@ -25,6 +31,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     inventoryImage,
   } = data;
 
+  //ERROR
   useEffect(() => {
     setStock(inventoryQuantity);
   }, [inventoryQuantity]);
@@ -41,7 +48,13 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     if (quantity <= stock) {
       setStock((prevState) => prevState - quantity);
       setQuantity("1");
-      console.log("ADD");
+      dispatch(
+        addOrder({
+          productId: inventoryId,
+          quantity: +quantity,
+          price: inventorySellingPrice,
+        })
+      );
     }
   };
   return (

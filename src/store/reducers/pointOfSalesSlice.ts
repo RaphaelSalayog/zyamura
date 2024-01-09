@@ -4,16 +4,20 @@ interface initialState {
   orderedItems: {
     productId: string;
     quantity: number;
+    totalItemPrice: number;
   }[];
+  totalPrice: number;
 }
 
 interface addPet {
   productId: string;
   quantity: number;
+  price: number;
 }
 
 const initialState: initialState = {
   orderedItems: [],
+  totalPrice: 0,
 };
 
 const pointOfSalesSlice = createSlice({
@@ -21,8 +25,21 @@ const pointOfSalesSlice = createSlice({
   initialState,
   reducers: {
     addOrder: (state, { payload }: PayloadAction<addPet>) => {
-      console.log("payload >> " + payload);
-      // state.orderedItems.push()
+      const id = state.orderedItems.find(
+        (item) => item.productId == payload.productId
+      );
+
+      const totalItemPrice = payload.quantity * payload.price;
+      if (id) {
+        id.quantity += payload.quantity;
+        id.totalItemPrice += totalItemPrice;
+      } else {
+        state.orderedItems.push({
+          ...payload,
+          totalItemPrice: totalItemPrice,
+        });
+      }
+      state.totalPrice += totalItemPrice;
     },
     resetOrder: () => {},
   },
