@@ -1,3 +1,4 @@
+import style from "@/styles/pointOfSales.module.css";
 import PosItemCard from "@/components/card/PosItemCard";
 import PosOrderedItemCard from "@/components/card/PosOrderedItemCard";
 import SearchBar from "@/components/filter/inventory/SearchBar";
@@ -10,32 +11,11 @@ const PointOfSales = () => {
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          height: "90vh",
-          overflow: "hidden",
-          padding: "2rem 2rem 0",
-        }}
-      >
-        <div
-          style={{
-            width: "75%",
-          }}
-        >
-          <header
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
+      <div className={style.container}>
+        <div className={style.leftPane}>
+          <header className={style.leftPaneHeader}>
             <Title level={2}>POINT OF SALES</Title>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
+            <div>
               <SearchBar
                 getValueOnChange={() => {}}
                 getValueOnClick={() => {}}
@@ -44,71 +24,38 @@ const PointOfSales = () => {
             </div>
           </header>
 
-          <section
-            style={{
-              display: "flex",
-              marginTop: "1rem",
-              height: "92%",
-              overflowY: "auto",
-              flexFlow: "row wrap",
-              position: "relative",
-              justifyContent: "center",
-              alignContent: "flex-start",
-            }}
-          >
+          <section className={style.leftPaneContent}>
             {data.map((value: any) => {
               return <PosItemCard key={data.inventoryId} data={value} />;
             })}
           </section>
         </div>
         <Divider type="vertical" style={{ height: "100%" }} />
-        <div
-          style={{
-            width: "25%",
-            height: "100%",
-            // border: "1px solid black",
-            padding: "0 1rem",
-          }}
-        >
-          <div
-            style={{
-              height: "5%",
-              display: "flex",
-              // border: "1px solid black",
-              justifyContent: "space-between",
-            }}
-          >
+        <div className={style.rightPane}>
+          <div className={style.rightPaneHeader}>
             <Title level={4}>Current Transaction</Title>
             <p>CLEAR ALL</p>
           </div>
           <Divider style={{ margin: "0.5rem 0" }} />
 
-          <div style={{ height: "78%", border: "1px solid black" }}>
-            <div style={{ overflowY: "auto" }}>
-              <PosOrderedItemCard />
-            </div>
+          <div className={style.rightPaneContent}>
+            <PosOrderedItemCard />
+            <PosOrderedItemCard />
+            <PosOrderedItemCard />
+            <PosOrderedItemCard />
+            <PosOrderedItemCard />
+            <PosOrderedItemCard />
+            <PosOrderedItemCard />
+            <PosOrderedItemCard />
           </div>
 
           <Divider style={{ margin: "0.5rem 0" }} />
-          <div
-            style={{
-              height: "12%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              // border: "1px solid black",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <p style={{ fontSize: "1.2rem" }}>Total</p>
-              <p style={{ fontSize: "1.2rem" }}>P0</p>
+          <div className={style.rightPaneFooter}>
+            <div className={style.rightPaneFooterContent}>
+              <p>Total</p>
+              <p>P0</p>
             </div>
-            <Button style={{ width: "100%", height: "2.5rem" }}>
+            <Button type="primary" className={style.rightPaneFooterButton}>
               Confirm Transaction
             </Button>
           </div>

@@ -1,3 +1,4 @@
+import style from "@/styles/posOrderedItemCard.module.css";
 import { Button, InputNumber, Typography } from "antd";
 import {
   addCommas,
@@ -12,26 +13,8 @@ const { Text, Title } = Typography;
 const PosOrderedItemCard = () => {
   return (
     <>
-      <div
-        style={{
-          padding: "10px",
-          border: "1px solid black",
-          borderRadius: "8px",
-          height: "136.75px",
-          maxWidth: "380px",
-          minWidth: "380px",
-          display: "flex",
-        }}
-      >
-        <div
-          style={{
-            width: "30%",
-            marginRight: "2%",
-            borderRadius: "8px",
-            overflow: "hidden",
-            // border: "1px solid black",
-          }}
-        >
+      <div className={style.container}>
+        <div className={style.image}>
           <img
             alt="example"
             src={
@@ -41,24 +24,8 @@ const PosOrderedItemCard = () => {
           />
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            width: "68%",
-            justifyContent: "space-between",
-            height: "100%",
-            // border: "1px solid black",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              justifyContent: "space-between",
-              //   border: "1px solid black",
-            }}
-          >
+        <div className={style.content}>
+          <div className={style.contentSection1}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <Title level={5} style={{ margin: "0" }}>
                 {truncateString("qweqweqwe", 36)}
@@ -83,14 +50,7 @@ const PosOrderedItemCard = () => {
                   <InventoryTag data={"Pet"} color="#1677ff" />
                 )}
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                  marginTop: "5px",
-                }}
-              >
+              <div className={style.contentSection2}>
                 <InputNumber
                   type="number"
                   min={"0"}

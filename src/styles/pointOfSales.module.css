@@ -1,0 +1,73 @@
+.container {
+  display: flex;
+  height: 90vh;
+  overflow: hidden;
+  padding: 2rem 2rem 0;
+}
+
+.leftPane {
+  width: 75%;
+}
+
+.leftPaneHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftPaneHeader div {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.leftPaneContent {
+  display: flex;
+  margin-top: 1rem;
+  height: 92%;
+  overflow-y: auto;
+  flex-flow: row wrap;
+  position: relative;
+  justify-content: center;
+  align-content: flex-start;
+}
+
+.rightPane {
+  width: 25%;
+  height: 100%;
+  padding: 0 1rem;
+}
+
+.rightPaneHeader {
+  height: 5%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.rightPaneContent {
+  height: 78%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.rightPaneFooter {
+  height: 12%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rightPaneFooterContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rightPaneFooterContent p {
+  font-size: 1.2rem;
+}
+
+.rightPaneFooterButton {
+  width: 100%;
+  height: 2.5rem;
+  color: white;
+}
