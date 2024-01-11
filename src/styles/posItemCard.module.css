@@ -6,8 +6,36 @@
   border-radius: 8px;
   margin: 10px;
   width: 30%;
-  /* border: 1px solid black; */
   border: 1px solid #f0f0f0;
   flex: 0 1 calc(33% - 20px);
   padding: 10px;
+}
+
+.imageItemCard {
+  width: 30%;
+  margin-right: 2%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.itemCardSection1 {
+  display: flex;
+  width: 68%;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.itemCardSection1Content {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  justify-content: space-between;
+}
+
+.itemCardSection2 {
+  display: flex;
+  margin-top: 5px;
+  height: calc(25% - 5px);
+  align-items: center;
+  justify-content: space-between;
 }

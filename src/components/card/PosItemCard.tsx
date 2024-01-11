@@ -8,16 +8,15 @@ import {
 } from "../util/customMethods";
 import { useEffect, useState } from "react";
 import WarningTooltip from "../util/WarningTooltip";
-import { addOrder } from "@/store/reducers/pointOfSalesSlice";
-import { useDispatch } from "react-redux";
+import {
+  addOrder,
+  deductStock,
+  setStock,
+} from "@/store/reducers/pointOfSalesSlice";
+import { useDispatch, useSelector } from "react-redux";
 const { Text, Title } = Typography;
 
 const PosItemCard: React.FC<any> = ({ data }) => {
-  const [quantity, setQuantity] = useState<any>("1");
-  const [stock, setStock] = useState(0);
-
-  const dispatch = useDispatch();
-
   const {
     inventoryId,
     inventoryName,
@@ -31,9 +30,20 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     inventoryImage,
   } = data;
 
+  const [quantity, setQuantity] = useState<any>("1");
+  const stockId = useSelector((store: any) => store.pointOfSales.itemStock);
+  const stock = stockId.find((item: any) => item.productId === inventoryId);
+
+  const dispatch = useDispatch();
+
   //ERROR
   useEffect(() => {
-    setStock(inventoryQuantity);
+    dispatch(
+      setStock({
+        productId: inventoryId,
+        stock: inventoryQuantity,
+      })
+    );
   }, [inventoryQuantity]);
 
   const inputNumberHandler = (value: string | null) => {
@@ -45,9 +55,13 @@ const PosItemCard: React.FC<any> = ({ data }) => {
   };
 
   const addHandler = () => {
-    if (quantity <= stock) {
-      setStock((prevState) => prevState - quantity);
-      setQuantity("1");
+    if (quantity <= stock?.stock) {
+      dispatch(
+        deductStock({
+          productId: inventoryId,
+          quantity: quantity,
+        })
+      );
       dispatch(
         addOrder({
           productId: inventoryId,
@@ -55,6 +69,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
           price: inventorySellingPrice,
         })
       );
+      setQuantity("1");
     }
   };
   return (
@@ -66,15 +81,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
             height: "75%",
           }}
         >
-          <div
-            style={{
-              width: "30%",
-              marginRight: "2%",
-              borderRadius: "8px",
-              overflow: "hidden",
-              // border: "1px solid black",
-            }}
-          >
+          <div className={style.imageItemCard}>
             <img
               alt="example"
               src={inventoryImage[0]?.thumbUrl}
@@ -82,23 +89,8 @@ const PosItemCard: React.FC<any> = ({ data }) => {
             />
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              width: "68%",
-              justifyContent: "space-between",
-              height: "100%",
-              // border: "1px solid black",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                maxWidth: "70%",
-                justifyContent: "space-between",
-              }}
-            >
+          <div className={style.itemCardSection1}>
+            <div className={style.itemCardSection1Content}>
               <Title level={5} style={{ margin: "0" }}>
                 {truncateString(inventoryName, 36)}
               </Title>
@@ -117,7 +109,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
                     <InventoryTag data={inventoryObject} color="#1677ff" />
                   )}
                 </div>
-                <p style={{ marginTop: "5px" }}>Stock: {stock}</p>
+                <p style={{ marginTop: "5px" }}>Stock: {stock?.stock}</p>
               </div>
             </div>
             <Text style={{ fontWeight: "bold", color: "#237804" }}>
@@ -126,15 +118,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
           </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            marginTop: "5px",
-            height: `calc(25% - 5px)`,
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+        <div className={style.itemCardSection2}>
           <div style={{ width: "100%" }}>
             <InputNumber
               type="number"
@@ -145,7 +129,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
               onChange={inputNumberHandler}
               onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
             />
-            {+quantity > stock && (
+            {+quantity > stock?.stock && (
               <WarningTooltip
                 text="You have reached the maximum quantity available for this
                         item."
@@ -160,7 +144,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
             type="primary"
             style={{ height: "100%" }}
             onClick={addHandler}
-            disabled={!quantity || quantity > stock}
+            disabled={!quantity || quantity > stock?.stock}
           >
             Add
           </Button>

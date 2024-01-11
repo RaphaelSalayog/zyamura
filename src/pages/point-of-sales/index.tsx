@@ -14,7 +14,6 @@ const PointOfSales = () => {
   );
   const totalPrice = useSelector((store: any) => store.pointOfSales.totalPrice);
 
-  console.log(orderedItem);
   return (
     <>
       <div className={style.container}>
@@ -44,11 +43,13 @@ const PointOfSales = () => {
           </div>
           <Divider style={{ margin: "0.5rem 0" }} />
 
-          <div className={style.rightPaneContent}>
+          <ul className={style.rightPaneContent}>
             {orderedItem.map((item: any) => (
-              <PosOrderedItemCard orderedItem={item} />
+              <li>
+                <PosOrderedItemCard orderedItem={item} />
+              </li>
             ))}
-          </div>
+          </ul>
 
           <Divider style={{ margin: "0.5rem 0" }} />
           <div className={style.rightPaneFooter}>

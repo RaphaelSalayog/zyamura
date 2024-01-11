@@ -6,17 +6,32 @@ interface initialState {
     quantity: number;
     totalItemPrice: number;
   }[];
+  itemStock: {
+    productId: string;
+    stock: number;
+  }[];
   totalPrice: number;
 }
 
-interface addPet {
+interface addPetAndItem {
   productId: string;
   quantity: number;
   price: number;
 }
 
+interface addStock {
+  productId: string;
+  stock: number;
+}
+
+interface deductStock {
+  productId: string;
+  quantity: number;
+}
+
 const initialState: initialState = {
   orderedItems: [],
+  itemStock: [],
   totalPrice: 0,
 };
 
@@ -24,7 +39,7 @@ const pointOfSalesSlice = createSlice({
   name: "point-of-sales",
   initialState,
   reducers: {
-    addOrder: (state, { payload }: PayloadAction<addPet>) => {
+    addOrder: (state, { payload }: PayloadAction<addPetAndItem>) => {
       const id = state.orderedItems.find(
         (item) => item.productId == payload.productId
       );
@@ -42,8 +57,20 @@ const pointOfSalesSlice = createSlice({
       state.totalPrice += totalItemPrice;
     },
     resetOrder: () => {},
+    setStock: (state, { payload }: PayloadAction<addStock>) => {
+      state.itemStock.push(payload);
+    },
+    deductStock: (state, { payload }: PayloadAction<deductStock>) => {
+      const id = state.itemStock.find(
+        (item) => item.productId == payload.productId
+      );
+      if (id) {
+        id.stock -= payload.quantity;
+      }
+    },
   },
 });
 
-export const { addOrder, resetOrder } = pointOfSalesSlice.actions;
+export const { addOrder, resetOrder, setStock, deductStock } =
+  pointOfSalesSlice.actions;
 export default pointOfSalesSlice.reducer;
