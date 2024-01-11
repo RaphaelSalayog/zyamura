@@ -7,7 +7,8 @@ import {
 } from "../util/customMethods";
 import InventoryTag from "../util/InventoryTag";
 import { CloseOutlined } from "@ant-design/icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { onChangeOrderedQuantity } from "@/store/reducers/pointOfSalesSlice";
 
 const { Text, Title } = Typography;
 
@@ -17,15 +18,26 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
     (item: any) => item.inventoryId === orderedItem.productId
   );
 
+  const dispatch = useDispatch();
   const { quantity: orderedItemQuantity, totalItemPrice } = orderedItem;
 
   const {
+    inventoryId,
     inventoryName,
     inventoryObject,
     inventoryCategory,
     inventoryGender,
     inventoryImage,
   } = item;
+
+  const inputNumberHandler = (value: string | null) => {
+    dispatch(
+      onChangeOrderedQuantity({
+        productId: inventoryId,
+        quantity: value ? +value : 0,
+      })
+    );
+  };
 
   return (
     <>
@@ -71,7 +83,7 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
                   precision={0}
                   value={orderedItemQuantity}
                   style={{ width: "36%" }}
-                  onChange={() => {}}
+                  onChange={inputNumberHandler}
                   onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
                 />
                 <Text style={{ fontWeight: "bold", color: "#237804" }}>

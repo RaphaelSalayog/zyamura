@@ -4,6 +4,7 @@ interface initialState {
   orderedItems: {
     productId: string;
     quantity: number;
+    price: number;
     totalItemPrice: number;
   }[];
   itemStock: {
@@ -19,9 +20,14 @@ interface addPetAndItem {
   price: number;
 }
 
-interface addStock {
+interface setStock {
   productId: string;
   stock: number;
+}
+
+interface deductOrderedQuantity {
+  productId: string;
+  quantity: number;
 }
 
 interface deductStock {
@@ -49,6 +55,7 @@ const pointOfSalesSlice = createSlice({
         id.quantity += payload.quantity;
         id.totalItemPrice += totalItemPrice;
       } else {
+        console.log(payload);
         state.orderedItems.push({
           ...payload,
           totalItemPrice: totalItemPrice,
@@ -56,13 +63,39 @@ const pointOfSalesSlice = createSlice({
       }
       state.totalPrice += totalItemPrice;
     },
+    onChangeOrderedQuantity: (
+      state,
+      { payload }: PayloadAction<deductOrderedQuantity>
+    ) => {
+      const orderedItemsId = state.orderedItems.find(
+        (item) => item.productId === payload.productId
+      );
+      const itemStockId = state.itemStock.find(
+        (item) => item.productId === payload.productId
+      );
+      // Note: Do not re-arrange the order of this code because it will affect the result
+      if (orderedItemsId && itemStockId) {
+        // To update the stocks
+        itemStockId.stock += orderedItemsId.quantity - payload.quantity;
+      }
+      if (orderedItemsId) {
+        // To update the ordered quantity
+        orderedItemsId.quantity = payload.quantity;
+        // To update the totalPrice
+        state.totalPrice -=
+          orderedItemsId.totalItemPrice -
+          payload.quantity * orderedItemsId.price;
+        // To update the totalItemPrice
+        orderedItemsId.totalItemPrice = payload.quantity * orderedItemsId.price;
+      }
+    },
     resetOrder: () => {},
-    setStock: (state, { payload }: PayloadAction<addStock>) => {
+    setStock: (state, { payload }: PayloadAction<setStock>) => {
       state.itemStock.push(payload);
     },
     deductStock: (state, { payload }: PayloadAction<deductStock>) => {
       const id = state.itemStock.find(
-        (item) => item.productId == payload.productId
+        (item) => item.productId === payload.productId
       );
       if (id) {
         id.stock -= payload.quantity;
@@ -71,6 +104,11 @@ const pointOfSalesSlice = createSlice({
   },
 });
 
-export const { addOrder, resetOrder, setStock, deductStock } =
-  pointOfSalesSlice.actions;
+export const {
+  addOrder,
+  onChangeOrderedQuantity,
+  resetOrder,
+  setStock,
+  deductStock,
+} = pointOfSalesSlice.actions;
 export default pointOfSalesSlice.reducer;

@@ -44,11 +44,15 @@ const PointOfSales = () => {
           <Divider style={{ margin: "0.5rem 0" }} />
 
           <ul className={style.rightPaneContent}>
-            {orderedItem.map((item: any) => (
-              <li>
-                <PosOrderedItemCard orderedItem={item} />
-              </li>
-            ))}
+            {orderedItem.map((item: any) => {
+              if (item.quantity !== 0) {
+                return (
+                  <li>
+                    <PosOrderedItemCard orderedItem={item} />
+                  </li>
+                );
+              }
+            })}
           </ul>
 
           <Divider style={{ margin: "0.5rem 0" }} />
