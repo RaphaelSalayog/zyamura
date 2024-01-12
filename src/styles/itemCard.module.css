@@ -8,14 +8,20 @@
   overflow: hidden;
   margin: 20px;
   flex: 0 1 calc(20% - 40px);
-  animation: scaleAnimationOut 0.3s ease forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-  animation: scaleAnimationIn 0.3s ease forwards;
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
-@keyframes scaleAnimationIn {
+.card:not(:hover) {
+  transform: scale(1);
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}
+
+/* @keyframes scaleAnimationIn {
   from {
     transform: scale(1);
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
@@ -35,4 +41,4 @@
     transform: scale(1);
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
   }
-}
+} */
