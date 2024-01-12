@@ -30,6 +30,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     inventoryImage,
   } = data;
 
+  const [isHovered, setIsHovered] = useState(false);
   const [quantity, setQuantity] = useState<any>("1");
   const stockId = useSelector((store: any) => store.pointOfSales.itemStock);
   const stock = stockId.find((item: any) => item.productId === inventoryId);
@@ -74,7 +75,11 @@ const PosItemCard: React.FC<any> = ({ data }) => {
   };
   return (
     <>
-      <div className={style.itemCard}>
+      <div
+        className={style.itemCard}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         <div
           style={{
             display: "flex",
@@ -85,7 +90,13 @@ const PosItemCard: React.FC<any> = ({ data }) => {
             <img
               alt="example"
               src={inventoryImage[0]?.thumbUrl}
-              style={{ objectFit: "cover", height: "100%", width: "100%" }}
+              style={{
+                objectFit: "cover",
+                height: "100%",
+                width: "100%",
+                transform: isHovered ? "scale(1.1)" : "scale(1)",
+                transition: "transform 0.3s ease",
+              }}
             />
           </div>
 
