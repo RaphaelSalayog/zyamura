@@ -1,5 +1,5 @@
 import ItemCard from "@/components/card/ItemCard";
-import { Typography } from "antd";
+import { Empty, Typography } from "antd";
 import style from "@/styles/inventory.module.css";
 import AddButton from "@/components/filter/inventory/AddButton";
 import SearchBar from "@/components/filter/inventory/SearchBar";
@@ -108,10 +108,22 @@ const Inventory = () => {
           />
         </div>
       </div>
-      <div className={style.itemCardParent}>
+      <div
+        className={style.itemCardParent}
+        style={{
+          justifyContent: sortedAndSearchedItems?.length === 0 ? "center" : "",
+          alignContent: sortedAndSearchedItems?.length === 0 ? "center" : "",
+        }}
+      >
         {sortedAndSearchedItems?.map((filteredData: any) => (
           <ItemCard key={filteredData.inventoryId} data={filteredData} />
         ))}
+        {sortedAndSearchedItems?.length === 0 && (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            style={{ marginBottom: "100px" }}
+          />
+        )}
       </div>
     </>
   );

@@ -2,7 +2,7 @@ import style from "@/styles/pointOfSales.module.css";
 import PosItemCard from "@/components/card/PosItemCard";
 import PosOrderedItemCard from "@/components/card/PosOrderedItemCard";
 import SearchBar from "@/components/filter/inventory/SearchBar";
-import { Button, Divider } from "antd";
+import { Button, Divider, Empty } from "antd";
 import Title from "antd/es/typography/Title";
 import { useSelector } from "react-redux";
 import { addCommas } from "@/components/util/customMethods";
@@ -29,10 +29,22 @@ const PointOfSales = () => {
             </div>
           </header>
 
-          <section className={style.leftPaneContent}>
+          <section
+            className={style.leftPaneContent}
+            style={{
+              justifyContent: data?.length === 0 ? "center" : "",
+              alignContent: data?.length === 0 ? "center" : "",
+            }}
+          >
             {data.map((value: any) => {
               return <PosItemCard key={data.inventoryId} data={value} />;
             })}
+            {data?.length === 0 && (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                style={{ marginBottom: "100px" }}
+              />
+            )}
           </section>
         </div>
         <Divider type="vertical" style={{ height: "100%" }} />
