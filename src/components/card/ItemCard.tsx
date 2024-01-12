@@ -2,7 +2,8 @@ import style from "@/styles/itemCard.module.css";
 import Title from "antd/es/typography/Title";
 import InventoryTag from "../util/InventoryTag";
 import { addCommas, truncateString } from "../util/customMethods";
-import { Typography } from "antd";
+import { Button, Dropdown, Typography } from "antd";
+import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 
 const { Text } = Typography;
 
@@ -10,6 +11,32 @@ interface ItemCard {
   data: any;
 }
 
+const items = [
+  {
+    label: (
+      <>
+        <EditTwoTone /> Edit
+      </>
+    ),
+    key: "1",
+  },
+  {
+    label: (
+      <>
+        <DeleteTwoTone /> Delete
+      </>
+    ),
+    key: "2",
+  },
+  {
+    label: (
+      <>
+        <DeleteTwoTone /> Archive
+      </>
+    ),
+    key: "3",
+  },
+];
 const ItemCard: React.FC<ItemCard> = ({ data }) => {
   const {
     inventoryName,
@@ -24,17 +51,20 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
 
   return (
     <>
-      <div className={style.card}>
-        <div style={{ position: "relative", width: "100%", height: "60%" }}>
-          <div
-            style={{
-              position: "absolute",
-              padding: "1rem",
-            }}
-          >
+      <div className={style.itemCard}>
+        <div className={style.itemCardImage}>
+          <div className={style.itemCardImageContent}>
             {inventoryType && (
               <InventoryTag data={inventoryType} color="#003eb3" />
             )}
+            <Dropdown menu={{ items }} placement="bottom">
+              <Button
+                type="primary"
+                className={style.itemCardImageContentButton}
+              >
+                ···
+              </Button>
+            </Dropdown>
           </div>
           <img
             alt="example"
@@ -43,15 +73,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
           />
         </div>
 
-        <div
-          style={{
-            padding: "1rem",
-            height: "40%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-        >
+        <div className={style.itemCardContent}>
           <Title level={5}>{truncateString(inventoryName, 40)}</Title>
           <div>
             <div

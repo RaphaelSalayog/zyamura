@@ -75,11 +75,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
   };
   return (
     <>
-      <div
-        className={style.itemCard}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+      <div className={style.itemCard}>
         <div
           style={{
             display: "flex",
@@ -87,17 +83,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
           }}
         >
           <div className={style.imageItemCard}>
-            <img
-              alt="example"
-              src={inventoryImage[0]?.thumbUrl}
-              style={{
-                objectFit: "cover",
-                height: "100%",
-                width: "100%",
-                transform: isHovered ? "scale(1.1)" : "scale(1)",
-                transition: "transform 0.3s ease",
-              }}
-            />
+            <img alt="example" src={inventoryImage[0]?.thumbUrl} />
           </div>
 
           <div className={style.itemCardSection1}>
