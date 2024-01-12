@@ -1,7 +1,7 @@
 .itemCard {
   background-color: white;
-  min-width: 394px;
-  max-width: 394px;
+  min-width: 379px;
+  max-width: 379px;
   height: 175px;
   border-radius: 8px;
   margin: 10px;
@@ -28,7 +28,7 @@
 .itemCardSection1Content {
   display: flex;
   flex-direction: column;
-  max-width: 70%;
+  max-width: 65%;
   justify-content: space-between;
 }
 

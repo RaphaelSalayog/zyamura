@@ -84,7 +84,7 @@ const Inventory = () => {
   }, [inventorySort, data, searchItemOnChange, searchItemOnClick]);
 
   return (
-    <div style={{ padding: "2rem 2rem 0" }}>
+    <>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <Title level={2}>INVENTORY</Title>
         <div
@@ -113,7 +113,7 @@ const Inventory = () => {
           <ItemCard key={filteredData.inventoryId} data={filteredData} />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

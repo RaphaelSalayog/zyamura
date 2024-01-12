@@ -1,4 +1,4 @@
-import { Avatar, Col, Layout, Row, Space, Typography } from "antd";
+import { Avatar, Col, Layout, Row, Space, Typography, theme } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import style from "@/styles/mainLayout.module.css";
 import MainNavigation from "../menu/MainNavigation";
@@ -9,6 +9,9 @@ interface MainLayoutProps {
 
 const username = "Raphael Salayog";
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
   return (
     <>
       <Layout>
@@ -24,7 +27,18 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
               </Col>
             </Row>
           </Header>
-          <Content className="main-content">{children}</Content>
+          <Content className="main-content" style={{ margin: "0 16px" }}>
+            <div
+              style={{
+                padding: "1rem",
+                background: colorBgContainer,
+                borderRadius: borderRadiusLG,
+                margin: "16px 0",
+              }}
+            >
+              {children}
+            </div>
+          </Content>
         </Layout>
       </Layout>
     </>
