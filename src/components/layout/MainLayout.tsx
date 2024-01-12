@@ -34,6 +34,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
                 background: colorBgContainer,
                 borderRadius: borderRadiusLG,
                 margin: "16px 0",
+                height: "89.9vh",
               }}
             >
               {children}
