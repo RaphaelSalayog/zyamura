@@ -1,35 +1,39 @@
 import CustomModal from "@/components/modal/CustomModal";
 import { PetForm } from "@/components/forms/inventory/PetForm";
 import CustomFormButton from "@/components/forms/CustomFormButton";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 
-interface AddPetModal {
-  openPetModal: boolean;
-  setOpenPetModal: (boolean: boolean) => void;
-}
+interface AddPetModal {}
 
-const AddPetModal: React.FC<AddPetModal> = ({
-  openPetModal,
-  setOpenPetModal,
-}) => {
+const AddPetModal: React.FC<AddPetModal> = () => {
+  const { addPet } = useContext(InventoryDrawerVisiblityContext);
+  const [isCancel, setIsCancel] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const handleCancel = () => {
-    setOpenPetModal(false);
-  };
 
   const isLoadingHandler = (value: any) => {
     setIsLoading(value);
+  };
+
+  const handleCancel = () => {
+    setIsCancel(true);
+    addPet?.setVisible(false);
+  };
+
+  const onClose = () => {
+    addPet?.setVisible(false);
   };
   return (
     <>
       <CustomModal
         title={"Add New Pet"}
-        open={openPetModal}
+        open={addPet?.visible}
         width={800}
-        onClose={handleCancel}
+        onClose={onClose}
       >
         <PetForm.AddPetForm
-          setOpenPetModal={setOpenPetModal}
+          isCancel={isCancel}
+          setIsCancel={setIsCancel}
           isLoadingHandler={isLoadingHandler}
         >
           <div style={{ display: "flex", justifyContent: "flex-end" }}>

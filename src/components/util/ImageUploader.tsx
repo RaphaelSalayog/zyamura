@@ -37,9 +37,10 @@ const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
         beforeUpload={() => {
           return false;
         }}
+        maxCount={1}
         // onPreview={onPreview}
       >
-        {fileList.length < 5 && "+ Upload"}
+        {fileList.length < 1 && "+ Upload"}
       </Upload>
     </ImgCrop>
   );

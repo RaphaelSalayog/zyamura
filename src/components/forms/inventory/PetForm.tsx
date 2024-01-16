@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Form, Input, InputNumber, Modal, Radio } from "antd";
 
 import DropdownMenu from "@/components/util/DropdownMenu";
@@ -10,9 +10,11 @@ import {
   capitalizeFirstLetter,
   onKeyDownTypeNumber,
 } from "@/components/util/customMethods";
+import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 
 interface AddPetForm {
-  setOpenPetModal: (boolean: boolean) => void;
+  isCancel: boolean;
+  setIsCancel: React.Dispatch<React.SetStateAction<boolean>>;
   isLoadingHandler: (boolean: boolean) => void;
   children: any;
 }
@@ -51,10 +53,12 @@ const petGenderOption = [
 ];
 
 const AddPetForm = ({
-  setOpenPetModal,
+  isCancel,
+  setIsCancel,
   isLoadingHandler,
   children,
 }: AddPetForm) => {
+  const { addPet: addPetVisible } = useContext(InventoryDrawerVisiblityContext);
   const [petType, setPetType] = useState("");
   const [petSupplier, setPetSupplier] = useState("");
   const [petCategory, setPetCategory] = useState("");
@@ -129,17 +133,26 @@ const AddPetForm = ({
     setTimeout(() => {
       resetState();
       form.resetFields();
-      setOpenPetModal(false);
+      addPetVisible?.setVisible(false);
       isLoadingHandler(false);
     }, 1000);
   };
 
-  const handleCancel = () => {
-    // console.log("Clicked cancel button");
-    resetState();
-    form.resetFields();
-    setOpenPetModal(false);
-  };
+  // Reset fields when the cancel button was clicked
+  useEffect(() => {
+    if (isCancel) {
+      resetState();
+      form.resetFields();
+      setIsCancel(false);
+    }
+  }, [isCancel]);
+
+  // Close the modal when the backdrop of modal was clicked (It will not reset the fields)
+  useEffect(() => {
+    if (!addPetVisible?.visible) {
+      addPetVisible?.setVisible(false);
+    }
+  }, [addPetVisible]);
 
   // To change the border color of custom Dropdown component
   const onFinishFailed = (errorInfo: any) => {
