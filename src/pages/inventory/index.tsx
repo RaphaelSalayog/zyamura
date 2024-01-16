@@ -49,7 +49,7 @@ const inventorySortItems = [
 ];
 
 const Inventory = () => {
-  const { addPet, editPet, removePet, viewPet } = useDrawerVisiblity();
+  const { pet, item } = useDrawerVisiblity();
   const [inventorySort, setInventorySort] = useState();
   const [searchItemOnChange, setSearchItemOnChange] = useState("");
   const [searchItemOnClick, setSearchItemOnClick] = useState("");
@@ -88,9 +88,7 @@ const Inventory = () => {
 
   return (
     <>
-      <InventoryDrawerVisiblityProvider
-        value={{ addPet, editPet, removePet, viewPet }}
-      >
+      <InventoryDrawerVisiblityProvider value={{ pet, item }}>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Title level={2}>INVENTORY</Title>
           <div

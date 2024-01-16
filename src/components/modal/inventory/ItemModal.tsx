@@ -1,11 +1,12 @@
-import CustomModal from "@/components/modal/CustomModal";
-import { PetForm } from "@/components/forms/inventory/PetForm";
+import { Form, Input, InputNumber, Modal } from "antd";
+import CustomModal from "../CustomModal";
+import { ItemForm } from "@/components/forms/inventory/ItemForm";
 import CustomFormButton from "@/components/forms/CustomFormButton";
 import { useContext, useState } from "react";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 
-const AddPetModal = () => {
-  const { pet } = useContext(InventoryDrawerVisiblityContext);
+const AddItemModal = () => {
+  const { item } = useContext(InventoryDrawerVisiblityContext);
   const [isCancel, setIsCancel] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -15,48 +16,37 @@ const AddPetModal = () => {
 
   const handleCancel = () => {
     setIsCancel(true);
-    pet?.add?.setVisible(false);
+    item?.add?.setVisible(false);
   };
 
   const onClose = () => {
-    pet?.add?.setVisible(false);
+    item?.add?.setVisible(false);
   };
+
   return (
     <>
       <CustomModal
-        title={"Add New Pet"}
-        open={pet?.add?.visible}
+        title={"Add New Item"}
+        open={item?.add?.visible}
         width={800}
         onClose={onClose}
       >
-        <PetForm.AddPetForm
+        <ItemForm.AddItemForm
           isCancel={isCancel}
           setIsCancel={setIsCancel}
           isLoadingHandler={isLoadingHandler}
         >
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
             <CustomFormButton
-              text={"Add New Pet"}
+              text={"Add New Item"}
               handleModalOnClose={handleCancel}
               confirmLoading={isLoading}
             />
           </div>
-        </PetForm.AddPetForm>
+        </ItemForm.AddItemForm>
       </CustomModal>
     </>
   );
 };
 
-export const PetModal = {
-  AddPetModal,
-};
-
-// onKeyPress={(event) => {
-//   if (
-//     !/[0-9\b.]/.test(event.key) ||
-//     (event.key === "." &&
-//       event.currentTarget.value.includes("."))
-//   ) {
-//     event.preventDefault();
-//   }
-// }}
+export const ItemModal = { AddItemModal };

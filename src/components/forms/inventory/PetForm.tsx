@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Form, Input, InputNumber, Modal, Radio } from "antd";
+import { Form, Input, InputNumber, Radio } from "antd";
 
 import DropdownMenu from "@/components/util/DropdownMenu";
 import TextArea from "antd/es/input/TextArea";
@@ -58,7 +58,7 @@ const AddPetForm = ({
   isLoadingHandler,
   children,
 }: AddPetForm) => {
-  const { addPet: addPetVisible } = useContext(InventoryDrawerVisiblityContext);
+  const { pet } = useContext(InventoryDrawerVisiblityContext);
   const [petType, setPetType] = useState("");
   const [petSupplier, setPetSupplier] = useState("");
   const [petCategory, setPetCategory] = useState("");
@@ -133,7 +133,7 @@ const AddPetForm = ({
     setTimeout(() => {
       resetState();
       form.resetFields();
-      addPetVisible?.setVisible(false);
+      pet?.add?.setVisible(false);
       isLoadingHandler(false);
     }, 1000);
   };
@@ -149,10 +149,10 @@ const AddPetForm = ({
 
   // Close the modal when the backdrop of modal was clicked (It will not reset the fields)
   useEffect(() => {
-    if (!addPetVisible?.visible) {
-      addPetVisible?.setVisible(false);
+    if (!pet?.add?.visible) {
+      pet?.add?.setVisible(false);
     }
-  }, [addPetVisible]);
+  }, [pet?.add]);
 
   // To change the border color of custom Dropdown component
   const onFinishFailed = (errorInfo: any) => {

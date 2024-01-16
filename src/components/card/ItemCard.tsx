@@ -1,7 +1,11 @@
 import style from "@/styles/itemCard.module.css";
 import Title from "antd/es/typography/Title";
 import InventoryTag from "../util/InventoryTag";
-import { addCommas, truncateString } from "../util/customMethods";
+import {
+  addCommas,
+  capitalizeFirstLetter,
+  truncateString,
+} from "../util/customMethods";
 import { Button, Dropdown, Typography } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 
@@ -60,7 +64,10 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
         <div className={style.itemCardImage}>
           <div className={style.itemCardImageContent}>
             {inventoryType && (
-              <InventoryTag data={inventoryType} color="#003eb3" />
+              <InventoryTag
+                data={capitalizeFirstLetter(inventoryType)}
+                color="#003eb3"
+              />
             )}
             <Dropdown menu={{ items }} placement="bottom">
               <Button

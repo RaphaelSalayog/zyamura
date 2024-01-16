@@ -1,26 +1,25 @@
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
-import AddItemModal from "@/components/modal/inventory/AddItemModal";
+import { ItemModal } from "@/components/modal/inventory/ItemModal";
 import { PetModal } from "@/components/modal/inventory/PetModal";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Dropdown } from "antd";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 const AddButton = () => {
-  const { addPet } = useContext(InventoryDrawerVisiblityContext);
-  const [openItemModal, setOpenItemModal] = useState(false);
+  const { pet, item } = useContext(InventoryDrawerVisiblityContext);
   const items = [
     {
       key: "1",
       label: "Add New Pet",
       onClick: () => {
-        addPet?.setVisible(true);
+        pet?.add?.setVisible(true);
       },
     },
     {
       key: "2",
       label: "Add New Item",
       onClick: () => {
-        setOpenItemModal(true);
+        item?.add?.setVisible(true);
       },
     },
   ];
@@ -33,10 +32,7 @@ const AddButton = () => {
         </Button>
       </Dropdown>
       <PetModal.AddPetModal />
-      <AddItemModal
-        openItemModal={openItemModal}
-        setOpenItemModal={setOpenItemModal}
-      />
+      <ItemModal.AddItemModal />
     </>
   );
 };

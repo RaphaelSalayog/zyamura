@@ -6,34 +6,69 @@ interface DrawerState {
 }
 
 export interface DrawerVisiblity {
-  addPet?: DrawerState;
-  editPet?: DrawerState;
-  removePet?: DrawerState;
-  viewPet?: DrawerState;
+  pet?: {
+    add?: DrawerState;
+    edit?: DrawerState;
+    remove?: DrawerState;
+    view?: DrawerState;
+  };
+  item?: {
+    add?: DrawerState;
+    edit?: DrawerState;
+    remove?: DrawerState;
+    view?: DrawerState;
+  };
 }
 
 const useDrawerVisiblity = (): DrawerVisiblity => {
-  const [isAddDrawerVisible, setIsAddDrawerVisible] = useState(false);
-  const [isEditDrawerVisible, setIsEditDrawerVisible] = useState(false);
-  const [isRemoveDrawerVisible, setIsRemoveDrawerVisible] = useState(false);
-  const [isViewDrawerVisible, setIsViewDrawerVisible] = useState(false);
+  const [isPetAddDrawerVisible, setIsPetAddDrawerVisible] = useState(false);
+  const [isPetEditDrawerVisible, setIsPetEditDrawerVisible] = useState(false);
+  const [isPetRemoveDrawerVisible, setIsPetRemoveDrawerVisible] =
+    useState(false);
+  const [isPetViewDrawerVisible, setIsPetViewDrawerVisible] = useState(false);
+
+  const [isItemAddDrawerVisible, setIsItemAddDrawerVisible] = useState(false);
+  const [isItemEditDrawerVisible, setIsItemEditDrawerVisible] = useState(false);
+  const [isItemRemoveDrawerVisible, setIsItemRemoveDrawerVisible] =
+    useState(false);
+  const [isItemViewDrawerVisible, setIsItemViewDrawerVisible] = useState(false);
 
   return {
-    addPet: {
-      visible: isAddDrawerVisible,
-      setVisible: setIsAddDrawerVisible,
+    pet: {
+      add: {
+        visible: isPetAddDrawerVisible,
+        setVisible: setIsPetAddDrawerVisible,
+      },
+      edit: {
+        visible: isPetEditDrawerVisible,
+        setVisible: setIsPetEditDrawerVisible,
+      },
+      remove: {
+        visible: isPetRemoveDrawerVisible,
+        setVisible: setIsPetRemoveDrawerVisible,
+      },
+      view: {
+        visible: isPetViewDrawerVisible,
+        setVisible: setIsPetViewDrawerVisible,
+      },
     },
-    editPet: {
-      visible: isEditDrawerVisible,
-      setVisible: setIsEditDrawerVisible,
-    },
-    removePet: {
-      visible: isRemoveDrawerVisible,
-      setVisible: setIsRemoveDrawerVisible,
-    },
-    viewPet: {
-      visible: isViewDrawerVisible,
-      setVisible: setIsViewDrawerVisible,
+    item: {
+      add: {
+        visible: isItemAddDrawerVisible,
+        setVisible: setIsItemAddDrawerVisible,
+      },
+      edit: {
+        visible: isItemEditDrawerVisible,
+        setVisible: setIsItemEditDrawerVisible,
+      },
+      remove: {
+        visible: isItemRemoveDrawerVisible,
+        setVisible: setIsItemRemoveDrawerVisible,
+      },
+      view: {
+        visible: isItemViewDrawerVisible,
+        setVisible: setIsItemViewDrawerVisible,
+      },
     },
   };
 };

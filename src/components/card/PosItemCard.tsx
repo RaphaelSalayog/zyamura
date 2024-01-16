@@ -30,7 +30,6 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     inventoryImage,
   } = data;
 
-  const [isHovered, setIsHovered] = useState(false);
   const [quantity, setQuantity] = useState<any>("1");
   const stockId = useSelector((store: any) => store.pointOfSales.itemStock);
   const stock = stockId.find((item: any) => item.productId === inventoryId);

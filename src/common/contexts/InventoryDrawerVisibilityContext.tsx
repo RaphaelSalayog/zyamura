@@ -2,21 +2,41 @@ import { createContext } from "react";
 import { DrawerVisiblity } from "../hooks/useDrawerVisibility";
 
 const initialValue = {
-  addPet: {
-    visible: false,
-    setVisible: () => {},
+  pet: {
+    add: {
+      visible: false,
+      setVisible: () => {},
+    },
+    edit: {
+      visible: false,
+      setVisible: () => {},
+    },
+    remove: {
+      visible: false,
+      setVisible: () => {},
+    },
+    view: {
+      visible: false,
+      setVisible: () => {},
+    },
   },
-  editPet: {
-    visible: false,
-    setVisible: () => {},
-  },
-  removePet: {
-    visible: false,
-    setVisible: () => {},
-  },
-  viewPet: {
-    visible: false,
-    setVisible: () => {},
+  item: {
+    add: {
+      visible: false,
+      setVisible: () => {},
+    },
+    edit: {
+      visible: false,
+      setVisible: () => {},
+    },
+    remove: {
+      visible: false,
+      setVisible: () => {},
+    },
+    view: {
+      visible: false,
+      setVisible: () => {},
+    },
   },
 };
 const InventoryDrawerVisiblityContext =
