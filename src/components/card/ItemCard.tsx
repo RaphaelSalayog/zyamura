@@ -18,7 +18,10 @@ const items = [
         <EditTwoTone /> Edit
       </>
     ),
-    key: "1",
+    key: "edit",
+    onClick: () => {
+      <></>;
+    },
   },
   {
     label: (
@@ -26,7 +29,8 @@ const items = [
         <DeleteTwoTone /> Delete
       </>
     ),
-    key: "2",
+    key: "delete",
+    onClick: () => {},
   },
   {
     label: (
@@ -34,7 +38,8 @@ const items = [
         <DeleteTwoTone /> Archive
       </>
     ),
-    key: "3",
+    key: "archive",
+    onClick: () => {},
   },
 ];
 const ItemCard: React.FC<ItemCard> = ({ data }) => {

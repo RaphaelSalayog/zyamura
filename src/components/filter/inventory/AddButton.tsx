@@ -1,5 +1,5 @@
 import AddItemModal from "@/components/modal/inventory/AddItemModal";
-import AddPetModal from "@/components/modal/inventory/AddPetModal";
+import { PetModal } from "@/components/modal/inventory/PetModal";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Dropdown } from "antd";
 import { useState } from "react";
@@ -32,7 +32,7 @@ const AddButton = () => {
           <PlusOutlined /> Add Listing
         </Button>
       </Dropdown>
-      <AddPetModal
+      <PetModal.AddPetModal
         openPetModal={openPetModal}
         setOpenPetModal={setOpenPetModal}
       />
