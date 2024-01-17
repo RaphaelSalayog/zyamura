@@ -1,6 +1,4 @@
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
-import { ItemModal } from "@/components/modal/inventory/ItemModal";
-import { PetModal } from "@/components/modal/inventory/PetModal";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Dropdown } from "antd";
 import { useContext } from "react";
@@ -31,8 +29,6 @@ const AddButton = () => {
           <PlusOutlined /> Add Listing
         </Button>
       </Dropdown>
-      <PetModal.AddPetModal />
-      <ItemModal.AddItemModal />
     </>
   );
 };

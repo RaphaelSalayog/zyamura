@@ -4,7 +4,7 @@ import CustomFormButton from "@/components/forms/CustomFormButton";
 import { useContext, useState } from "react";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 
-const AddPetModal = () => {
+const PetInformationModal = () => {
   const { pet } = useContext(InventoryDrawerVisiblityContext);
   const [isCancel, setIsCancel] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,17 +16,25 @@ const AddPetModal = () => {
   const handleCancel = () => {
     setIsCancel(true);
     pet?.add?.setVisible(false);
+    pet?.edit?.setVisible(false);
   };
 
   const onClose = () => {
     pet?.add?.setVisible(false);
+    pet?.edit?.setVisible(false);
   };
 
   return (
     <>
       <CustomModal
-        title={"Add New Pet"}
-        open={pet?.add?.visible}
+        title={
+          pet?.add?.visible
+            ? "Add New Pet"
+            : pet?.edit?.visible
+            ? "Update Pet Information"
+            : "Pet Information"
+        }
+        open={pet?.add?.visible || pet?.edit?.visible || pet?.view?.visible}
         width={800}
         onClose={onClose}
       >
@@ -36,7 +44,13 @@ const AddPetModal = () => {
           isLoadingHandler={isLoadingHandler}
         >
           <CustomFormButton
-            text={"Add New Pet"}
+            text={
+              pet?.add?.visible
+                ? "Add New Pet"
+                : pet?.edit?.visible
+                ? "Update"
+                : ""
+            }
             handleModalOnClose={handleCancel}
             confirmLoading={isLoading}
           />
@@ -46,50 +60,8 @@ const AddPetModal = () => {
   );
 };
 
-const EditPetModal = () => {
-  const { pet } = useContext(InventoryDrawerVisiblityContext);
-  const [isCancel, setIsCancel] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const isLoadingHandler = (value: any) => {
-    setIsLoading(value);
-  };
-
-  const handleCancel = () => {
-    setIsCancel(true);
-    pet?.edit?.setVisible(false);
-  };
-
-  const onClose = () => {
-    pet?.edit?.setVisible(false);
-  };
-  return (
-    <>
-      <CustomModal
-        title={"Update Pet Information"}
-        open={pet?.edit?.visible}
-        width={800}
-        onClose={onClose}
-      >
-        <PetForm.AddPetForm
-          isCancel={isCancel}
-          setIsCancel={setIsCancel}
-          isLoadingHandler={isLoadingHandler}
-        >
-          <CustomFormButton
-            text={"Update"}
-            handleModalOnClose={handleCancel}
-            confirmLoading={isLoading}
-          />
-        </PetForm.AddPetForm>
-      </CustomModal>
-    </>
-  );
-};
-
-export const PetModal = {
-  AddPetModal,
-  EditPetModal,
+export const PetMainModal = {
+  PetInformationModal,
 };
 
 // onKeyPress={(event) => {

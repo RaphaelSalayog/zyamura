@@ -10,9 +10,10 @@ import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 import { inventorySortItem } from "@/components/util/customMethods";
 import { InventoryDrawerVisiblityProvider } from "@/common/contexts/InventoryDrawerVisibilityContext";
 import useDrawerVisiblity from "@/common/hooks/useDrawerVisibility";
-import { PetModal } from "@/components/modal/inventory/PetModal";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import useSelectedData from "@/common/hooks/useSelectedData";
+import { ItemModal } from "@/components/modal/inventory/ItemModal";
+import { PetMainModal } from "@/components/modal/inventory/PetModal";
 
 const { Title } = Typography;
 
@@ -140,7 +141,9 @@ const Inventory = () => {
               />
             )}
           </div>
-          <PetModal.EditPetModal />
+
+          <PetMainModal.PetInformationModal />
+          <ItemModal.AddItemModal />
         </SelectedDataProvider>
       </InventoryDrawerVisiblityProvider>
     </>
