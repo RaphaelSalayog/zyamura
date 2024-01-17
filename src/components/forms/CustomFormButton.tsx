@@ -13,16 +13,18 @@ const CustomFormButton = ({
 }: IFormButton) => {
   return (
     <>
-      <Button
-        type="default"
-        onClick={handleModalOnClose}
-        style={{ marginRight: "8px" }}
-      >
-        Cancel
-      </Button>
-      <Button type="primary" htmlType="submit" loading={confirmLoading}>
-        {text}
-      </Button>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          type="default"
+          onClick={handleModalOnClose}
+          style={{ marginRight: "8px" }}
+        >
+          Cancel
+        </Button>
+        <Button type="primary" htmlType="submit" loading={confirmLoading}>
+          {text}
+        </Button>
+      </div>
     </>
   );
 };

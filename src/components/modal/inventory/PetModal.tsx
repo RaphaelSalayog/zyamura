@@ -21,6 +21,7 @@ const AddPetModal = () => {
   const onClose = () => {
     pet?.add?.setVisible(false);
   };
+
   return (
     <>
       <CustomModal
@@ -34,13 +35,11 @@ const AddPetModal = () => {
           setIsCancel={setIsCancel}
           isLoadingHandler={isLoadingHandler}
         >
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <CustomFormButton
-              text={"Add New Pet"}
-              handleModalOnClose={handleCancel}
-              confirmLoading={isLoading}
-            />
-          </div>
+          <CustomFormButton
+            text={"Add New Pet"}
+            handleModalOnClose={handleCancel}
+            confirmLoading={isLoading}
+          />
         </PetForm.AddPetForm>
       </CustomModal>
     </>
@@ -67,7 +66,7 @@ const EditPetModal = () => {
   return (
     <>
       <CustomModal
-        title={"Add New Pet"}
+        title={"Update Pet Information"}
         open={pet?.edit?.visible}
         width={800}
         onClose={onClose}
@@ -77,13 +76,11 @@ const EditPetModal = () => {
           setIsCancel={setIsCancel}
           isLoadingHandler={isLoadingHandler}
         >
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <CustomFormButton
-              text={"Update"}
-              handleModalOnClose={handleCancel}
-              confirmLoading={isLoading}
-            />
-          </div>
+          <CustomFormButton
+            text={"Update"}
+            handleModalOnClose={handleCancel}
+            confirmLoading={isLoading}
+          />
         </PetForm.AddPetForm>
       </CustomModal>
     </>

@@ -23,7 +23,7 @@ const CustomModal: React.FC<any> = (props) => {
         closeIcon={
           <CloseCircleFilled style={{ color: "rgba(0, 0, 0, 0.85)" }} />
         }
-        style={props.style}
+        // style={props.style}
         width={props?.width || 600}
         centered={props.centered}
       >

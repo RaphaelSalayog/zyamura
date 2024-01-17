@@ -60,7 +60,7 @@ const AddPetForm = ({
   children,
 }: AddPetForm) => {
   const { pet } = useContext(InventoryDrawerVisiblityContext);
-  const { get } = useContext(SelectedDataContext);
+  const { get, set } = useContext(SelectedDataContext);
   const [petType, setPetType] = useState("");
   const [petSupplier, setPetSupplier] = useState("");
   const [petCategory, setPetCategory] = useState("");
@@ -101,7 +101,6 @@ const AddPetForm = ({
 
   // >>Radio Button
   const onChange = (e: any) => {
-    // console.log("radio checked", e.target.value);
     setPetType(e.target.value);
   };
 
@@ -164,7 +163,13 @@ const AddPetForm = ({
         setPetImage(get.inventoryImage);
       }
     }
-  }, [isCancel, pet?.edit?.visible, pet?.view?.visible]);
+
+    if (!(pet?.edit?.visible || pet?.view?.visible)) {
+      resetState();
+      form.resetFields();
+      set(null);
+    }
+  }, [isCancel, get, pet?.edit?.visible, pet?.view?.visible]);
 
   // Reset fields when the cancel button was clicked
   useEffect(() => {
