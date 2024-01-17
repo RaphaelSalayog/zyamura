@@ -1,6 +1,8 @@
+import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import { DownOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Space } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 interface DropdownMenu {
   items: {
@@ -10,7 +12,8 @@ interface DropdownMenu {
   trigger: "hover" | "click";
   type: "category" | "sort";
   style?: React.CSSProperties;
-  getValue: (value: any) => void;
+  value?: string;
+  setValue: (value: any) => void;
 }
 
 const DropdownMenu: React.FC<DropdownMenu> = ({
@@ -18,15 +21,26 @@ const DropdownMenu: React.FC<DropdownMenu> = ({
   items,
   trigger,
   style,
-  getValue,
+  value,
+  setValue,
 }) => {
+  const { pet } = useContext(InventoryDrawerVisiblityContext);
   const [sortName, setSortName] = useState(
     type === "sort" ? items[0].label : ""
   );
+
+  useEffect(() => {
+    if (pet?.edit?.visible || pet?.view?.visible) {
+      if (value) {
+        setSortName(value);
+      }
+    }
+  }, [value, pet?.edit?.visible, pet?.view?.visible]);
+
   const handleMenuClick = ({ key }: any) => {
     const selectedItem = items.find((item) => item.key === key);
     setSortName((prevState) => (selectedItem ? selectedItem.label : prevState));
-    getValue(selectedItem?.key);
+    setValue(selectedItem?.key);
   };
 
   return (

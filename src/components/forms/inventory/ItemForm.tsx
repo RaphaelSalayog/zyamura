@@ -157,7 +157,7 @@ const AddItemForm = ({
               width: "100%",
               borderColor: isSupplierNotValid ? "#ff4d4f" : "#d9d9d9",
             }}
-            getValue={itemSupplierHandler}
+            setValue={itemSupplierHandler}
           />
         </Form.Item>
         <Form.Item name="itemDescription" label="Item Description">

@@ -8,6 +8,9 @@ import {
 } from "../util/customMethods";
 import { Button, Dropdown, Typography } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
+import { useContext } from "react";
+import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 const { Text } = Typography;
 
@@ -15,38 +18,9 @@ interface ItemCard {
   data: any;
 }
 
-const items = [
-  {
-    label: (
-      <>
-        <EditTwoTone /> Edit
-      </>
-    ),
-    key: "edit",
-    onClick: () => {
-      <></>;
-    },
-  },
-  {
-    label: (
-      <>
-        <DeleteTwoTone /> Delete
-      </>
-    ),
-    key: "delete",
-    onClick: () => {},
-  },
-  {
-    label: (
-      <>
-        <DeleteTwoTone /> Archive
-      </>
-    ),
-    key: "archive",
-    onClick: () => {},
-  },
-];
 const ItemCard: React.FC<ItemCard> = ({ data }) => {
+  const { pet, item } = useContext(InventoryDrawerVisiblityContext);
+  const { set } = useContext(SelectedDataContext);
   const {
     inventoryName,
     inventoryQuantity,
@@ -58,11 +32,52 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
     inventoryImage,
   } = data;
 
+  const items = [
+    {
+      label: (
+        <>
+          <EditTwoTone /> Edit
+        </>
+      ),
+      key: "edit",
+      onClick: () => {
+        if (inventoryObject === "Pet") {
+          pet?.edit?.setVisible(true);
+        } else if (inventoryObject === "Item") {
+          item?.edit?.setVisible(true);
+        }
+        set(data);
+      },
+    },
+    {
+      label: (
+        <>
+          <DeleteTwoTone /> Delete
+        </>
+      ),
+      key: "delete",
+      onClick: () => {},
+    },
+    {
+      label: (
+        <>
+          <DeleteTwoTone /> Archive
+        </>
+      ),
+      key: "archive",
+      onClick: () => {},
+    },
+  ];
   return (
     <>
       <div className={style.itemCard}>
         <div className={style.itemCardImage}>
-          <div className={style.itemCardImageContent}>
+          <div
+            className={style.itemCardImageContent}
+            style={{
+              justifyContent: !inventoryType ? "flex-end" : "space-between",
+            }}
+          >
             {inventoryType && (
               <InventoryTag
                 data={capitalizeFirstLetter(inventoryType)}

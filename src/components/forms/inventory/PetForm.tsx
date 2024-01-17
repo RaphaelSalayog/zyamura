@@ -11,6 +11,7 @@ import {
   onKeyDownTypeNumber,
 } from "@/components/util/customMethods";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 interface AddPetForm {
   isCancel: boolean;
@@ -59,6 +60,7 @@ const AddPetForm = ({
   children,
 }: AddPetForm) => {
   const { pet } = useContext(InventoryDrawerVisiblityContext);
+  const { get } = useContext(SelectedDataContext);
   const [petType, setPetType] = useState("");
   const [petSupplier, setPetSupplier] = useState("");
   const [petCategory, setPetCategory] = useState("");
@@ -140,12 +142,40 @@ const AddPetForm = ({
 
   // Reset fields when the cancel button was clicked
   useEffect(() => {
+    if (pet?.edit?.visible || pet?.view?.visible) {
+      if (get) {
+        form.setFieldsValue({
+          petName: get.inventoryName,
+          petSupplier: get.inventorySupplier,
+          petDescription: get.inventoryDescription,
+          petSellingPrice: get.inventorySellingPrice,
+          petInvestmentCost: get.inventoryInvestmentCost,
+          petCategory: get.inventoryCategory,
+          petGender: get.inventoryGender,
+          petType: get.inventoryType,
+          petQuantity:
+            get.inventoryType === "group" ? get.inventoryQuantity : "",
+          petImage: get.inventoryImage,
+        });
+        setPetSupplier(get.inventorySupplier);
+        setPetCategory(get.inventoryCategory);
+        setPetGender(get.inventoryGender);
+        setPetType(get.inventoryType);
+        setPetImage(get.inventoryImage);
+      }
+    }
+  }, [isCancel, pet?.edit?.visible, pet?.view?.visible]);
+
+  // Reset fields when the cancel button was clicked
+  useEffect(() => {
     if (isCancel) {
-      resetState();
-      form.resetFields();
+      if (pet?.add?.visible) {
+        resetState();
+        form.resetFields();
+      }
       setIsCancel(false);
     }
-  }, [isCancel]);
+  }, [isCancel, pet?.add?.visible]);
 
   // Close the modal when the backdrop of modal was clicked (It will not reset the fields)
   useEffect(() => {
@@ -211,7 +241,8 @@ const AddPetForm = ({
               width: "100%",
               borderColor: isSupplierNotValid ? "#ff4d4f" : "#d9d9d9",
             }}
-            getValue={petSupplierHandler}
+            value={petSupplier}
+            setValue={petSupplierHandler}
           />
         </Form.Item>
         <Form.Item name="petDescription" label="Pet Description">
@@ -278,7 +309,8 @@ const AddPetForm = ({
                 width: "100%",
                 borderColor: isCategoryNotValid ? "#ff4d4f" : "#d9d9d9",
               }}
-              getValue={petCategoryHandler}
+              value={petCategory}
+              setValue={petCategoryHandler}
             />
           </Form.Item>
           <Form.Item
@@ -301,7 +333,8 @@ const AddPetForm = ({
                 width: "100%",
                 borderColor: isGenderNotValid ? "#ff4d4f" : "#d9d9d9",
               }}
-              getValue={petGenderHandler}
+              value={petGender}
+              setValue={petGenderHandler}
             />
           </Form.Item>
         </div>

@@ -1,13 +1,18 @@
 import ImgCrop from "antd-img-crop";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Upload } from "antd";
 import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 interface ImageUploader {
   getValue: (value: any[]) => void;
 }
 
 const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
+  const { pet } = useContext(InventoryDrawerVisiblityContext);
+  const { get } = useContext(SelectedDataContext);
+
   const [fileList, setFileList] = useState<UploadFile[]>([
     // {
     //   uid: "-1",
@@ -20,6 +25,12 @@ const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
+
+  useEffect(() => {
+    if ((pet?.edit?.visible || pet?.view?.visible) && get) {
+      setFileList(get.inventoryImage);
+    }
+  }, [get, pet?.edit?.visible, pet?.view?.visible]);
 
   useEffect(() => {
     getValue(fileList);
@@ -40,7 +51,7 @@ const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
         maxCount={1}
         // onPreview={onPreview}
       >
-        {fileList.length < 1 && "+ Upload"}
+        {fileList?.length < 1 && "+ Upload"}
       </Upload>
     </ImgCrop>
   );
