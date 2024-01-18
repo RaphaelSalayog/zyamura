@@ -18,6 +18,7 @@ export interface inventoryInitialState {
 }
 
 interface addPet {
+  petId: string;
   petName: string;
   petSupplier: string;
   petDescription: string;
@@ -31,6 +32,7 @@ interface addPet {
 }
 
 interface addItem {
+  itemId: string;
   itemName: string;
   itemSupplier: string;
   itemDescription: string;
@@ -49,8 +51,8 @@ const inventorySlice = createSlice({
   initialState,
   reducers: {
     addPet: (state, { payload }: PayloadAction<addPet>) => {
-      state.inventory.push({
-        inventoryId: state.inventory.length.toString(),
+      const data = {
+        inventoryId: payload.petId,
         inventoryObject: "Pet",
         inventoryName: payload.petName,
         inventorySupplier: payload.petSupplier,
@@ -62,11 +64,23 @@ const inventorySlice = createSlice({
         inventoryType: payload.petType,
         inventoryQuantity: payload.petQuantity,
         inventoryImage: payload.petImage,
-      });
+      };
+
+      // Check if the item is existing
+      const index = state.inventory.findIndex(
+        (item) => item.inventoryId === payload.petId
+      );
+      if (index !== -1) {
+        // If it is existing
+        state.inventory[index] = data; // Update the specified properties for the object
+      } else {
+        //If it is not
+        state.inventory.push(data); // Add the object to the inventory array
+      }
     },
     addItem: (state, { payload }: PayloadAction<addItem>) => {
-      state.inventory.push({
-        inventoryId: state.inventory.length.toString(),
+      const data = {
+        inventoryId: payload.itemId,
         inventoryObject: "Item",
         inventoryName: payload.itemName,
         inventorySupplier: payload.itemSupplier,
@@ -78,7 +92,19 @@ const inventorySlice = createSlice({
         inventoryType: null,
         inventoryQuantity: payload.itemQuantity,
         inventoryImage: payload.itemImage,
-      });
+      };
+
+      // Check if the item is existing
+      const index = state.inventory.findIndex(
+        (item) => item.inventoryId === payload.itemId
+      );
+      if (index !== -1) {
+        // If it is existing
+        state.inventory[index] = data; // Update the specified properties for the object
+      } else {
+        //If it is not
+        state.inventory.push(data); // Add the object to the inventory array
+      }
     },
   },
 });

@@ -1,4 +1,5 @@
 import {
+  DashboardOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
@@ -10,7 +11,7 @@ import { useRouter } from "next/router";
 const items = [
   {
     key: "/dashboard",
-    icon: <UserOutlined />,
+    icon: <DashboardOutlined />,
     label: "Dashboard",
   },
   {
@@ -28,31 +29,31 @@ const items = [
     icon: <UploadOutlined />,
     label: "Transaction",
   },
-  {
-    key: "/orders",
-    icon: <UploadOutlined />,
-    label: "Orders",
-  },
-  {
-    key: "/purchase-order",
-    icon: <UploadOutlined />,
-    label: "Purchase Order",
-  },
-  {
-    key: "/archive",
-    icon: <UploadOutlined />,
-    label: "Archive",
-  },
-  {
-    key: "/activity-log",
-    icon: <UploadOutlined />,
-    label: "Activity Log",
-  },
-  {
-    key: "/accounts",
-    icon: <UploadOutlined />,
-    label: "Accounts",
-  },
+  // {
+  //   key: "/orders",
+  //   icon: <UploadOutlined />,
+  //   label: "Orders",
+  // },
+  // {
+  //   key: "/purchase-order",
+  //   icon: <UploadOutlined />,
+  //   label: "Purchase Order",
+  // },
+  // {
+  //   key: "/archive",
+  //   icon: <UploadOutlined />,
+  //   label: "Archive",
+  // },
+  // {
+  //   key: "/activity-log",
+  //   icon: <UploadOutlined />,
+  //   label: "Activity Log",
+  // },
+  // {
+  //   key: "/accounts",
+  //   icon: <UploadOutlined />,
+  //   label: "Accounts",
+  // },
   {
     key: "/login",
     icon: <UploadOutlined />,

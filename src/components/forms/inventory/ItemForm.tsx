@@ -4,12 +4,14 @@ import ImageUploader from "@/components/util/ImageUploader";
 import TextArea from "antd/es/input/TextArea";
 import {
   capitalizeFirstLetter,
+  generateUniqueId,
   onKeyDownTypeNumber,
 } from "@/components/util/customMethods";
 import { useContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "@/store/reducers/inventorySlice";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 interface AddItemForm {
   isCancel: boolean;
@@ -35,7 +37,9 @@ const AddItemForm = ({
   isLoadingHandler,
   children,
 }: AddItemForm) => {
+  const data = useSelector((store: any) => store.inventory.inventory);
   const { item } = useContext(InventoryDrawerVisiblityContext);
+  const { get, set } = useContext(SelectedDataContext);
   const [itemSupplier, setItemSupplier] = useState("");
   const [itemImage, setItemImage] = useState([]);
 
@@ -68,17 +72,22 @@ const AddItemForm = ({
     setIsImageNotValid(false);
   };
 
-  const handleOk = (value: any) => {
-    const data = {
+  const submitHandler = (value: any) => {
+    const id = generateUniqueId(
+      data.map((item: any) => item.inventoryId),
+      "item"
+    );
+    const newData = {
+      itemId: item?.add?.visible ? id : get.inventoryId,
       ...value,
       itemSupplier: itemSupplier,
       itemImage: itemImage,
     };
-    //Add data to Inventory Slice in Redux
-    dispatch(addItem(data));
 
     isLoadingHandler(true);
     setTimeout(() => {
+      //Add data to Inventory Slice in Redux
+      dispatch(addItem(newData));
       resetState();
       form.resetFields();
       item?.add?.setVisible(false);
@@ -110,7 +119,7 @@ const AddItemForm = ({
     <>
       <Form
         form={form}
-        onFinish={handleOk}
+        onFinish={submitHandler}
         id="addItemForm"
         // labelCol={{ span: 4 }}
         // wrapperCol={{ span: 14 }}

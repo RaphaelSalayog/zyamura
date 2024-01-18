@@ -5,9 +5,10 @@ import DropdownMenu from "@/components/util/DropdownMenu";
 import TextArea from "antd/es/input/TextArea";
 import ImageUploader from "@/components/util/ImageUploader";
 import { addPet } from "@/store/reducers/inventorySlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   capitalizeFirstLetter,
+  generateUniqueId,
   onKeyDownTypeNumber,
 } from "@/components/util/customMethods";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
@@ -59,6 +60,7 @@ const AddPetForm = ({
   isLoadingHandler,
   children,
 }: AddPetForm) => {
+  const data = useSelector((store: any) => store.inventory.inventory);
   const { pet } = useContext(InventoryDrawerVisiblityContext);
   const { get, set } = useContext(SelectedDataContext);
   const [petType, setPetType] = useState("");
@@ -118,8 +120,13 @@ const AddPetForm = ({
     setIsImageNotValid(false);
   };
 
-  const handleOk = (value: any) => {
-    const data = {
+  const submitHandler = (value: any) => {
+    const id = generateUniqueId(
+      data.map((item: any) => item.inventoryId),
+      "pet"
+    );
+    const newData = {
+      petId: pet?.add?.visible ? id : get.inventoryId,
       ...value,
       petQuantity: value.petType === "unique" ? 1 : value?.petQuantity,
       petCategory: petCategory,
@@ -127,14 +134,15 @@ const AddPetForm = ({
       petSupplier: petSupplier,
       petImage: petImage,
     };
-    //Add data to Inventory Slice in Redux
-    dispatch(addPet(data));
 
     isLoadingHandler(true);
     setTimeout(() => {
+      //Add data to Inventory Slice in Redux
+      dispatch(addPet(newData));
       resetState();
       form.resetFields();
       pet?.add?.setVisible(false);
+      pet?.edit?.setVisible(false);
       isLoadingHandler(false);
     }, 1000);
   };
@@ -200,7 +208,7 @@ const AddPetForm = ({
     <>
       <Form
         form={form}
-        onFinish={handleOk}
+        onFinish={submitHandler}
         id="addPetForm"
         layout="vertical"
         initialValues={{ petType: "unique" }}
