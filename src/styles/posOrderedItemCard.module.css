@@ -1,6 +1,6 @@
 .container {
   padding: 10px;
-  border: 1px solid black;
+  border: 1px solid #f0f0f0;
   border-radius: 8px;
   height: 136.75px;
   max-width: 364px;
@@ -8,7 +8,6 @@
   min-height: 136.75px;
   display: flex;
   margin-bottom: 10px;
-  background-color: white;
 }
 
 .image {

@@ -55,7 +55,6 @@ const pointOfSalesSlice = createSlice({
         id.quantity += payload.quantity;
         id.totalItemPrice += totalItemPrice;
       } else {
-        console.log(payload);
         state.orderedItems.push({
           ...payload,
           totalItemPrice: totalItemPrice,
@@ -87,6 +86,15 @@ const pointOfSalesSlice = createSlice({
           payload.quantity * orderedItemsId.price;
         // To update the totalItemPrice
         orderedItemsId.totalItemPrice = payload.quantity * orderedItemsId.price;
+        // To check if the quantity of ordered item is 0. If it is true, it will be remove in the orderedItems array
+        if (payload.quantity === 0) {
+          let indexToRemove = state.orderedItems.findIndex(
+            (item) => item.productId === payload.productId
+          );
+          if (indexToRemove !== -1) {
+            state.orderedItems.splice(indexToRemove, 1);
+          }
+        }
       }
     },
     resetOrder: () => {},

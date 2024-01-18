@@ -73,7 +73,11 @@ const PointOfSales = () => {
               <p>Total</p>
               <p>₱{addCommas(totalPrice)}</p>
             </div>
-            <Button type="primary" className={style.rightPaneFooterButton}>
+            <Button
+              type="primary"
+              disabled={orderedItem.length === 0}
+              className={style.rightPaneFooterButton}
+            >
               Confirm Transaction
             </Button>
           </div>
