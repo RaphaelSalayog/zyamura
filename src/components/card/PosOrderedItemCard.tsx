@@ -26,19 +26,30 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
     inventoryName,
     inventoryObject,
     inventoryCategory,
+    inventoryQuantity,
     inventoryGender,
     inventoryImage,
   } = item;
 
-  const inputNumberHandler = (value: string | null) => {
+  const inputNumberHandler = (value: number | null) => {
+    if (value === 0 || (value && value <= inventoryQuantity)) {
+      dispatch(
+        onChangeOrderedQuantity({
+          productId: inventoryId,
+          quantity: value,
+        })
+      );
+    }
+  };
+
+  const onClickHandler = () => {
     dispatch(
       onChangeOrderedQuantity({
         productId: inventoryId,
-        quantity: value ? +value : 0,
+        quantity: 0,
       })
     );
   };
-
   return (
     <>
       <div className={style.container}>
@@ -56,7 +67,11 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
               <Title level={5} style={{ margin: "0" }}>
                 {truncateString(inventoryName, 36)}
               </Title>
-              <Button>
+              <Button
+                type="default"
+                style={{ border: "none" }}
+                onClick={onClickHandler}
+              >
                 <CloseOutlined />
               </Button>
             </div>
@@ -79,7 +94,7 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
               <div className={style.contentSection2}>
                 <InputNumber
                   type="number"
-                  min={"0"}
+                  min={0}
                   precision={0}
                   value={orderedItemQuantity}
                   style={{ width: "36%" }}
