@@ -11,6 +11,8 @@ import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useContext } from "react";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
+import { useDispatch } from "react-redux";
+import { removeInventoryItem } from "@/store/reducers/inventorySlice";
 
 const { Text } = Typography;
 
@@ -21,6 +23,7 @@ interface ItemCard {
 const ItemCard: React.FC<ItemCard> = ({ data }) => {
   const { pet, item } = useContext(InventoryDrawerVisiblityContext);
   const { set } = useContext(SelectedDataContext);
+  const dispatch = useDispatch();
   const {
     inventoryName,
     inventoryQuantity,
@@ -36,7 +39,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
     {
       label: (
         <>
-          <EditTwoTone /> Edit
+          <EditTwoTone />
         </>
       ),
       key: "edit",
@@ -52,16 +55,18 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
     {
       label: (
         <>
-          <DeleteTwoTone /> Delete
+          <DeleteTwoTone twoToneColor={"red"} />
         </>
       ),
       key: "delete",
-      onClick: () => {},
+      onClick: () => {
+        dispatch(removeInventoryItem({ inventoryId: data.inventoryId }));
+      },
     },
     {
       label: (
         <>
-          <DeleteTwoTone /> Archive
+          <DeleteTwoTone />
         </>
       ),
       key: "archive",

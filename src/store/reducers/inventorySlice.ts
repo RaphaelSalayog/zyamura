@@ -42,6 +42,10 @@ interface addItem {
   itemImage: any[];
 }
 
+interface removeItem {
+  inventoryId: string;
+}
+
 const initialState: inventoryInitialState = {
   inventory: [],
 };
@@ -106,9 +110,20 @@ const inventorySlice = createSlice({
         state.inventory.push(data); // Add the object to the inventory array
       }
     },
+    removeInventoryItem: (state, { payload }: PayloadAction<removeItem>) => {
+      console.log(payload.inventoryId);
+      const indexToRemove = state.inventory.findIndex(
+        (item) => item.inventoryId === payload.inventoryId
+      );
+
+      // Remove the object if found
+      if (indexToRemove !== -1) {
+        state.inventory.splice(indexToRemove, 1);
+      }
+    },
   },
 });
 
-export const { addPet, addItem } = inventorySlice.actions;
+export const { addPet, addItem, removeInventoryItem } = inventorySlice.actions;
 
 export default inventorySlice.reducer;
