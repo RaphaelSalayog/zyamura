@@ -61,7 +61,7 @@ const AddPetForm = ({
   children,
 }: AddPetForm) => {
   const data = useSelector((store: any) => store.inventory.inventory);
-  const { pet } = useContext(InventoryDrawerVisiblityContext);
+  const { pet, item } = useContext(InventoryDrawerVisiblityContext);
   const { get, set } = useContext(SelectedDataContext);
   const [petType, setPetType] = useState("");
   const [petSupplier, setPetSupplier] = useState("");
@@ -147,8 +147,8 @@ const AddPetForm = ({
     }, 1000);
   };
 
-  // Reset fields when the cancel button was clicked
   useEffect(() => {
+    // Form setField for Edit and View
     if (pet?.edit?.visible || pet?.view?.visible) {
       if (get) {
         form.setFieldsValue({
@@ -172,30 +172,31 @@ const AddPetForm = ({
       }
     }
 
-    if (!(pet?.edit?.visible || pet?.view?.visible)) {
+    // Clear form fields when closing modal
+    if (
+      !(pet?.edit?.visible || pet?.view?.visible) &&
+      !(item?.edit?.visible || item?.view?.visible)
+    ) {
       resetState();
       form.resetFields();
       set(null);
     }
-  }, [isCancel, get, pet?.edit?.visible, pet?.view?.visible]);
+  }, [
+    get,
+    pet?.edit?.visible,
+    pet?.view?.visible,
+    item?.edit?.visible,
+    item?.view?.visible,
+  ]);
 
   // Reset fields when the cancel button was clicked
   useEffect(() => {
     if (isCancel) {
-      if (pet?.add?.visible) {
-        resetState();
-        form.resetFields();
-      }
+      resetState();
+      form.resetFields();
       setIsCancel(false);
     }
-  }, [isCancel, pet?.add?.visible]);
-
-  // Close the modal when the backdrop of modal was clicked (It will not reset the fields)
-  useEffect(() => {
-    if (!pet?.add?.visible) {
-      pet?.add?.setVisible(false);
-    }
-  }, [pet?.add]);
+  }, [isCancel]);
 
   // To change the border color of custom Dropdown component
   const onFinishFailed = (errorInfo: any) => {

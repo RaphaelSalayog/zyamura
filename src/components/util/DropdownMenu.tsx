@@ -1,5 +1,4 @@
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
-import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import { DownOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Space } from "antd";
 import React, { useContext, useEffect, useState } from "react";
@@ -24,18 +23,29 @@ const DropdownMenu: React.FC<DropdownMenu> = ({
   value,
   setValue,
 }) => {
-  const { pet } = useContext(InventoryDrawerVisiblityContext);
+  const { pet, item } = useContext(InventoryDrawerVisiblityContext);
   const [sortName, setSortName] = useState(
     type === "sort" ? items[0].label : ""
   );
 
   useEffect(() => {
-    if (pet?.edit?.visible || pet?.view?.visible) {
+    if (
+      pet?.edit?.visible ||
+      pet?.view?.visible ||
+      item?.edit?.visible ||
+      item?.view?.visible
+    ) {
       if (value) {
         setSortName(value);
       }
     }
-  }, [value, pet?.edit?.visible, pet?.view?.visible]);
+  }, [
+    value,
+    pet?.edit?.visible,
+    pet?.view?.visible,
+    item?.edit?.visible,
+    item?.view?.visible,
+  ]);
 
   const handleMenuClick = ({ key }: any) => {
     const selectedItem = items.find((item) => item.key === key);

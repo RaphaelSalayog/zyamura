@@ -1,4 +1,3 @@
-import { Form, Input, InputNumber, Modal } from "antd";
 import CustomModal from "../CustomModal";
 import { ItemForm } from "@/components/forms/inventory/ItemForm";
 import CustomFormButton from "@/components/forms/CustomFormButton";
@@ -17,17 +16,25 @@ const AddItemModal = () => {
   const handleCancel = () => {
     setIsCancel(true);
     item?.add?.setVisible(false);
+    item?.edit?.setVisible(false);
   };
 
   const onClose = () => {
     item?.add?.setVisible(false);
+    item?.edit?.setVisible(false);
   };
 
   return (
     <>
       <CustomModal
-        title={"Add New Item"}
-        open={item?.add?.visible}
+        title={
+          item?.add?.visible
+            ? "Add New Item"
+            : item?.edit?.visible
+            ? "Update Item Information"
+            : "Item Information"
+        }
+        open={item?.add?.visible || item?.edit?.visible || item?.view?.visible}
         width={800}
         onClose={onClose}
       >
@@ -36,13 +43,17 @@ const AddItemModal = () => {
           setIsCancel={setIsCancel}
           isLoadingHandler={isLoadingHandler}
         >
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <CustomFormButton
-              text={"Add New Item"}
-              handleModalOnClose={handleCancel}
-              confirmLoading={isLoading}
-            />
-          </div>
+          <CustomFormButton
+            text={
+              item?.add?.visible
+                ? "Add New Item"
+                : item?.edit?.visible
+                ? "Update"
+                : ""
+            }
+            handleModalOnClose={handleCancel}
+            confirmLoading={isLoading}
+          />
         </ItemForm.AddItemForm>
       </CustomModal>
     </>

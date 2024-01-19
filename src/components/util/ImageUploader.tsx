@@ -10,7 +10,7 @@ interface ImageUploader {
 }
 
 const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
-  const { pet } = useContext(InventoryDrawerVisiblityContext);
+  const { pet, item } = useContext(InventoryDrawerVisiblityContext);
   const { get } = useContext(SelectedDataContext);
 
   const [fileList, setFileList] = useState<UploadFile[]>([
@@ -27,10 +27,22 @@ const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
   };
 
   useEffect(() => {
-    if ((pet?.edit?.visible || pet?.view?.visible) && get) {
+    if (
+      (pet?.edit?.visible ||
+        pet?.view?.visible ||
+        item?.edit?.visible ||
+        item?.view?.visible) &&
+      get
+    ) {
       setFileList(get.inventoryImage);
     }
-  }, [get, pet?.edit?.visible, pet?.view?.visible]);
+  }, [
+    get,
+    pet?.edit?.visible,
+    pet?.view?.visible,
+    item?.edit?.visible,
+    item?.view?.visible,
+  ]);
 
   useEffect(() => {
     getValue(fileList);

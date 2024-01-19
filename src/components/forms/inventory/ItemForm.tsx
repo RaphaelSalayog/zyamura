@@ -38,7 +38,7 @@ const AddItemForm = ({
   children,
 }: AddItemForm) => {
   const data = useSelector((store: any) => store.inventory.inventory);
-  const { item } = useContext(InventoryDrawerVisiblityContext);
+  const { item, pet } = useContext(InventoryDrawerVisiblityContext);
   const { get, set } = useContext(SelectedDataContext);
   const [itemSupplier, setItemSupplier] = useState("");
   const [itemImage, setItemImage] = useState([]);
@@ -91,9 +91,45 @@ const AddItemForm = ({
       resetState();
       form.resetFields();
       item?.add?.setVisible(false);
+      item?.edit?.setVisible(false);
       isLoadingHandler(false);
     }, 1000);
   };
+
+  useEffect(() => {
+    // Form setField for Edit and View
+    if (item?.edit?.visible || item?.view?.visible) {
+      if (get) {
+        form.setFieldsValue({
+          itemName: get.inventoryName,
+          itemSupplier: get.inventorySupplier,
+          itemDescription: get.inventoryDescription,
+          itemSellingPrice: get.inventorySellingPrice,
+          itemInvestmentCost: get.inventoryInvestmentCost,
+          itemQuantity: get.inventoryQuantity,
+          itemImage: get.inventoryImage,
+        });
+        setItemSupplier(get.inventorySupplier);
+        setItemImage(get.inventoryImage);
+      }
+    }
+
+    // Clear form fields when closing modal
+    if (
+      !(item?.edit?.visible || item?.view?.visible) &&
+      !(pet?.edit?.visible || pet?.view?.visible)
+    ) {
+      resetState();
+      form.resetFields();
+      set(null);
+    }
+  }, [
+    get,
+    item?.edit?.visible,
+    item?.view?.visible,
+    pet?.edit?.visible,
+    pet?.view?.visible,
+  ]);
 
   // Reset fields when the cancel button was clicked
   useEffect(() => {
@@ -103,13 +139,6 @@ const AddItemForm = ({
       setIsCancel(false);
     }
   }, [isCancel]);
-
-  // Close the modal when the backdrop of modal was clicked (It will not reset the fields)
-  useEffect(() => {
-    if (!item?.add?.visible) {
-      item?.add?.setVisible(false);
-    }
-  }, [item?.add]);
 
   const onFinishFailed = (errorInfo: any) => {
     setIsSupplierNotValid(errorInfo.values.itemSupplier === undefined);
@@ -121,8 +150,6 @@ const AddItemForm = ({
         form={form}
         onFinish={submitHandler}
         id="addItemForm"
-        // labelCol={{ span: 4 }}
-        // wrapperCol={{ span: 14 }}
         layout="vertical"
         onFinishFailed={onFinishFailed}
         onValuesChange={(changedValues, allValues) => {
@@ -166,6 +193,7 @@ const AddItemForm = ({
               width: "100%",
               borderColor: isSupplierNotValid ? "#ff4d4f" : "#d9d9d9",
             }}
+            value={itemSupplier}
             setValue={itemSupplierHandler}
           />
         </Form.Item>
