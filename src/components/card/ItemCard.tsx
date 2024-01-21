@@ -6,7 +6,7 @@ import {
   capitalizeFirstLetter,
   truncateString,
 } from "../util/customMethods";
-import { Button, Dropdown, Typography } from "antd";
+import { Button, Dropdown, Modal, Typography } from "antd";
 import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { useContext } from "react";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
@@ -37,12 +37,9 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
 
   const items = [
     {
-      label: (
-        <>
-          <EditTwoTone />
-        </>
-      ),
       key: "edit",
+      label: "Edit",
+      icon: <EditTwoTone />,
       onClick: () => {
         if (inventoryObject === "Pet") {
           pet?.edit?.setVisible(true);
@@ -53,25 +50,33 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
       },
     },
     {
-      label: (
-        <>
-          <DeleteTwoTone twoToneColor={"red"} />
-        </>
-      ),
       key: "delete",
+      label: "Delete",
+      icon: <DeleteTwoTone twoToneColor={"red"} />,
       onClick: () => {
-        dispatch(removeInventoryItem({ inventoryId: data.inventoryId }));
+        Modal.confirm({
+          title: "Confirm Deletion",
+          content: (
+            <>
+              <p>Are you sure you want to delete this information?</p>
+              <p>This action cannot be undone.</p>
+            </>
+          ),
+          onOk: async () => {
+            await dispatch(
+              removeInventoryItem({ inventoryId: data.inventoryId })
+            );
+          },
+          centered: true,
+        });
       },
     },
-    {
-      label: (
-        <>
-          <DeleteTwoTone />
-        </>
-      ),
-      key: "archive",
-      onClick: () => {},
-    },
+    // {
+    //   key: "archive",
+    //   label: "Archive",
+    //   icon: <DeleteTwoTone />,
+    //   onClick: () => {},
+    // },
   ];
   return (
     <>

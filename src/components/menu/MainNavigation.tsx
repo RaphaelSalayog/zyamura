@@ -1,5 +1,6 @@
 import {
   DashboardOutlined,
+  LogoutOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
@@ -56,7 +57,7 @@ const items = [
   // },
   {
     key: "/login",
-    icon: <UploadOutlined />,
+    icon: <LogoutOutlined />,
     label: "Logout",
   },
 ];

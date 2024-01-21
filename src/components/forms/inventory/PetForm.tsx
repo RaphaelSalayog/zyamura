@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Form, Input, InputNumber, Radio } from "antd";
+import { Form, Input, InputNumber, Modal, Radio } from "antd";
 
 import DropdownMenu from "@/components/util/DropdownMenu";
 import TextArea from "antd/es/input/TextArea";
@@ -120,7 +120,7 @@ const AddPetForm = ({
     setIsImageNotValid(false);
   };
 
-  const submitHandler = (value: any) => {
+  const submitHandler = async (value: any) => {
     const id = generateUniqueId(
       data.map((item: any) => item.inventoryId),
       "pet"
@@ -135,16 +135,34 @@ const AddPetForm = ({
       petImage: petImage,
     };
 
-    isLoadingHandler(true);
-    setTimeout(() => {
-      //Add data to Inventory Slice in Redux
-      dispatch(addPet(newData));
+    // Add data to Inventory Slice in Redux
+    if (pet?.add?.visible) {
+      isLoadingHandler(true);
+      await dispatch(addPet(newData));
       resetState();
       form.resetFields();
       pet?.add?.setVisible(false);
       pet?.edit?.setVisible(false);
       isLoadingHandler(false);
-    }, 1000);
+    }
+
+    // Update data from Inventory Slice in Redux
+    if (pet?.edit?.visible) {
+      Modal.confirm({
+        title: "Confirm Update",
+        content: `Are you sure you want to save the changes made? This action cannot be undone.`,
+        onOk: async () => {
+          isLoadingHandler(true);
+          await dispatch(addPet(newData));
+          resetState();
+          form.resetFields();
+          pet?.add?.setVisible(false);
+          pet?.edit?.setVisible(false);
+          isLoadingHandler(false);
+        },
+        centered: true,
+      });
+    }
   };
 
   useEffect(() => {
@@ -192,8 +210,10 @@ const AddPetForm = ({
   // Reset fields when the cancel button was clicked
   useEffect(() => {
     if (isCancel) {
-      resetState();
-      form.resetFields();
+      if (pet?.add?.visible) {
+        resetState();
+        form.resetFields();
+      }
       setIsCancel(false);
     }
   }, [isCancel]);
