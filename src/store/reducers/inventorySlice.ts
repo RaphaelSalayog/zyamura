@@ -111,7 +111,6 @@ const inventorySlice = createSlice({
       }
     },
     removeInventoryItem: (state, { payload }: PayloadAction<removeItem>) => {
-      console.log(payload.inventoryId);
       const indexToRemove = state.inventory.findIndex(
         (item) => item.inventoryId === payload.inventoryId
       );

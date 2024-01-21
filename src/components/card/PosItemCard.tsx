@@ -36,7 +36,6 @@ const PosItemCard: React.FC<any> = ({ data }) => {
 
   const dispatch = useDispatch();
 
-  //ERROR
   useEffect(() => {
     dispatch(
       setStock({

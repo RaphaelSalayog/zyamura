@@ -62,49 +62,47 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
         </div>
 
         <div className={style.content}>
-          <div className={style.contentSection1}>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Title level={5} style={{ margin: "0" }}>
-                {truncateString(inventoryName, 36)}
-              </Title>
-              <Button
-                type="default"
-                style={{ border: "none" }}
-                onClick={onClickHandler}
-              >
-                <CloseOutlined />
-              </Button>
-            </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Title level={5} style={{ margin: "0" }}>
+              {truncateString(inventoryName, 36)}
+            </Title>
+            <Button
+              type="default"
+              style={{ border: "none" }}
+              onClick={onClickHandler}
+            >
+              <CloseOutlined />
+            </Button>
+          </div>
 
-            <div>
-              <div
-                style={{
-                  display: "flex",
-                }}
-              >
-                {inventoryObject === "Pet" ? (
-                  <>
-                    <InventoryTag data={inventoryCategory} color="#1677ff" />
-                    <InventoryTag data={inventoryGender} color="#1677ff" />
-                  </>
-                ) : (
-                  <InventoryTag data={inventoryObject} color="#1677ff" />
-                )}
-              </div>
-              <div className={style.contentSection2}>
-                <InputNumber
-                  type="number"
-                  min={0}
-                  precision={0}
-                  value={orderedItemQuantity}
-                  style={{ width: "36%" }}
-                  onChange={inputNumberHandler}
-                  onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
-                />
-                <Text style={{ fontWeight: "bold", color: "#237804" }}>
-                  ₱{addCommas(totalItemPrice)}
-                </Text>
-              </div>
+          <div>
+            <div
+              style={{
+                display: "flex",
+              }}
+            >
+              {inventoryObject === "Pet" ? (
+                <>
+                  <InventoryTag data={inventoryCategory} color="#1677ff" />
+                  <InventoryTag data={inventoryGender} color="#1677ff" />
+                </>
+              ) : (
+                <InventoryTag data={inventoryObject} color="#1677ff" />
+              )}
+            </div>
+            <div className={style.contentSection1}>
+              <InputNumber
+                type="number"
+                min={0}
+                precision={0}
+                value={orderedItemQuantity}
+                style={{ width: "36%" }}
+                onChange={inputNumberHandler}
+                onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
+              />
+              <Text style={{ fontWeight: "bold", color: "#237804" }}>
+                ₱{addCommas(totalItemPrice)}
+              </Text>
             </div>
           </div>
         </div>
