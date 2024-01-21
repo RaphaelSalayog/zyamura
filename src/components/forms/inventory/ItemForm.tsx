@@ -9,7 +9,7 @@ import {
 } from "@/components/util/customMethods";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "@/store/reducers/inventorySlice";
+import { addItem, updateItem } from "@/store/reducers/inventorySlice";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
@@ -102,7 +102,7 @@ const AddItemForm = ({
         content: `Are you sure you want to save the changes made? This action cannot be undone.`,
         onOk: async () => {
           isLoadingHandler(true);
-          await dispatch(addItem(newData));
+          await dispatch(updateItem(newData));
           resetState();
           form.resetFields();
           item?.add?.setVisible(false);

@@ -4,7 +4,7 @@ import { Form, Input, InputNumber, Modal, Radio } from "antd";
 import DropdownMenu from "@/components/util/DropdownMenu";
 import TextArea from "antd/es/input/TextArea";
 import ImageUploader from "@/components/util/ImageUploader";
-import { addPet } from "@/store/reducers/inventorySlice";
+import { addPet, updatePet } from "@/store/reducers/inventorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   capitalizeFirstLetter,
@@ -153,7 +153,7 @@ const AddPetForm = ({
         content: `Are you sure you want to save the changes made? This action cannot be undone.`,
         onOk: async () => {
           isLoadingHandler(true);
-          await dispatch(addPet(newData));
+          await dispatch(updatePet(newData));
           resetState();
           form.resetFields();
           pet?.add?.setVisible(false);
