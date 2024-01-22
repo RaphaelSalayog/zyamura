@@ -101,7 +101,6 @@ const pointOfSalesSlice = createSlice({
         }
       }
     },
-    resetOrder: () => {},
     setStock: (state, { payload }: PayloadAction<setStock>) => {
       const itemStock = state.itemStock.find(
         (item) => item.productId === payload.productId
@@ -139,15 +138,26 @@ const pointOfSalesSlice = createSlice({
         state.orderedItems.splice(indexToRemove, 1);
       }
     },
+    resetOrder: (state) => {
+      state.orderedItems.map((item) => {
+        state.itemStock.map((value) => {
+          if (item.productId === value.productId) {
+            value.stock += item.quantity;
+          }
+        });
+      });
+      state.orderedItems = [];
+      state.totalPrice = 0;
+    },
   },
 });
 
 export const {
   addOrder,
   onChangeOrderedQuantity,
-  resetOrder,
   setStock,
   deductStock,
   removeOrderItem,
+  resetOrder,
 } = pointOfSalesSlice.actions;
 export default pointOfSalesSlice.reducer;

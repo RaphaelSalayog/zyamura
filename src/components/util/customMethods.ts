@@ -76,7 +76,7 @@ function generateUniqueId(existingIds: any, type: string) {
     const randomPart = Math.random().toString(36).substring(2, 10);
 
     // Combine the random component with a prefix for clarity
-    randomId = `id_${type.toLowerCase()}_${randomPart}`;
+    randomId = `ID-${type.toLowerCase()}-${randomPart}`;
   } while (existingIds.includes(randomId)); // Check for uniqueness
 
   return randomId;

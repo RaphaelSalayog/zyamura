@@ -31,8 +31,8 @@ const PosItemCard: React.FC<any> = ({ data }) => {
   } = data;
 
   const [quantity, setQuantity] = useState<any>("1");
-  const stockId = useSelector((store: any) => store.pointOfSales.itemStock);
-  const stock = stockId.find((item: any) => item.productId === inventoryId);
+  const itemStock = useSelector((store: any) => store.pointOfSales.itemStock);
+  const stock = itemStock.find((item: any) => item.productId === inventoryId);
 
   const dispatch = useDispatch();
 
