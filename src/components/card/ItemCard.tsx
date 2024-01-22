@@ -13,6 +13,7 @@ import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVi
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import { useDispatch } from "react-redux";
 import { removeInventoryItem } from "@/store/reducers/inventorySlice";
+import { removeOrderItem } from "@/store/reducers/pointOfSalesSlice";
 
 const { Text } = Typography;
 
@@ -66,6 +67,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
             await dispatch(
               removeInventoryItem({ inventoryId: data.inventoryId })
             );
+            await dispatch(removeOrderItem({ productId: data.inventoryId }));
           },
           centered: true,
         });

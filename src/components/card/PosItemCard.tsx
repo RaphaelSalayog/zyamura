@@ -43,7 +43,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
         stock: inventoryQuantity,
       })
     );
-  }, [inventoryQuantity]);
+  }, [inventoryId, inventoryQuantity]);
 
   const inputNumberHandler = (value: string | null) => {
     if (value || value == "0") {

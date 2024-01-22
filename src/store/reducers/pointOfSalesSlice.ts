@@ -35,6 +35,10 @@ interface deductStock {
   quantity: number;
 }
 
+interface revmoveOrderItem {
+  productId: string;
+}
+
 const initialState: initialState = {
   orderedItems: [],
   itemStock: [],
@@ -88,7 +92,7 @@ const pointOfSalesSlice = createSlice({
         orderedItemsId.totalItemPrice = payload.quantity * orderedItemsId.price;
         // To check if the quantity of ordered item is 0. If it is true, it will be remove in the orderedItems array
         if (payload.quantity === 0) {
-          let indexToRemove = state.orderedItems.findIndex(
+          const indexToRemove = state.orderedItems.findIndex(
             (item) => item.productId === payload.productId
           );
           if (indexToRemove !== -1) {
@@ -99,7 +103,22 @@ const pointOfSalesSlice = createSlice({
     },
     resetOrder: () => {},
     setStock: (state, { payload }: PayloadAction<setStock>) => {
-      state.itemStock.push(payload);
+      const itemStock = state.itemStock.find(
+        (item) => item.productId === payload.productId
+      );
+      const orderedItemsId = state.orderedItems.find(
+        (item) => item.productId === payload.productId
+      );
+      if (itemStock) {
+        if (!orderedItemsId) {
+          itemStock.stock = payload.stock;
+        } else {
+          // To update the stocks when there are ordered items and you changed a path and goes back to POS
+          itemStock.stock = payload.stock - orderedItemsId.quantity;
+        }
+      } else {
+        state.itemStock.push(payload);
+      }
     },
     deductStock: (state, { payload }: PayloadAction<deductStock>) => {
       const id = state.itemStock.find(
@@ -107,6 +126,17 @@ const pointOfSalesSlice = createSlice({
       );
       if (id) {
         id.stock -= payload.quantity;
+      }
+    },
+    removeOrderItem: (state, { payload }: PayloadAction<revmoveOrderItem>) => {
+      const indexToRemove = state.orderedItems.findIndex(
+        (item) => item.productId === payload.productId
+      );
+      if (indexToRemove !== -1) {
+        // Deduct total price
+        state.totalPrice -= state.orderedItems[indexToRemove].totalItemPrice;
+        // Remove updated ordered item
+        state.orderedItems.splice(indexToRemove, 1);
       }
     },
   },
@@ -118,5 +148,6 @@ export const {
   resetOrder,
   setStock,
   deductStock,
+  removeOrderItem,
 } = pointOfSalesSlice.actions;
 export default pointOfSalesSlice.reducer;

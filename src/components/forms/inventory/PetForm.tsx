@@ -13,6 +13,7 @@ import {
 } from "@/components/util/customMethods";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
+import { removeOrderItem } from "@/store/reducers/pointOfSalesSlice";
 
 interface AddPetForm {
   isCancel: boolean;
@@ -154,6 +155,7 @@ const AddPetForm = ({
         onOk: async () => {
           isLoadingHandler(true);
           await dispatch(updatePet(newData));
+          await dispatch(removeOrderItem({ productId: newData.petId }));
           resetState();
           form.resetFields();
           pet?.add?.setVisible(false);

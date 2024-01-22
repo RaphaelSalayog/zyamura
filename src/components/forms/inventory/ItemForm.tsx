@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItem, updateItem } from "@/store/reducers/inventorySlice";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
+import { removeOrderItem } from "@/store/reducers/pointOfSalesSlice";
 
 interface AddItemForm {
   isCancel: boolean;
@@ -103,6 +104,7 @@ const AddItemForm = ({
         onOk: async () => {
           isLoadingHandler(true);
           await dispatch(updateItem(newData));
+          await dispatch(removeOrderItem({ productId: newData.itemId }));
           resetState();
           form.resetFields();
           item?.add?.setVisible(false);
