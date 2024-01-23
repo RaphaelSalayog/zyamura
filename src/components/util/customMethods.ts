@@ -38,6 +38,14 @@ function inventorySortItem(inventorySort: any, inventory: any[]) {
   }
 }
 
+function posSortItem(inventory: any[]) {
+  const items = [...inventory];
+
+  return items?.sort((a, b) =>
+    a.inventoryQuantity === 0 ? 1 : b.inventoryQuantity - a.inventoryQuantity
+  );
+}
+
 function capitalizeFirstLetter(string: string) {
   const word = string.split(" ");
   return word
@@ -89,4 +97,5 @@ export {
   truncateString,
   onKeyDownTypeNumber,
   generateUniqueId,
+  posSortItem,
 };

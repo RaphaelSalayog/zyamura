@@ -5,11 +5,13 @@ import SearchBar from "@/components/filter/inventory/SearchBar";
 import { Button, Divider, Empty } from "antd";
 import Title from "antd/es/typography/Title";
 import { useDispatch, useSelector } from "react-redux";
-import { addCommas } from "@/components/util/customMethods";
+import { addCommas, posSortItem } from "@/components/util/customMethods";
 import { clearAllOrder } from "@/store/reducers/pointOfSalesSlice";
 import AmountChangeModal from "@/components/modal/point-of-sales/AmountChangeModal";
 import { PosModalVisibilityProvider } from "@/common/contexts/PosModalVisibilityContext";
 import useModalVisibility from "@/common/hooks/useModalVisibility";
+import { useEffect, useState } from "react";
+import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 
 const PointOfSales = () => {
   const data = useSelector((store: any) => store.inventory.inventory);
@@ -21,9 +23,39 @@ const PointOfSales = () => {
 
   const { modal } = useModalVisibility();
 
+  const [searchItemOnChange, setSearchItemOnChange] = useState("");
+  const [searchItemOnClick, setSearchItemOnClick] = useState("");
+  const [sortedAndSearchedItems, setSortedAndSearchedItems] =
+    useState<inventoryInitialState[]>();
+
+  useEffect(() => {
+    // sorted items
+    const sortedItems = posSortItem(data);
+    // filter the sorted items by search key
+    const sortedAndSearchedItem = sortedItems.filter((items: any) => {
+      if (searchItemOnClick == "") {
+        return items.inventoryName
+          .toLowerCase()
+          .includes(searchItemOnChange.toLowerCase());
+      } else {
+        return items.inventoryName === searchItemOnClick;
+      }
+    });
+    setSortedAndSearchedItems(sortedAndSearchedItem);
+  }, [data, searchItemOnChange, searchItemOnClick]);
+
+  const itemSearchOnChangeHandler = (value: string) => {
+    setSearchItemOnChange(value);
+  };
+
+  const itemSearchOnClickHandler = (value: string) => {
+    setSearchItemOnClick(value);
+  };
+
   const confirmTransactionHandler = () => {
     modal?.setVisible(true);
   };
+
   return (
     <>
       <PosModalVisibilityProvider value={{ modal }}>
@@ -33,10 +65,11 @@ const PointOfSales = () => {
               <Title level={2}>POINT OF SALES</Title>
               <div>
                 <SearchBar
-                  getValueOnChange={() => {}}
-                  getValueOnClick={() => {}}
+                  getValueOnChange={itemSearchOnChangeHandler}
+                  getValueOnClick={itemSearchOnClickHandler}
+                  sortedAndSearchedItems={sortedAndSearchedItems}
                 />
-                <Button>FILTER</Button>
+                {/* <Button>FILTER</Button> */}
               </div>
             </header>
 
@@ -47,7 +80,7 @@ const PointOfSales = () => {
                 alignContent: data?.length === 0 ? "center" : "",
               }}
             >
-              {data.map((value: any) => {
+              {sortedAndSearchedItems?.map((value: any) => {
                 return <PosItemCard key={data.inventoryId} data={value} />;
               })}
               {data?.length === 0 && (

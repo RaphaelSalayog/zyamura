@@ -120,6 +120,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
               min={"0"}
               precision={0}
               value={quantity}
+              status={quantity > stock?.stock ? "error" : ""}
               style={{ width: "36%" }}
               onChange={inputNumberHandler}
               onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}

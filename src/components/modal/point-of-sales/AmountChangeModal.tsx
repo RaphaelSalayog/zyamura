@@ -87,7 +87,7 @@ const AmountChangeModal = () => {
           justify={"space-between"}
           style={{ height: "32px", alignItems: "center" }}
         >
-          <p>Subtotal</p>
+          <h3>Total Amount Due</h3>
           <Input
             addonBefore="₱"
             style={{ width: "35%" }}
@@ -100,7 +100,7 @@ const AmountChangeModal = () => {
           justify={"space-between"}
           style={{ alignItems: "center", marginBottom: "0.5rem" }}
         >
-          <p>Change Calculator</p>
+          <p>Payment</p>
           <InputNumber
             type="number"
             addonBefore="₱"
@@ -126,7 +126,15 @@ const AmountChangeModal = () => {
             addonBefore="₱"
             style={{ width: "35%" }}
             value={addCommas(change)}
-            status={value ? (value < totalPrice ? "error" : "") : ""}
+            status={
+              value
+                ? value < totalPrice
+                  ? "error"
+                  : ""
+                : value === 0
+                ? "error"
+                : ""
+            }
             readOnly
           />
         </Row>
