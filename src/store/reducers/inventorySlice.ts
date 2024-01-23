@@ -46,6 +46,13 @@ interface removeItem {
   inventoryId: string;
 }
 
+interface deductOrderedItems {
+  productId: string;
+  quantity: number;
+  price: number;
+  totalItemPrice: number;
+}
+
 const petData = (payload: any) => {
   return {
     inventoryId: payload.petId,
@@ -117,10 +124,28 @@ const inventorySlice = createSlice({
         state.inventory.splice(indexToRemove, 1);
       }
     },
+    deductOrderedItems: (
+      state,
+      { payload }: PayloadAction<deductOrderedItems[]>
+    ) => {
+      payload.map((item) =>
+        state.inventory.map((value) => {
+          if (item.productId === value.inventoryId) {
+            value.inventoryQuantity -= item.quantity;
+          }
+        })
+      );
+    },
   },
 });
 
-export const { addPet, addItem, updatePet, updateItem, removeInventoryItem } =
-  inventorySlice.actions;
+export const {
+  addPet,
+  addItem,
+  updatePet,
+  updateItem,
+  removeInventoryItem,
+  deductOrderedItems,
+} = inventorySlice.actions;
 
 export default inventorySlice.reducer;

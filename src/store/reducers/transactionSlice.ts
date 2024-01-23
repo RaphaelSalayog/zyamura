@@ -10,6 +10,8 @@ interface addTransaction {
     totalItemPrice: number;
   }[];
   totalPrice: number;
+  cash: number;
+  change: number;
 }
 
 interface initialState {

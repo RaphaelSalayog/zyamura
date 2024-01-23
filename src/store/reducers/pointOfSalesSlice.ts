@@ -138,7 +138,7 @@ const pointOfSalesSlice = createSlice({
         state.orderedItems.splice(indexToRemove, 1);
       }
     },
-    resetOrder: (state) => {
+    clearAllOrder: (state) => {
       state.orderedItems.map((item) => {
         state.itemStock.map((value) => {
           if (item.productId === value.productId) {
@@ -146,6 +146,10 @@ const pointOfSalesSlice = createSlice({
           }
         });
       });
+      state.orderedItems = [];
+      state.totalPrice = 0;
+    },
+    removeOrder: (state) => {
       state.orderedItems = [];
       state.totalPrice = 0;
     },
@@ -158,6 +162,7 @@ export const {
   setStock,
   deductStock,
   removeOrderItem,
-  resetOrder,
+  clearAllOrder,
+  removeOrder,
 } = pointOfSalesSlice.actions;
 export default pointOfSalesSlice.reducer;
