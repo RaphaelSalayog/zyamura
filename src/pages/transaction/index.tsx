@@ -1,3 +1,4 @@
+import MainLayout from "@/components/layout/MainLayout";
 import CustomModal from "@/components/modal/CustomModal";
 import GenerateReceipt from "@/components/util/GenerateReceipt";
 import ReceiptFormat from "@/components/util/ReceiptFormat";
@@ -18,7 +19,7 @@ const Transaction = () => {
   });
 
   return (
-    <>
+    <MainLayout>
       TRANSACTION
       <div style={{ display: "none" }}>
         <GenerateReceipt ref={componentRef} type={"pdf"} />
@@ -48,7 +49,7 @@ const Transaction = () => {
           Print
         </Button>
       </CustomModal>
-    </>
+    </MainLayout>
   );
 };
 

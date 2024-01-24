@@ -14,6 +14,7 @@ import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import useSelectedData from "@/common/hooks/useSelectedData";
 import { ItemModal } from "@/components/modal/inventory/ItemModal";
 import { PetMainModal } from "@/components/modal/inventory/PetModal";
+import MainLayout from "@/components/layout/MainLayout";
 
 const { Title } = Typography;
 
@@ -92,7 +93,7 @@ const Inventory = () => {
   }, [inventorySort, data, searchItemOnChange, searchItemOnClick]);
 
   return (
-    <>
+    <MainLayout>
       <InventoryDrawerVisiblityProvider value={{ pet, item }}>
         <SelectedDataProvider value={selectedData}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -146,7 +147,7 @@ const Inventory = () => {
           <ItemModal.AddItemModal />
         </SelectedDataProvider>
       </InventoryDrawerVisiblityProvider>
-    </>
+    </MainLayout>
   );
 };
 

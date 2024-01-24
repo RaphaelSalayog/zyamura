@@ -12,6 +12,7 @@ import { PosModalVisibilityProvider } from "@/common/contexts/PosModalVisibility
 import useModalVisibility from "@/common/hooks/useModalVisibility";
 import { useEffect, useState } from "react";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
+import MainLayout from "@/components/layout/MainLayout";
 
 const PointOfSales = () => {
   const data = useSelector((store: any) => store.inventory.inventory);
@@ -57,7 +58,7 @@ const PointOfSales = () => {
   };
 
   return (
-    <>
+    <MainLayout>
       <PosModalVisibilityProvider value={{ modal }}>
         <div className={style.container}>
           <div className={style.leftPane}>
@@ -132,7 +133,7 @@ const PointOfSales = () => {
         </div>
         <AmountChangeModal />
       </PosModalVisibilityProvider>
-    </>
+    </MainLayout>
   );
 };
 
