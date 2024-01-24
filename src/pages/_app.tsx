@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
     if (auth === undefined || auth === null) {
       router.push("/login");
     } else {
-      router.push("/dashboard");
+      router.push(router.pathname);
     }
   }, []);
 

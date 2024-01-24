@@ -72,6 +72,7 @@ const MainNavigation = () => {
       router.push(item.key);
     }
   };
+
   return (
     <>
       <Affix>
@@ -80,7 +81,7 @@ const MainNavigation = () => {
           <Menu
             theme="light"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={[router.pathname]}
             onSelect={selectHandler}
             items={items}
           />
