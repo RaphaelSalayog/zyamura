@@ -6,6 +6,10 @@ const initialValue: ModalVisibility = {
     visible: false,
     setVisible: () => {},
   },
+  receiptModal: {
+    visible: false,
+    setVisible: () => {},
+  },
 };
 
 const PosModalVisibilityContext = createContext<ModalVisibility>(initialValue);

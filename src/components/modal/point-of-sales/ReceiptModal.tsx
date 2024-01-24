@@ -1,17 +1,19 @@
-import MainLayout from "@/components/layout/MainLayout";
+import PosModalVisibilityContext from "@/common/contexts/PosModalVisibilityContext";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import CustomModal from "@/components/modal/CustomModal";
 import GenerateReceipt from "@/components/util/GenerateReceipt";
 import ReceiptFormat from "@/components/util/ReceiptFormat";
 import { Button } from "antd";
-import { useRef, useState } from "react";
+import { useContext, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 
-const Transaction = () => {
+const ReceiptModal = () => {
+  const { receiptModal } = useContext(PosModalVisibilityContext);
+  const { get } = useContext(SelectedDataContext);
   const transaction = useSelector(
     (store: any) => store.transaction.transaction
   );
-  const [isVisible, setIsVisible] = useState(false);
   const componentRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef(null);
   const printHandler = useReactToPrint({
@@ -19,24 +21,15 @@ const Transaction = () => {
   });
 
   return (
-    <MainLayout>
-      TRANSACTION
-      {/* <div style={{ display: "none" }}>
+    <>
+      <div style={{ display: "none" }}>
         <GenerateReceipt ref={componentRef} type={"pdf"} />
       </div>
-      <Button
-        onClick={() => {
-          setIsVisible(true);
-        }}
-        ref={buttonRef}
-      >
-        Modal
-      </Button>
       <CustomModal
-        open={isVisible}
+        open={receiptModal?.visible}
         width={700}
         onClose={() => {
-          setIsVisible(false);
+          receiptModal?.setVisible(false);
         }}
       >
         <ReceiptFormat type={"modal"} />
@@ -48,16 +41,9 @@ const Transaction = () => {
         >
           Print
         </Button>
-      </CustomModal> */}
-    </MainLayout>
+      </CustomModal>
+    </>
   );
 };
 
-export default Transaction;
-
-// style={{
-//   width: "857px",
-//   padding: "5rem",
-// }}
-
-// { width: "600px", padding: "0", margin: "0" }
+export default ReceiptModal;

@@ -7,15 +7,21 @@ interface ModalyState {
 
 export interface ModalVisibility {
   modal?: ModalyState;
+  receiptModal?: ModalyState;
 }
 
 const useModalVisibility = (): ModalVisibility => {
   const [visible, setVisible] = useState(false);
+  const [isReceiptModalVisible, setIsReceiptModalVisible] = useState(false);
 
   return {
     modal: {
       visible,
       setVisible,
+    },
+    receiptModal: {
+      visible: isReceiptModalVisible,
+      setVisible: setIsReceiptModalVisible,
     },
   };
 };

@@ -12,6 +12,7 @@ import { addTransaction } from "@/store/reducers/transactionSlice";
 import { removeOrder } from "@/store/reducers/pointOfSalesSlice";
 import { deductOrderedItems } from "@/store/reducers/inventorySlice";
 import moment from "moment";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 const AmountChangeModal = () => {
   const transaction = useSelector(
@@ -22,7 +23,8 @@ const AmountChangeModal = () => {
     (store: any) => store.pointOfSales.orderedItems
   );
   const dispatch = useDispatch();
-  const { modal } = useContext(PosModalVisibilityContext);
+  const { modal, receiptModal } = useContext(PosModalVisibilityContext);
+  const { set } = useContext(SelectedDataContext);
 
   const currentDate = moment();
   const formattedDate = currentDate.format("MMMM D YYYY, h:mm a");
@@ -52,12 +54,13 @@ const AmountChangeModal = () => {
       title: "Confirm Transaction",
       content: `Are you sure you want to confirm the transaction? This action cannot be undone.`,
       onOk: async () => {
+        const transactionId = generateUniqueId(
+          transaction.map((item: any) => item.transactionId),
+          "transaction"
+        );
         dispatch(
           addTransaction({
-            transactionId: generateUniqueId(
-              transaction.map((item: any) => item.transactionId),
-              "transaction"
-            ),
+            transactionId: transactionId,
             transactionDate: formattedDate,
             orderedItems: orderedItem,
             totalPrice: totalPrice,
@@ -67,7 +70,9 @@ const AmountChangeModal = () => {
         );
         dispatch(removeOrder());
         dispatch(deductOrderedItems(orderedItem));
+        set(transactionId);
         resetValues();
+        receiptModal?.setVisible(true);
       },
       centered: true,
     });
