@@ -5,15 +5,10 @@ import GenerateReceipt from "@/components/util/GenerateReceipt";
 import ReceiptFormat from "@/components/util/ReceiptFormat";
 import { Button } from "antd";
 import { useContext, useRef } from "react";
-import { useSelector } from "react-redux";
 import { useReactToPrint } from "react-to-print";
 
 const ReceiptModal = () => {
   const { receiptModal } = useContext(PosModalVisibilityContext);
-  const { get } = useContext(SelectedDataContext);
-  const transaction = useSelector(
-    (store: any) => store.transaction.transaction
-  );
   const componentRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef(null);
   const printHandler = useReactToPrint({

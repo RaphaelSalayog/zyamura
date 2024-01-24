@@ -1,20 +1,22 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface inventoryInitialState {
-  inventory: {
-    inventoryId: string;
-    inventoryObject: string;
-    inventoryName: string;
-    inventorySupplier: string;
-    inventoryDescription: string;
-    inventorySellingPrice: number;
-    inventoryInvestmentCost: number;
-    inventoryCategory: string | null;
-    inventoryGender: string | null;
-    inventoryType: string | null;
-    inventoryQuantity: number;
-    inventoryImage: any[];
-  }[];
+  inventoryId: string;
+  inventoryObject: string;
+  inventoryName: string;
+  inventorySupplier: string;
+  inventoryDescription: string;
+  inventorySellingPrice: number;
+  inventoryInvestmentCost: number;
+  inventoryCategory: string | null;
+  inventoryGender: string | null;
+  inventoryType: string | null;
+  inventoryQuantity: number;
+  inventoryImage: any[];
+}
+
+export interface initialState {
+  inventory: inventoryInitialState[];
 }
 
 interface addPet {
@@ -87,7 +89,7 @@ const itemData = (payload: any) => {
   };
 };
 
-const initialState: inventoryInitialState = {
+const initialState: initialState = {
   inventory: [],
 };
 

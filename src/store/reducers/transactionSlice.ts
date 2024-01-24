@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface addTransaction {
+export interface addTransaction {
   transactionId: string;
   transactionDate: string;
   orderedItems: {
@@ -14,18 +14,8 @@ interface addTransaction {
   change: number;
 }
 
-interface initialState {
-  transaction: {
-    transactionId: string;
-    transactionDate: string;
-    orderedItems: {
-      productId: string;
-      quantity: number;
-      price: number;
-      totalItemPrice: number;
-    }[];
-    totalPrice: number;
-  }[];
+export interface initialState {
+  transaction: addTransaction[];
 }
 const initialState: initialState = {
   transaction: [],

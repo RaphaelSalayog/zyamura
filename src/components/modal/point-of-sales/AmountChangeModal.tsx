@@ -26,8 +26,7 @@ const AmountChangeModal = () => {
   const { modal, receiptModal } = useContext(PosModalVisibilityContext);
   const { set } = useContext(SelectedDataContext);
 
-  const currentDate = moment();
-  const formattedDate = currentDate.format("MMMM D YYYY, h:mm a");
+  const formattedDate = moment().format("MMMM D YYYY, h:mm a");
 
   const [value, setValue] = useState<number | null>(null);
   const [change, setChange] = useState(0);

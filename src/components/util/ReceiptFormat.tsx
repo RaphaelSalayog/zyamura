@@ -1,5 +1,11 @@
 import { Row } from "antd";
 import { addCommas } from "./customMethods";
+import { useSelector } from "react-redux";
+import { useContext, useMemo } from "react";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
+import { addTransaction } from "@/store/reducers/transactionSlice";
+import moment from "moment";
+import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 
 const pdfDivider =
   "---------------------------------------------------------------------------------------------------------------------";
@@ -7,6 +13,27 @@ const modalDivider =
   "-----------------------------------------------------------------------------------------------------------";
 
 const ReceiptFormat = ({ type }: { type?: string }) => {
+  const inventory = useSelector((store: any) => store.inventory.inventory);
+  const transaction = useSelector(
+    (store: any) => store.transaction.transaction
+  );
+  const { get } = useContext(SelectedDataContext);
+
+  const transactionData: addTransaction = useMemo(() => {
+    return transaction.find(
+      (item: addTransaction) => item.transactionId === get
+    );
+  }, [get, transaction]);
+
+  const dateObject = moment(
+    transactionData?.transactionDate,
+    "MMMM DD YYYY, h:mm a"
+  );
+  const date = {
+    date: dateObject.format("M/D/YYYY"),
+    time: dateObject.format("h:mm a"),
+  };
+
   return (
     <>
       <Row
@@ -28,7 +55,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           <h2>Zyamura Mix Pet Shop</h2>
           <p>Barangay Mulawin Francisco Homes 1,</p>
           <p>San Jose del Monte Bulacan, 3023</p>
-          <p>(+63) 9913700299</p>
+          <p>(+63) 960 227 1361</p>
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>
         <Row justify={"center"} style={{ width: "100%" }}>
@@ -45,11 +72,11 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           }}
         >
           <Row justify={"space-between"} style={{ width: "100%" }}>
-            <p>Date : Jan 30, 2023</p>
-            <p>Time: 3:04 PM</p>
+            <p>Date : {date?.date}</p>
+            <p>Time: {date?.time}</p>
           </Row>
           <p>Sales Clerk: Pia Bonto</p>
-          <p>Invoice No. : 3023285</p>
+          <p>Invoice No. : {transactionData?.transactionId}</p>
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>
         <Row style={{ padding: "0.5rem 1.5rem" }}>
@@ -68,21 +95,39 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
               Total Unit Cost
             </p>
           </Row>
-          <Row
-            style={{
-              display: "grid",
-              gridTemplateColumns: "2.7fr 0.5fr 0.8fr 1fr",
-              width: "100%",
-            }}
-          >
-            <p>Clownfish</p>
-            <p style={{ textAlign: "center" }}>15</p>
-            <p style={{ textAlign: "end" }}>85,455.00</p>
-            <p style={{ textAlign: "end" }}>1,275.00</p>
-          </Row>
+          {transactionData?.orderedItems?.map((orderedData) => {
+            const inventoryData: inventoryInitialState = inventory?.find(
+              (value: inventoryInitialState) =>
+                value.inventoryId == orderedData.productId
+            );
+            return (
+              <>
+                <Row
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "2.7fr 0.5fr 0.8fr 1fr",
+                    width: "100%",
+                  }}
+                >
+                  <p>{inventoryData.inventoryName}</p>
+                  <p style={{ textAlign: "center" }}>{orderedData?.quantity}</p>
+                  <p style={{ textAlign: "end" }}>{orderedData?.price}</p>
+                  <p style={{ textAlign: "end" }}>
+                    {orderedData?.totalItemPrice}
+                  </p>
+                </Row>
+              </>
+            );
+          })}
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>
-        <Row style={{ padding: "0.5rem 1.5rem", marginBottom: "1rem" }}>
+        <Row
+          style={{
+            padding: "0.5rem 1.5rem",
+            marginBottom: "1rem",
+            width: "100%",
+          }}
+        >
           <Row
             style={{
               display: "grid",
@@ -92,7 +137,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p style={{ fontWeight: "bold" }}>TOTAL</p>
             <p style={{ fontWeight: "bold", textAlign: "end" }}>
-              ₱{addCommas(12312123)}
+              ₱{addCommas(transactionData?.totalPrice)}
             </p>
           </Row>
           <Row
@@ -103,7 +148,9 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
             }}
           >
             <p>Cash</p>
-            <p style={{ textAlign: "end" }}>₱{addCommas(12312123)}</p>
+            <p style={{ textAlign: "end" }}>
+              ₱{addCommas(transactionData?.cash)}
+            </p>
           </Row>
           <Row
             style={{
@@ -113,7 +160,9 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
             }}
           >
             <p>Change</p>
-            <p style={{ textAlign: "end" }}>₱{addCommas(12312123)}</p>
+            <p style={{ textAlign: "end" }}>
+              ₱{addCommas(transactionData?.change)}
+            </p>
           </Row>
         </Row>
         <Row justify={"center"} style={{ width: "100%" }}>

@@ -53,7 +53,7 @@ function capitalizeFirstLetter(string: string) {
     .join(" ");
 }
 
-function addCommas(number: number) {
+function addCommas(number: number = 0) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -81,7 +81,8 @@ function generateUniqueId(existingIds: any, type: string) {
 
   do {
     // Generate a random component
-    const randomPart = Math.random().toString(36).substring(2, 10);
+    const randomPart = Math.floor(Math.random() * 9000000000) + 1000000000; // Random number
+    // const randomPart = Math.random().toString(36).substring(2, 10); // Random text number
 
     // Combine the random component with a prefix for clarity
     randomId = `ID-${type.toLowerCase()}-${randomPart}`;
