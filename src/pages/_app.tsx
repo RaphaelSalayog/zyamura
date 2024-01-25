@@ -28,16 +28,6 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, []);
 
-  const isNotMenu = router.pathname === "/login";
-
-  if (isNotMenu) {
-    return (
-      <Provider store={store}>
-        <Component {...pageProps} />
-      </Provider>
-    );
-  }
-
   return (
     <Provider store={store}>
       {hasMounted ? (

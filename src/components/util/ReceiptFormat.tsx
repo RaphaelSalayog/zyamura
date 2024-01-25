@@ -75,7 +75,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
             <p>Date : {date?.date}</p>
             <p>Time: {date?.time}</p>
           </Row>
-          <p>Sales Clerk: Pia Bonto</p>
+          <p>Sales Clerk: Raphael Salayog</p>
           <p>Invoice No. : {transactionData?.transactionId}</p>
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>
