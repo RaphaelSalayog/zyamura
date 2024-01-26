@@ -8,6 +8,7 @@ import {
 import { Affix, Layout, Menu } from "antd";
 import style from "@/styles/mainNavigation.module.css";
 import { useRouter } from "next/router";
+import logo from "@/assets/zyamuraLogo.svg";
 
 const items = [
   {
@@ -77,7 +78,12 @@ const MainNavigation = () => {
     <>
       <Affix>
         <Layout.Sider theme="light" className={style.layoutSider}>
-          <div style={{ height: "130px" }}>LOGO</div>
+          <div style={{ height: "130px", marginBottom: "1.5rem" }}>
+            <img
+              src={logo.src}
+              style={{ height: "100%", width: "100%", objectFit: "cover" }}
+            />
+          </div>
           <Menu
             theme="light"
             mode="inline"

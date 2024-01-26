@@ -1,8 +1,8 @@
-import { Button, Form, Input, Typography } from "antd";
-import style from "@/styles/loginForm.module.css";
+import { Button, Form, Input, Row, Typography } from "antd";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import logo from "@/assets/zyamuraLogo.svg";
 
 const { Title, Text } = Typography;
 
@@ -26,7 +26,7 @@ const LoginForms = () => {
   }, [email, password]);
 
   const submitHandler = (event: any) => {
-    if (event.email === "qwe@gmail.com" && event.password === "zyamura") {
+    if (event.email === "zyamura@gmail.com" && event.password === "zyamura") {
       localStorage.setItem("token", "qwe");
       router.push("/dashboard");
     } else {
@@ -36,7 +36,12 @@ const LoginForms = () => {
 
   return (
     <div style={{ maxWidth: "37%" }}>
-      <div>LOGO</div>
+      <Row justify={"center"}>
+        <img
+          src={logo.src}
+          style={{ height: "50%", width: "50%", objectFit: "cover" }}
+        />
+      </Row>
       <Title
         level={2}
         style={{
@@ -48,12 +53,12 @@ const LoginForms = () => {
       >
         Welcome to Zyamura
       </Title>
-      <p
+      {/* <p
         style={{ fontWeight: "light", color: "#8C8C8C", marginBottom: "14px" }}
       >
         LEXI is an HR online application able to provide a leave management
         system for employees
-      </p>
+      </p> */}
       <Form
         name="basic"
         initialValues={{ remember: true }}
@@ -106,9 +111,9 @@ const LoginForms = () => {
           </Button>
         </Form.Item>
 
-        <Link className="login-form-forgot" href="" style={{ float: "right" }}>
+        {/* <Link className="login-form-forgot" href="" style={{ float: "right" }}>
           Forgot password
-        </Link>
+        </Link> */}
       </Form>
     </div>
   );
