@@ -7,9 +7,9 @@ import Title from "antd/es/typography/Title";
 import { useSelector } from "react-redux";
 
 const Transaction = () => {
-  const transaction: addTransaction[] = useSelector(
-    (store: any) => store.transaction.transaction
-  );
+  // const transaction: addTransaction[] = useSelector(
+  //   (store: any) => store.transaction.transaction
+  // );
   return (
     <MainLayout>
       <Row justify={"space-between"}>

@@ -76,7 +76,7 @@ function onKeyDownTypeNumber(event: any, type: string) {
   }
 }
 
-function generateUniqueId(existingIds: any, type: string) {
+function generateUniqueId(existingIds: string[], type: string) {
   let randomId;
 
   do {

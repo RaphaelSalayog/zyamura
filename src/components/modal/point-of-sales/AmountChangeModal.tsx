@@ -8,7 +8,7 @@ import {
 import { useContext, useState } from "react";
 import PosModalVisibilityContext from "@/common/contexts/PosModalVisibilityContext";
 import { useDispatch, useSelector } from "react-redux";
-import { addTransaction } from "@/store/reducers/transactionSlice";
+import { Transaction, addTransaction } from "@/store/reducers/transactionSlice";
 import { removeOrder } from "@/store/reducers/pointOfSalesSlice";
 import { deductOrderedItems } from "@/store/reducers/inventorySlice";
 import moment from "moment";
@@ -26,7 +26,10 @@ const AmountChangeModal = () => {
   const { modal, receiptModal } = useContext(PosModalVisibilityContext);
   const { set } = useContext(SelectedDataContext);
 
-  const formattedDate = moment().format("MMMM D YYYY, h:mm a");
+  const formattedDate = {
+    date: moment().format("M/D/YYYY"),
+    time: moment().format("h:mm:ss A"),
+  };
 
   const [value, setValue] = useState<number | null>(null);
   const [change, setChange] = useState(0);
@@ -54,17 +57,22 @@ const AmountChangeModal = () => {
       content: `Are you sure you want to confirm the transaction? This action cannot be undone.`,
       onOk: async () => {
         const transactionId = generateUniqueId(
-          transaction.map((item: any) => item.transactionId),
+          transaction.map((item: Transaction) =>
+            item.transactionData.map((value) => value.transactionId)
+          ),
           "transaction"
         );
         dispatch(
           addTransaction({
-            transactionId: transactionId,
-            transactionDate: formattedDate,
-            orderedItems: orderedItem,
-            totalPrice: totalPrice,
-            cash: value!,
-            change: change,
+            date: formattedDate.date,
+            transactionData: {
+              transactionId: transactionId,
+              time: formattedDate.time,
+              orderedItems: orderedItem,
+              totalPrice: totalPrice,
+              cash: value!,
+              change: change,
+            },
           })
         );
         dispatch(removeOrder());
