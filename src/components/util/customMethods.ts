@@ -76,7 +76,7 @@ function onKeyDownTypeNumber(event: any, type: string) {
   }
 }
 
-function generateUniqueId(existingIds: string[], type: string) {
+function generateUniqueId(existingIds: string[]) {
   let randomId;
 
   do {
@@ -85,7 +85,7 @@ function generateUniqueId(existingIds: string[], type: string) {
     // const randomPart = Math.random().toString(36).substring(2, 10); // Random text number
 
     // Combine the random component with a prefix for clarity
-    randomId = `ID-${type.toLowerCase()}-${randomPart}`;
+    randomId = `${randomPart}`;
   } while (existingIds.includes(randomId)); // Check for uniqueness
 
   return randomId;

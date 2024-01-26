@@ -74,10 +74,7 @@ const AddItemForm = ({
   };
 
   const submitHandler = async (value: any) => {
-    const id = generateUniqueId(
-      data.map((item: any) => item.inventoryId),
-      "item"
-    );
+    const id = generateUniqueId(data.map((item: any) => item.inventoryId));
     const newData = {
       itemId: item?.add?.visible ? id : get.inventoryId,
       ...value,

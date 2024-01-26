@@ -122,10 +122,7 @@ const AddPetForm = ({
   };
 
   const submitHandler = async (value: any) => {
-    const id = generateUniqueId(
-      data.map((item: any) => item.inventoryId),
-      "pet"
-    );
+    const id = generateUniqueId(data.map((item: any) => item.inventoryId));
     const newData = {
       petId: pet?.add?.visible ? id : get.inventoryId,
       ...value,

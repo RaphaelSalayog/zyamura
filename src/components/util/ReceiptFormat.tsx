@@ -1,7 +1,7 @@
 import { Row } from "antd";
 import { addCommas, truncateString } from "./customMethods";
 import { useSelector } from "react-redux";
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useState } from "react";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import { Transaction } from "@/store/reducers/transactionSlice";
 import moment from "moment";
@@ -19,13 +19,18 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
   );
   const { get } = useContext(SelectedDataContext);
 
+  const [index, setIndex] = useState(0);
+
   const transactionData: Transaction[] = useMemo(
     () =>
-      transaction?.map((item: Transaction) => {
+      transaction?.map((item: Transaction, index: number) => {
         const data = item.transactionData.filter(
           (value) => value.transactionId === get
         );
 
+        if (data) {
+          setIndex(index);
+        }
         return {
           date: item.date,
           transactionData: data,
@@ -72,13 +77,13 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           }}
         >
           <Row justify={"space-between"} style={{ width: "100%" }}>
-            <p>Date : {transactionData[0]?.date}</p>
-            <p>Time: {transactionData[0]?.transactionData[0]?.time}</p>
+            <p>Date : {transactionData[index]?.date}</p>
+            <p>Time: {transactionData[index]?.transactionData[0]?.time}</p>
           </Row>
           <p>Sales Clerk : Raphael Salayog</p>
           <p>
             Invoice No. :{" "}
-            {transactionData[0]?.transactionData[0]?.transactionId}
+            {transactionData[index]?.transactionData[0]?.transactionId}
           </p>
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>
@@ -98,7 +103,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
               Total Unit Cost
             </p>
           </Row>
-          {transactionData[0]?.transactionData[0]?.orderedItems.map(
+          {transactionData[index]?.transactionData[0]?.orderedItems.map(
             (orderedData) => {
               const inventoryData: inventoryInitialState = inventory?.find(
                 (value: inventoryInitialState) =>
@@ -152,7 +157,10 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p style={{ fontWeight: "bold" }}>TOTAL</p>
             <p style={{ fontWeight: "bold", textAlign: "end" }}>
-              ₱{addCommas(transactionData[0]?.transactionData[0]?.totalPrice)}
+              ₱
+              {addCommas(
+                transactionData[index]?.transactionData[0]?.totalPrice
+              )}
             </p>
           </Row>
           <Row
@@ -164,7 +172,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p>Cash</p>
             <p style={{ textAlign: "end" }}>
-              ₱{addCommas(transactionData[0]?.transactionData[0]?.cash)}
+              ₱{addCommas(transactionData[index]?.transactionData[0]?.cash)}
             </p>
           </Row>
           <Row
@@ -176,7 +184,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p>Change</p>
             <p style={{ textAlign: "end" }}>
-              ₱{addCommas(transactionData[0]?.transactionData[0]?.change)}
+              ₱{addCommas(transactionData[index]?.transactionData[0]?.change)}
             </p>
           </Row>
         </Row>

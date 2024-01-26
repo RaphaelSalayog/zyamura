@@ -93,10 +93,11 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
             flexDirection: "column",
             justifyContent: "center",
             alignContent: "center",
+            width: "154px",
           }}
         >
           <p>Raphael Salayog</p>
-          <p>{data.transactionId}</p>
+          <p style={{ color: "#bfbfbf" }}>#{data.transactionId}</p>
         </Col>
         <Col
           style={{
@@ -119,7 +120,9 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
             width: "100px",
           }}
         >
-          <p>₱{addCommas(data.totalPrice)}</p>
+          <p style={{ fontWeight: "bold", color: "#237804" }}>
+            ₱{addCommas(data.totalPrice)}
+          </p>
         </Col>
         <Col
           style={{

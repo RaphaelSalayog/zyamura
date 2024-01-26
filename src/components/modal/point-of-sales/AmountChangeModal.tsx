@@ -59,8 +59,7 @@ const AmountChangeModal = () => {
         const transactionId = generateUniqueId(
           transaction.map((item: Transaction) =>
             item.transactionData.map((value) => value.transactionId)
-          ),
-          "transaction"
+          )
         );
         dispatch(
           addTransaction({

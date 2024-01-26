@@ -1,10 +1,12 @@
 import TransactionCard from "@/components/card/TransactionCard";
 import SearchBar from "@/components/filter/inventory/SearchBar";
 import MainLayout from "@/components/layout/MainLayout";
-import { Col, Row } from "antd";
+import { Col, Empty, Row } from "antd";
 import Title from "antd/es/typography/Title";
 import { useSelector } from "react-redux";
 import { Transaction } from "@/store/reducers/transactionSlice";
+import { addCommas } from "@/components/util/customMethods";
+import moment from "moment";
 
 const Transaction = () => {
   const transaction: Transaction[] = useSelector(
@@ -23,24 +25,64 @@ const Transaction = () => {
           />
         </Row>
       </Row>
-      {transaction.map((item) => (
-        <Row style={{ marginBottom: "1.5rem" }}>
-          <Col
-            style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between",
-              marginBottom: "1rem",
-            }}
-          >
-            <p>{item.date}</p>
-            <p>{item.totalPricePerDay}</p>
-          </Col>
-          {item.transactionData.map((value) => (
-            <TransactionCard data={value} />
-          ))}
-        </Row>
-      ))}
+      <Row
+        style={{
+          width: "100%",
+          height: "81vh",
+          marginTop: "1rem",
+          display: transaction.length === 0 ? "flex" : "",
+          justifyContent: transaction.length === 0 ? "center" : "",
+          alignContent: transaction.length === 0 ? "center" : "",
+          overflowY: "auto",
+        }}
+      >
+        {transaction.map((item) => (
+          <Row style={{ width: "99.5%", marginBottom: "1.5rem" }}>
+            <Col
+              style={{
+                display: "flex",
+                width: "100%",
+                justifyContent: "space-between",
+                marginBottom: "1rem",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  color: "#0958d9",
+                }}
+              >
+                {moment(item.date, "M/D/YYYY").format("MMM D, YYYY")}
+              </p>
+              <p
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  color: "#237804",
+                }}
+              >
+                ₱{addCommas(item.totalPricePerDay)}
+              </p>
+            </Col>
+            <Col
+              style={{
+                width: "100%",
+              }}
+            >
+              {item.transactionData.map((value) => (
+                <TransactionCard data={value} />
+              ))}
+            </Col>
+          </Row>
+        ))}
+        {transaction.length === 0 && (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            style={{ marginBottom: "100px" }}
+          />
+        )}
+      </Row>
     </MainLayout>
   );
 };
