@@ -1,7 +1,41 @@
+import { inventoryInitialState } from "@/store/reducers/inventorySlice";
+import { TransactionData } from "@/store/reducers/transactionSlice";
 import { EyeOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row } from "antd";
+import { useSelector } from "react-redux";
+import { addCommas, truncateString } from "../util/customMethods";
+import { useMemo } from "react";
 
-const TransactionCard = () => {
+const colors = [
+  "#f5222d",
+  "#fa541c",
+  "#fa8c16",
+  "#faad14",
+  "#fadb14",
+  "#a0d911",
+  "#52c41a",
+  "#13c2c2",
+  "#1677ff",
+  "#2f54eb",
+  "#722ed1",
+  "#eb2f96",
+];
+const TransactionCard = ({ data }: { data: TransactionData }) => {
+  const inventoryData: inventoryInitialState[] = useSelector(
+    (store: any) => store.inventory.inventory
+  );
+
+  const inventoryName = useMemo(
+    () =>
+      data?.orderedItems?.map((item) => {
+        const data = inventoryData?.filter(
+          (value) => item.productId === value.inventoryId && value.inventoryName
+        );
+        return data[0].inventoryName;
+      }),
+    [data, inventoryData]
+  );
+
   return (
     <>
       <Row
@@ -29,31 +63,18 @@ const TransactionCard = () => {
           }}
           style={{ width: "286px" }}
         >
-          <Avatar src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg" />
-          <Avatar
-            src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-            style={{ backgroundColor: "#f56a00" }}
-          />
-          <Avatar
-            src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-            style={{ backgroundColor: "#87d068" }}
-          />
-          <Avatar
-            src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-            style={{ backgroundColor: "#1677ff" }}
-          />
-          <Avatar
-            src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-            style={{ backgroundColor: "#1677ff" }}
-          />
-          <Avatar
-            src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-            style={{ backgroundColor: "#1677ff" }}
-          />
-          <Avatar
-            src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
-            style={{ backgroundColor: "#1677ff" }}
-          />
+          {data.orderedItems.map((item) => {
+            const inventory = inventoryData.filter(
+              (value) => item.productId === value.inventoryId
+            );
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            return (
+              <Avatar
+                src={inventory[0]?.inventoryImage[0]?.thumbUrl}
+                style={{ backgroundColor: colors[randomIndex] }}
+              />
+            );
+          })}
         </Avatar.Group>
         <Col
           style={{
@@ -64,7 +85,7 @@ const TransactionCard = () => {
           }}
         >
           <p>WALK IN</p>
-          <p>TIME</p>
+          <p>{data.time}</p>
         </Col>
         <Col
           style={{
@@ -75,7 +96,7 @@ const TransactionCard = () => {
           }}
         >
           <p>Raphael Salayog</p>
-          <p>#0000098</p>
+          <p>{data.transactionId}</p>
         </Col>
         <Col
           style={{
@@ -84,9 +105,10 @@ const TransactionCard = () => {
             justifyContent: "center",
             alignContent: "center",
             width: "300px",
+            wordWrap: "break-word",
           }}
         >
-          <p>Clownfish and Mermaid Mussel Acquarium Figurine</p>
+          <p>{truncateString(inventoryName.join(", "), 81)}</p>
         </Col>
         <Col
           style={{
@@ -97,7 +119,7 @@ const TransactionCard = () => {
             width: "100px",
           }}
         >
-          <p>P10,000,000.020</p>
+          <p>₱{addCommas(data.totalPrice)}</p>
         </Col>
         <Col
           style={{

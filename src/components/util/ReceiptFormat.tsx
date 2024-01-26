@@ -1,5 +1,5 @@
 import { Row } from "antd";
-import { addCommas } from "./customMethods";
+import { addCommas, truncateString } from "./customMethods";
 import { useSelector } from "react-redux";
 import { useContext, useMemo } from "react";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
@@ -21,7 +21,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
 
   const transactionData: Transaction[] = useMemo(
     () =>
-      transaction.map((item: Transaction) => {
+      transaction?.map((item: Transaction) => {
         const data = item.transactionData.filter(
           (value) => value.transactionId === get
         );
@@ -72,12 +72,13 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           }}
         >
           <Row justify={"space-between"} style={{ width: "100%" }}>
-            <p>Date : {transactionData[0].date}</p>
-            <p>Time: {transactionData[0].transactionData[0].time}</p>
+            <p>Date : {transactionData[0]?.date}</p>
+            <p>Time: {transactionData[0]?.transactionData[0]?.time}</p>
           </Row>
           <p>Sales Clerk : Raphael Salayog</p>
           <p>
-            Invoice No. : {transactionData[0].transactionData[0].transactionId}
+            Invoice No. :{" "}
+            {transactionData[0]?.transactionData[0]?.transactionId}
           </p>
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>
@@ -97,7 +98,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
               Total Unit Cost
             </p>
           </Row>
-          {transactionData[0].transactionData[0].orderedItems.map(
+          {transactionData[0]?.transactionData[0]?.orderedItems.map(
             (orderedData) => {
               const inventoryData: inventoryInitialState = inventory?.find(
                 (value: inventoryInitialState) =>
@@ -110,9 +111,17 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
                       display: "grid",
                       gridTemplateColumns: "2.7fr 0.5fr 0.8fr 1fr",
                       width: "100%",
+                      wordWrap: "break-word",
                     }}
                   >
-                    <p>{inventoryData.inventoryName}</p>
+                    <p
+                      style={{ maxWidth: type === "modal" ? "280px" : "320px" }}
+                    >
+                      {truncateString(
+                        inventoryData.inventoryName,
+                        type === "modal" ? 77 : 87
+                      )}
+                    </p>
                     <p style={{ textAlign: "center" }}>
                       {orderedData?.quantity}
                     </p>
@@ -143,7 +152,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p style={{ fontWeight: "bold" }}>TOTAL</p>
             <p style={{ fontWeight: "bold", textAlign: "end" }}>
-              ₱{addCommas(transactionData[0].transactionData[0].totalPrice)}
+              ₱{addCommas(transactionData[0]?.transactionData[0]?.totalPrice)}
             </p>
           </Row>
           <Row
@@ -155,7 +164,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p>Cash</p>
             <p style={{ textAlign: "end" }}>
-              ₱{addCommas(transactionData[0].transactionData[0].cash)}
+              ₱{addCommas(transactionData[0]?.transactionData[0]?.cash)}
             </p>
           </Row>
           <Row
@@ -167,7 +176,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p>Change</p>
             <p style={{ textAlign: "end" }}>
-              ₱{addCommas(transactionData[0].transactionData[0].change)}
+              ₱{addCommas(transactionData[0]?.transactionData[0]?.change)}
             </p>
           </Row>
         </Row>
