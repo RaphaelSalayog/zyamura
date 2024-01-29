@@ -7,7 +7,7 @@ import logo from "@/assets/zyamuraLogo.svg";
 const { Title, Text } = Typography;
 
 type FieldType = {
-  email?: string;
+  username?: string;
   password?: string;
   remember?: string;
 };
@@ -16,6 +16,8 @@ const LoginForms = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [disableSubmit, setDisableSubmit] = useState(true);
+  const [isUsernameError, setIsUsernameError] = useState(false);
+  const [isPasswordError, setIsPasswordError] = useState(false);
   const router = useRouter();
   useEffect(() => {
     if (email && password) {
@@ -26,11 +28,16 @@ const LoginForms = () => {
   }, [email, password]);
 
   const submitHandler = (event: any) => {
-    if (event.email === "zyamura@gmail.com" && event.password === "zyamura") {
+    if (event.username === "zyamura" && event.password === "zyamura") {
       localStorage.setItem("token", "qwe");
       router.push("/dashboard");
     } else {
-      // console.log("error");
+      if (event.username !== "zyamura") {
+        setIsUsernameError(true);
+      }
+      if (event.username !== "zyamura" || event.password !== "zyamura") {
+        setIsPasswordError(true);
+      }
     }
   };
 
@@ -66,22 +73,19 @@ const LoginForms = () => {
         autoComplete="off"
       >
         <Form.Item<FieldType>
-          name="email"
-          label="Email"
+          name="username"
+          label="Username"
           labelCol={{ span: 24 }}
-          rules={[
-            {
-              type: "email",
-              message: "Please check your email address.",
-              validateTrigger: "submit",
-            },
-          ]}
+          validateStatus={isUsernameError ? "error" : ""}
+          help={isUsernameError ? "Invalid username." : undefined}
         >
           <Input
             onChange={(event) => {
+              setIsUsernameError(false);
+              setIsPasswordError(false);
               setEmail(event.target.value);
             }}
-            placeholder="user@zyamura.com"
+            placeholder="zyamura"
             style={{ borderRadius: "0px" }}
           />
         </Form.Item>
@@ -90,12 +94,16 @@ const LoginForms = () => {
           name="password"
           label="Password"
           labelCol={{ span: 24 }}
+          validateStatus={isPasswordError ? "error" : ""}
+          help={isPasswordError ? "Invalid password." : undefined}
         >
           <Input.Password
             onChange={(event) => {
+              setIsUsernameError(false);
+              setIsPasswordError(false);
               setPassword(event.target.value);
             }}
-            placeholder="example"
+            placeholder="zyamura"
             style={{ borderRadius: "0px" }}
           />
         </Form.Item>
@@ -110,7 +118,6 @@ const LoginForms = () => {
             Login
           </Button>
         </Form.Item>
-
         {/* <Link className="login-form-forgot" href="" style={{ float: "right" }}>
           Forgot password
         </Link> */}
