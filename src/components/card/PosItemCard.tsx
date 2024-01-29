@@ -64,6 +64,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
       dispatch(
         addOrder({
           productId: inventoryId,
+          itemDetails: data,
           quantity: +quantity,
           price: inventorySellingPrice,
         })

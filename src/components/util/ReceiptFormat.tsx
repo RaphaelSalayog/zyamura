@@ -13,7 +13,6 @@ const modalDivider =
   "-----------------------------------------------------------------------------------------------------------";
 
 const ReceiptFormat = ({ type }: { type?: string }) => {
-  const inventory = useSelector((store: any) => store.inventory.inventory);
   const transaction = useSelector(
     (store: any) => store.transaction.transaction
   );
@@ -104,40 +103,28 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
             </p>
           </Row>
           {transactionData[index]?.transactionData[0]?.orderedItems.map(
-            (orderedData) => {
-              const inventoryData: inventoryInitialState = inventory?.find(
-                (value: inventoryInitialState) =>
-                  value.inventoryId == orderedData.productId
-              );
-              return (
-                <>
-                  <Row
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "2.7fr 0.5fr 0.8fr 1fr",
-                      width: "100%",
-                      wordWrap: "break-word",
-                    }}
-                  >
-                    <p
-                      style={{ maxWidth: type === "modal" ? "280px" : "320px" }}
-                    >
-                      {truncateString(
-                        inventoryData.inventoryName,
-                        type === "modal" ? 77 : 87
-                      )}
-                    </p>
-                    <p style={{ textAlign: "center" }}>
-                      {orderedData?.quantity}
-                    </p>
-                    <p style={{ textAlign: "end" }}>{orderedData?.price}</p>
-                    <p style={{ textAlign: "end" }}>
-                      {orderedData?.totalItemPrice}
-                    </p>
-                  </Row>
-                </>
-              );
-            }
+            (item) => (
+              <>
+                <Row
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "2.7fr 0.5fr 0.8fr 1fr",
+                    width: "100%",
+                    wordWrap: "break-word",
+                  }}
+                >
+                  <p style={{ maxWidth: type === "modal" ? "280px" : "320px" }}>
+                    {truncateString(
+                      item.itemDetails.inventoryName,
+                      type === "modal" ? 77 : 87
+                    )}
+                  </p>
+                  <p style={{ textAlign: "center" }}>{item?.quantity}</p>
+                  <p style={{ textAlign: "end" }}>{item?.price}</p>
+                  <p style={{ textAlign: "end" }}>{item?.totalItemPrice}</p>
+                </Row>
+              </>
+            )
           )}
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>

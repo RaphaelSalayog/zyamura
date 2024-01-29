@@ -1,7 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { inventoryInitialState } from "./inventorySlice";
 
 export interface OrderedItems {
   productId: string;
+  itemDetails: inventoryInitialState;
   quantity: number;
   price: number;
   totalItemPrice: number;

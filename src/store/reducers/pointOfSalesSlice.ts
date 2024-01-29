@@ -1,21 +1,28 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { inventoryInitialState } from "./inventorySlice";
+
+export interface orderedItems {
+  productId: string;
+  itemDetails: inventoryInitialState;
+  quantity: number;
+  price: number;
+  totalItemPrice: number;
+}
+
+export interface itemStock {
+  productId: string;
+  stock: number;
+}
 
 interface initialState {
-  orderedItems: {
-    productId: string;
-    quantity: number;
-    price: number;
-    totalItemPrice: number;
-  }[];
-  itemStock: {
-    productId: string;
-    stock: number;
-  }[];
+  orderedItems: orderedItems[];
+  itemStock: itemStock[];
   totalPrice: number;
 }
 
 interface addPetAndItem {
   productId: string;
+  itemDetails: inventoryInitialState;
   quantity: number;
   price: number;
 }

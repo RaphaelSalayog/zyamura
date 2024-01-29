@@ -21,19 +21,12 @@ const colors = [
   "#eb2f96",
 ];
 const TransactionCard = ({ data }: { data: TransactionData }) => {
-  const inventoryData: inventoryInitialState[] = useSelector(
-    (store: any) => store.inventory.inventory
-  );
-
   const inventoryName = useMemo(
     () =>
       data?.orderedItems?.map((item) => {
-        const data = inventoryData?.filter(
-          (value) => item.productId === value.inventoryId && value.inventoryName
-        );
-        return data[0].inventoryName;
+        return item.itemDetails.inventoryName;
       }),
-    [data, inventoryData]
+    [data]
   );
 
   return (
@@ -64,13 +57,10 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
           style={{ width: "286px" }}
         >
           {data.orderedItems.map((item) => {
-            const inventory = inventoryData.filter(
-              (value) => item.productId === value.inventoryId
-            );
             const randomIndex = Math.floor(Math.random() * colors.length);
             return (
               <Avatar
-                src={inventory[0]?.inventoryImage[0]?.thumbUrl}
+                src={item.itemDetails.inventoryImage[0]?.thumbUrl}
                 style={{ backgroundColor: colors[randomIndex] }}
               />
             );

@@ -7,35 +7,29 @@ import {
 } from "../util/customMethods";
 import InventoryTag from "../util/InventoryTag";
 import { CloseOutlined } from "@ant-design/icons";
-import { useDispatch, useSelector } from "react-redux";
-import { onChangeOrderedQuantity } from "@/store/reducers/pointOfSalesSlice";
+import { useDispatch } from "react-redux";
+import {
+  onChangeOrderedQuantity,
+  orderedItems,
+} from "@/store/reducers/pointOfSalesSlice";
 
 const { Text, Title } = Typography;
 
-const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
-  const data = useSelector((store: any) => store.inventory.inventory);
-  const item = data.find(
-    (item: any) => item.inventoryId === orderedItem.productId
-  );
-
+const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
+  orderedItem,
+}) => {
   const dispatch = useDispatch();
-  const { quantity: orderedItemQuantity, totalItemPrice } = orderedItem;
-
   const {
-    inventoryId,
-    inventoryName,
-    inventoryObject,
-    inventoryCategory,
-    inventoryQuantity,
-    inventoryGender,
-    inventoryImage,
-  } = item;
+    itemDetails,
+    quantity: orderedItemQuantity,
+    totalItemPrice,
+  } = orderedItem;
 
   const inputNumberHandler = (value: number | null) => {
-    if (value === 0 || (value && value <= inventoryQuantity)) {
+    if (value === 0 || (value && value <= itemDetails.inventoryQuantity)) {
       dispatch(
         onChangeOrderedQuantity({
-          productId: inventoryId,
+          productId: itemDetails.inventoryId,
           quantity: value,
         })
       );
@@ -45,7 +39,7 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
   const onClickHandler = () => {
     dispatch(
       onChangeOrderedQuantity({
-        productId: inventoryId,
+        productId: itemDetails.inventoryId,
         quantity: 0,
       })
     );
@@ -56,7 +50,7 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
         <div className={style.image}>
           <img
             alt="example"
-            src={inventoryImage[0].thumbUrl}
+            src={itemDetails.inventoryImage[0].thumbUrl}
             style={{ objectFit: "cover", height: "100%", width: "100%" }}
           />
         </div>
@@ -64,7 +58,7 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
         <div className={style.content}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Title level={5} style={{ margin: "0" }}>
-              {truncateString(inventoryName, 36)}
+              {truncateString(itemDetails.inventoryName, 36)}
             </Title>
             <Button
               type="default"
@@ -81,13 +75,22 @@ const PosOrderedItemCard: React.FC<any> = ({ orderedItem }) => {
                 display: "flex",
               }}
             >
-              {inventoryObject === "Pet" ? (
+              {itemDetails.inventoryObject === "Pet" ? (
                 <>
-                  <InventoryTag data={inventoryCategory} color="#1677ff" />
-                  <InventoryTag data={inventoryGender} color="#1677ff" />
+                  <InventoryTag
+                    data={itemDetails.inventoryCategory}
+                    color="#1677ff"
+                  />
+                  <InventoryTag
+                    data={itemDetails.inventoryGender}
+                    color="#1677ff"
+                  />
                 </>
               ) : (
-                <InventoryTag data={inventoryObject} color="#1677ff" />
+                <InventoryTag
+                  data={itemDetails.inventoryObject}
+                  color="#1677ff"
+                />
               )}
             </div>
             <div className={style.contentSection1}>
