@@ -1,4 +1,4 @@
-export const addPet = {
+export const addPetMockData = {
   inventoryId: "1136683242",
   inventoryObject: "Pet",
   inventoryName: "Pug",
@@ -10,5 +10,5 @@ export const addPet = {
   inventoryGender: "Male",
   inventoryType: "Group",
   inventoryQuantity: 5,
-  inventoryImage: "",
+  inventoryImage: [],
 };

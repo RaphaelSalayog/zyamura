@@ -70,69 +70,88 @@ const Transaction = () => {
               />
             </Row>
           </Row>
-          <Row
-            style={{
-              width: "100%",
-              height: "81vh",
-              marginTop: "1rem",
-              display: sortedAndSearchedItems?.length === 0 ? "flex" : "start",
-              justifyContent:
-                sortedAndSearchedItems?.length === 0 ? "center" : "start",
-              alignContent:
-                sortedAndSearchedItems?.length === 0 ? "center" : "start",
-              overflowY: "auto",
-            }}
-          >
-            {sortedAndSearchedItems?.map(
-              (item) =>
-                item.transactionData.length > 0 && (
-                  <Row style={{ width: "99.5%", marginBottom: "1.5rem" }}>
-                    <Row
+          {sortedAndSearchedItems?.map((item) => (
+            <Row
+              style={{
+                width: "100%",
+                height: "81vh",
+                marginTop: "1rem",
+                display: item.transactionData.length === 0 ? "flex" : "start",
+                justifyContent:
+                  item.transactionData.length === 0 ? "center" : "start",
+                alignContent:
+                  item.transactionData.length === 0 ? "center" : "start",
+                overflowY: "auto",
+              }}
+            >
+              {item.transactionData.length > 0 ? (
+                <Row style={{ width: "99.5%", marginBottom: "1.5rem" }}>
+                  <Row
+                    style={{
+                      display: "flex",
+                      width: "100%",
+                      justifyContent: "space-between",
+                      marginBottom: "1rem",
+                    }}
+                  >
+                    <p
                       style={{
-                        display: "flex",
-                        width: "100%",
-                        justifyContent: "space-between",
-                        marginBottom: "1rem",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                        color: "#0958d9",
                       }}
                     >
-                      <p
-                        style={{
-                          fontSize: "1rem",
-                          fontWeight: "bold",
-                          color: "#0958d9",
-                        }}
-                      >
-                        {moment(item.date, "M/D/YYYY").format("MMM D, YYYY")}
-                      </p>
-                      <p
-                        style={{
-                          fontSize: "1rem",
-                          fontWeight: "bold",
-                          color: "#237804",
-                        }}
-                      >
-                        ₱{addCommas(item.totalPricePerDay)}
-                      </p>
-                    </Row>
-                    <Row
+                      {moment(item.date, "M/D/YYYY").format("MMM D, YYYY")}
+                    </p>
+                    <p
                       style={{
-                        width: "100%",
+                        fontSize: "1rem",
+                        fontWeight: "bold",
+                        color: "#237804",
                       }}
                     >
-                      {item.transactionData.map((value) => (
-                        <TransactionCard data={value} />
-                      ))}
-                    </Row>
+                      ₱{addCommas(item.totalPricePerDay)}
+                    </p>
                   </Row>
-                )
-            )}
-            {sortedAndSearchedItems?.length === 0 && (
+                  <Row
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    {item.transactionData.map((value) => (
+                      <TransactionCard data={value} />
+                    ))}
+                  </Row>
+                </Row>
+              ) : (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  style={{ marginBottom: "100px" }}
+                />
+              )}
+            </Row>
+          ))}
+          {sortedAndSearchedItems?.length === 0 && (
+            <Row
+              style={{
+                width: "100%",
+                height: "81vh",
+                marginTop: "1rem",
+                display:
+                  sortedAndSearchedItems?.length === 0 ? "flex" : "start",
+                justifyContent:
+                  sortedAndSearchedItems?.length === 0 ? "center" : "start",
+                alignContent:
+                  sortedAndSearchedItems?.length === 0 ? "center" : "start",
+                overflowY: "auto",
+              }}
+            >
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 style={{ marginBottom: "100px" }}
               />
-            )}
-          </Row>
+            </Row>
+          )}
           <ReceiptModal />
         </SelectedDataProvider>
       </PosModalVisibilityProvider>

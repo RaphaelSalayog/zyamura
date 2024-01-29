@@ -83,14 +83,17 @@ const PointOfSales = () => {
               <section
                 className={style.leftPaneContent}
                 style={{
-                  justifyContent: data?.length === 0 ? "center" : "",
-                  alignContent: data?.length === 0 ? "center" : "",
+                  justifyContent:
+                    sortedAndSearchedItems?.length === 0 ? "center" : "",
+                  alignContent:
+                    sortedAndSearchedItems?.length === 0 ? "center" : "",
                 }}
               >
-                {sortedAndSearchedItems?.map((value: any) => {
-                  return <PosItemCard key={data.inventoryId} data={value} />;
-                })}
-                {data?.length === 0 && (
+                {sortedAndSearchedItems?.map((value: any) => (
+                  <PosItemCard key={value.inventoryId} data={value} />
+                ))}
+
+                {sortedAndSearchedItems?.length === 0 && (
                   <Empty
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
                     style={{ marginBottom: "100px" }}
