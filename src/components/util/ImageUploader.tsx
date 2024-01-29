@@ -51,7 +51,13 @@ const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
     <ImgCrop>
       <Upload
         // action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188" for API call only
-        action="/api/noop"
+        customRequest={({ onSuccess }) => {
+          if (onSuccess) {
+            setTimeout(() => {
+              onSuccess("ok", undefined);
+            }, 0);
+          }
+        }}
         listType="picture-card"
         fileList={fileList}
         onChange={onChange}
