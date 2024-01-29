@@ -108,6 +108,7 @@ const Inventory = () => {
                 getValueOnChange={itemSearchOnChangeHandler}
                 getValueOnClick={itemSearchOnClickHandler}
                 sortedAndSearchedItems={sortedAndSearchedItems}
+                type="inventory"
               />
               <AddButton />
               <DropdownMenu

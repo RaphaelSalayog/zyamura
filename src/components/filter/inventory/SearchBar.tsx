@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import { AutoComplete, Input } from "antd";
 import type { SelectProps } from "antd/es/select";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
+import { Transaction } from "@/store/reducers/transactionSlice";
 
 interface SearchBar {
   getValueOnClick: (value: string) => void;
   getValueOnChange: (value: string) => void;
-  sortedAndSearchedItems?: inventoryInitialState[] | undefined;
+  sortedAndSearchedItems?: inventoryInitialState[] | Transaction[] | undefined;
+  type: "inventory" | "transaction";
 }
 
 const SearchBar: React.FC<SearchBar> = ({
   getValueOnClick,
   getValueOnChange,
   sortedAndSearchedItems,
+  type,
 }) => {
   const [options, setOptions] = useState<SelectProps<object>["options"]>([]);
   const [searchValue, setSearchValue] = useState<string>();
@@ -28,24 +31,46 @@ const SearchBar: React.FC<SearchBar> = ({
     query: string | undefined,
     sortedAndSearchedItems: any[] | undefined
   ) => {
-    // To know if the item is duplicate. If it is, it will just increment the number
     const array: { itemName: string; number: number }[] = [];
-    sortedAndSearchedItems?.map((item) => {
-      const existingItem = array.find(
-        (existing) => existing.itemName === item.inventoryName
-      );
+    if (type === "inventory") {
+      // To know if the item is duplicate. If it is, it will just increment the number
+      sortedAndSearchedItems?.map((item: inventoryInitialState) => {
+        const existingItem = array.find(
+          (existing) => existing.itemName === item.inventoryName
+        );
 
-      if (existingItem) {
-        // If item exists, increment the number
-        existingItem.number += 1;
-      } else {
-        // If item doesn't exist, add a new object to the array
-        array.push({
-          itemName: item.inventoryName,
-          number: 1, // Assuming you start with 1 when adding a new item
+        if (existingItem) {
+          existingItem.number += 1; // If item exists, increment the number
+        } else {
+          // If item doesn't exist, add a new object to the array
+          array.push({
+            itemName: item.inventoryName,
+            number: 1, // Assuming you start with 1 when adding a new item
+          });
+        }
+      });
+    }
+
+    if (type === "transaction") {
+      // To know if the item is duplicate. If it is, it will just increment the number
+      sortedAndSearchedItems?.map((item: Transaction) => {
+        item.transactionData.map((value) => {
+          const existingItem = array.find(
+            (existing) => existing.itemName === value.transactionId
+          );
+
+          if (existingItem) {
+            existingItem.number += 1; // If item exists, increment the number
+          } else {
+            // If item doesn't exist, add a new object to the array
+            array.push({
+              itemName: value.transactionId,
+              number: 1, // Assuming you start with 1 when adding a new item
+            });
+          }
         });
-      }
-    });
+      });
+    }
 
     return new Array(array?.length)
       .join(".")
@@ -95,7 +120,7 @@ const SearchBar: React.FC<SearchBar> = ({
     >
       <Input.Search
         size="large"
-        placeholder="input here"
+        placeholder={type === "inventory" ? "search" : "transaction id"}
         enterButton
         className="remove-border-radius"
         style={{ width: 500 }}

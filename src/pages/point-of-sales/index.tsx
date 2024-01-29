@@ -74,6 +74,7 @@ const PointOfSales = () => {
                     getValueOnChange={itemSearchOnChangeHandler}
                     getValueOnClick={itemSearchOnClickHandler}
                     sortedAndSearchedItems={sortedAndSearchedItems}
+                    type="inventory"
                   />
                   {/* <Button>FILTER</Button> */}
                 </div>

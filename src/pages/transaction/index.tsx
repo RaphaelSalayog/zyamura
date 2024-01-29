@@ -12,6 +12,7 @@ import useSelectedData from "@/common/hooks/useSelectedData";
 import ReceiptModal from "@/components/modal/point-of-sales/ReceiptModal";
 import { PosModalVisibilityProvider } from "@/common/contexts/PosModalVisibilityContext";
 import useModalVisibility from "@/common/hooks/useModalVisibility";
+import { useEffect, useState } from "react";
 
 const Transaction = () => {
   const transaction: Transaction[] = useSelector(
@@ -20,6 +21,40 @@ const Transaction = () => {
 
   const { receiptModal } = useModalVisibility();
   const { selectedData } = useSelectedData();
+
+  const [searchItemOnChange, setSearchItemOnChange] = useState("");
+  const [searchItemOnClick, setSearchItemOnClick] = useState("");
+  const [sortedAndSearchedItems, setSortedAndSearchedItems] =
+    useState<Transaction[]>();
+
+  const itemSearchOnChangeHandler = (value: string) => {
+    setSearchItemOnChange(value);
+  };
+
+  const itemSearchOnClickHandler = (value: string) => {
+    setSearchItemOnClick(value);
+  };
+
+  useEffect(() => {
+    // filter the sorted items by search key
+    const sortedAndSearchedItem = transaction.map((items) => {
+      const filteredData = items.transactionData.filter((value) => {
+        if (searchItemOnClick == "") {
+          return value.transactionId
+            .toLowerCase()
+            .includes(searchItemOnChange.toLowerCase());
+        } else {
+          return value.transactionId === searchItemOnClick;
+        }
+      });
+      return {
+        ...items,
+        transactionData: filteredData,
+      };
+    });
+    setSortedAndSearchedItems(sortedAndSearchedItem);
+  }, [transaction, searchItemOnChange, searchItemOnClick]);
+
   return (
     <MainLayout>
       <PosModalVisibilityProvider value={{ receiptModal }}>
@@ -28,9 +63,10 @@ const Transaction = () => {
             <Title level={2}>TRANSACTION HISTORY</Title>
             <Row justify={"end"}>
               <SearchBar
-                getValueOnChange={() => {}}
-                getValueOnClick={() => {}}
-                // sortedAndSearchedItems={() => {}}
+                getValueOnChange={itemSearchOnChangeHandler}
+                getValueOnClick={itemSearchOnClickHandler}
+                sortedAndSearchedItems={sortedAndSearchedItems}
+                type="transaction"
               />
             </Row>
           </Row>
@@ -39,13 +75,15 @@ const Transaction = () => {
               width: "100%",
               height: "81vh",
               marginTop: "1rem",
-              display: transaction.length === 0 ? "flex" : "start",
-              justifyContent: transaction.length === 0 ? "center" : "start",
-              alignContent: transaction.length === 0 ? "center" : "start",
+              display: sortedAndSearchedItems?.length === 0 ? "flex" : "start",
+              justifyContent:
+                sortedAndSearchedItems?.length === 0 ? "center" : "start",
+              alignContent:
+                sortedAndSearchedItems?.length === 0 ? "center" : "start",
               overflowY: "auto",
             }}
           >
-            {transaction.map((item) => (
+            {sortedAndSearchedItems?.map((item) => (
               <Row style={{ width: "99.5%", marginBottom: "1.5rem" }}>
                 <Row
                   style={{
@@ -85,7 +123,7 @@ const Transaction = () => {
                 </Row>
               </Row>
             ))}
-            {transaction.length === 0 && (
+            {sortedAndSearchedItems?.length === 0 && (
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 style={{ marginBottom: "100px" }}
