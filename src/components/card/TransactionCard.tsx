@@ -1,10 +1,10 @@
-import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 import { TransactionData } from "@/store/reducers/transactionSlice";
 import { EyeOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row } from "antd";
-import { useSelector } from "react-redux";
 import { addCommas, truncateString } from "../util/customMethods";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
+import PosModalVisibilityContext from "@/common/contexts/PosModalVisibilityContext";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 const colors = [
   "#f5222d",
@@ -21,6 +21,9 @@ const colors = [
   "#eb2f96",
 ];
 const TransactionCard = ({ data }: { data: TransactionData }) => {
+  const { receiptModal } = useContext(PosModalVisibilityContext);
+  const { set } = useContext(SelectedDataContext);
+
   const inventoryName = useMemo(
     () =>
       data?.orderedItems?.map((item) => {
@@ -29,6 +32,10 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
     [data]
   );
 
+  const invoiceHandler = () => {
+    set(data.transactionId);
+    receiptModal?.setVisible(true);
+  };
   return (
     <>
       <Row
@@ -122,7 +129,9 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
             alignContent: "center",
           }}
         >
-          <Button>Invoice</Button>
+          <Button type="primary" onClick={invoiceHandler}>
+            Invoice
+          </Button>
         </Col>
         <Col
           style={{

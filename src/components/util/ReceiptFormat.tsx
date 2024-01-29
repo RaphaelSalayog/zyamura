@@ -4,8 +4,6 @@ import { useSelector } from "react-redux";
 import { useContext, useMemo, useState } from "react";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import { Transaction } from "@/store/reducers/transactionSlice";
-import moment from "moment";
-import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 
 const pdfDivider =
   "---------------------------------------------------------------------------------------------------------------------";

@@ -1,6 +1,5 @@
 import { Row } from "antd";
 import React, { forwardRef } from "react";
-import { addCommas } from "./customMethods";
 import ReceiptFormat from "./ReceiptFormat";
 
 const GenerateReceipt = forwardRef<HTMLDivElement, { type?: string }>(

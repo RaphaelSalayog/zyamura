@@ -1,5 +1,4 @@
 import PosModalVisibilityContext from "@/common/contexts/PosModalVisibilityContext";
-import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import CustomModal from "@/components/modal/CustomModal";
 import GenerateReceipt from "@/components/util/GenerateReceipt";
 import ReceiptFormat from "@/components/util/ReceiptFormat";
