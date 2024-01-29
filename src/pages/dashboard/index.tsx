@@ -9,9 +9,6 @@ const Dashboard = () => {
       <p style={{ marginBottom: "1rem" }}>
         Pure front-end, no back-end included yet.
       </p>
-      <p style={{ marginBottom: "1rem" }}>
-        You can try the Inventory and Point-of-Sales module.
-      </p>
     </MainLayout>
   );
 };
