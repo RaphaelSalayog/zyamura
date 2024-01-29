@@ -30,15 +30,15 @@ const Transaction = () => {
           width: "100%",
           height: "81vh",
           marginTop: "1rem",
-          display: transaction.length === 0 ? "flex" : "",
-          justifyContent: transaction.length === 0 ? "center" : "",
-          alignContent: transaction.length === 0 ? "center" : "",
+          display: transaction.length === 0 ? "flex" : "start",
+          justifyContent: transaction.length === 0 ? "center" : "start",
+          alignContent: transaction.length === 0 ? "center" : "start",
           overflowY: "auto",
         }}
       >
         {transaction.map((item) => (
           <Row style={{ width: "99.5%", marginBottom: "1.5rem" }}>
-            <Col
+            <Row
               style={{
                 display: "flex",
                 width: "100%",
@@ -64,8 +64,8 @@ const Transaction = () => {
               >
                 ₱{addCommas(item.totalPricePerDay)}
               </p>
-            </Col>
-            <Col
+            </Row>
+            <Row
               style={{
                 width: "100%",
               }}
@@ -73,7 +73,7 @@ const Transaction = () => {
               {item.transactionData.map((value) => (
                 <TransactionCard data={value} />
               ))}
-            </Col>
+            </Row>
           </Row>
         ))}
         {transaction.length === 0 && (
