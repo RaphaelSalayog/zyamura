@@ -1,9 +1,9 @@
 import {
   DashboardOutlined,
+  DropboxOutlined,
+  FileDoneOutlined,
+  LaptopOutlined,
   LogoutOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Affix, Layout, Menu } from "antd";
 import style from "@/styles/mainNavigation.module.css";
@@ -18,17 +18,17 @@ const items = [
   },
   {
     key: "/inventory",
-    icon: <VideoCameraOutlined />,
+    icon: <DropboxOutlined />,
     label: "Inventory",
   },
   {
     key: "/point-of-sales",
-    icon: <UploadOutlined />,
+    icon: <LaptopOutlined />,
     label: "Point of Sales",
   },
   {
     key: "/transaction",
-    icon: <UploadOutlined />,
+    icon: <FileDoneOutlined />,
     label: "Transaction",
   },
   // {
