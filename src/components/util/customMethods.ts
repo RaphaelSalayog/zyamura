@@ -4,7 +4,7 @@ function inventorySortItem(inventorySort: any, inventory: any[]) {
     case "Latest":
       return inventory;
     case "Oldest":
-      return inventory;
+      return items?.reverse();
     case "Name (A-Z)":
       return items?.sort((a: any, b: any) =>
         a.inventoryName.localeCompare(b.inventoryName)

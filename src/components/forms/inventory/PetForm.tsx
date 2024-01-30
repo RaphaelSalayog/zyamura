@@ -31,6 +31,14 @@ const petSupplierOption = [
     key: "QC Corporation",
     label: "QC Corporation",
   },
+  {
+    key: "Kim's Pet Accessories",
+    label: "Kim's Pet Accessories",
+  },
+  {
+    key: "Lotte's Trading",
+    label: "Lotte's Trading",
+  },
 ];
 
 const petCategoryOption = [
@@ -41,6 +49,30 @@ const petCategoryOption = [
   {
     key: "Cat",
     label: "Cat",
+  },
+  {
+    key: "Fish",
+    label: "Fish",
+  },
+  {
+    key: "Bird",
+    label: "Bird",
+  },
+  {
+    key: "Rabbit",
+    label: "Rabbit",
+  },
+  {
+    key: "Hamster",
+    label: "Hamster",
+  },
+  {
+    key: "Turtle",
+    label: "Turtle",
+  },
+  {
+    key: "Hedgehog",
+    label: "Hedgehog",
   },
 ];
 
