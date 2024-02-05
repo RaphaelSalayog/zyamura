@@ -9,9 +9,11 @@ import LoadingSpinner from "@/components/loadingSpinner";
 export default function App({ Component, pageProps }: AppProps) {
   const [hasMounted, setHasMounted] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
     const auth = localStorage.getItem("token");
-    if (auth === undefined || auth === null) {
+    if (auth === undefined || auth === null || auth !== "token") {
+      localStorage.removeItem("token");
       router.push("/login").then(() => {
         setHasMounted(true);
       });
@@ -26,7 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
         });
       }
     }
-  }, []);
+  }, [router.pathname]);
 
   return (
     <Provider store={store}>

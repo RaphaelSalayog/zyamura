@@ -17,11 +17,13 @@ const AddItemModal = () => {
     setIsCancel(true);
     item?.add?.setVisible(false);
     item?.edit?.setVisible(false);
+    item?.view?.setVisible(false);
   };
 
   const onClose = () => {
     item?.add?.setVisible(false);
     item?.edit?.setVisible(false);
+    item?.view?.setVisible(false);
   };
 
   return (
@@ -43,17 +45,19 @@ const AddItemModal = () => {
           setIsCancel={setIsCancel}
           isLoadingHandler={isLoadingHandler}
         >
-          <CustomFormButton
-            text={
-              item?.add?.visible
-                ? "Add New Item"
-                : item?.edit?.visible
-                ? "Update"
-                : ""
-            }
-            handleModalOnClose={handleCancel}
-            confirmLoading={isLoading}
-          />
+          {!item?.view?.visible && (
+            <CustomFormButton
+              text={
+                item?.add?.visible
+                  ? "Add New Item"
+                  : item?.edit?.visible
+                  ? "Update"
+                  : ""
+              }
+              handleModalOnClose={handleCancel}
+              confirmLoading={isLoading}
+            />
+          )}
         </ItemForm.AddItemForm>
       </CustomModal>
     </>

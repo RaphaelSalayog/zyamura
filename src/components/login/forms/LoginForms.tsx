@@ -29,7 +29,7 @@ const LoginForms = () => {
 
   const submitHandler = (event: any) => {
     if (event.username === "zyamura" && event.password === "zyamura") {
-      localStorage.setItem("token", "qwe");
+      localStorage.setItem("token", "token");
       router.push("/dashboard");
     } else {
       if (event.username !== "zyamura") {

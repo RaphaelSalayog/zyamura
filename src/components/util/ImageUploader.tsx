@@ -69,6 +69,7 @@ const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
           return false;
         }}
         maxCount={1}
+        disabled={pet?.view?.visible || item?.view?.visible}
         // onPreview={onPreview}
       >
         {fileList?.length < 1 && "+ Upload"}

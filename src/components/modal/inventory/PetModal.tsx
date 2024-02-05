@@ -17,11 +17,13 @@ const PetInformationModal = () => {
     setIsCancel(true);
     pet?.add?.setVisible(false);
     pet?.edit?.setVisible(false);
+    pet?.view?.setVisible(false);
   };
 
   const onClose = () => {
     pet?.add?.setVisible(false);
     pet?.edit?.setVisible(false);
+    pet?.view?.setVisible(false);
   };
 
   return (
@@ -43,17 +45,19 @@ const PetInformationModal = () => {
           setIsCancel={setIsCancel}
           isLoadingHandler={isLoadingHandler}
         >
-          <CustomFormButton
-            text={
-              pet?.add?.visible
-                ? "Add New Pet"
-                : pet?.edit?.visible
-                ? "Update"
-                : ""
-            }
-            handleModalOnClose={handleCancel}
-            confirmLoading={isLoading}
-          />
+          {!pet?.view?.visible && (
+            <CustomFormButton
+              text={
+                pet?.add?.visible
+                  ? "Add New Pet"
+                  : pet?.edit?.visible
+                  ? "Update"
+                  : ""
+              }
+              handleModalOnClose={handleCancel}
+              confirmLoading={isLoading}
+            />
+          )}
         </PetForm.AddPetForm>
       </CustomModal>
     </>

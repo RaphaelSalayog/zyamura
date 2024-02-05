@@ -30,6 +30,14 @@ const itemSupplierOption = [
     key: "QC Corporation",
     label: "QC Corporation",
   },
+  {
+    key: "Kim's Pet Accessories",
+    label: "Kim's Pet Accessories",
+  },
+  {
+    key: "Lotte's Trading",
+    label: "Lotte's Trading",
+  },
 ];
 
 const AddItemForm = ({
@@ -191,7 +199,7 @@ const AddItemForm = ({
             },
           ]}
         >
-          <Input allowClear />
+          <Input allowClear readOnly={item?.view?.visible} />
         </Form.Item>
         <Form.Item
           name="itemSupplier"
@@ -217,7 +225,11 @@ const AddItemForm = ({
           />
         </Form.Item>
         <Form.Item name="itemDescription" label="Item Description">
-          <TextArea allowClear autoSize={{ minRows: 3, maxRows: 7 }} />
+          <TextArea
+            allowClear={!item?.view?.visible}
+            autoSize={{ minRows: 3, maxRows: 7 }}
+            readOnly={item?.view?.visible}
+          />
         </Form.Item>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Form.Item
@@ -238,6 +250,7 @@ const AddItemForm = ({
               precision={2}
               placeholder="0.00"
               onKeyDown={(event) => onKeyDownTypeNumber(event, "price")}
+              readOnly={item?.view?.visible}
             />
           </Form.Item>
           <Form.Item
@@ -258,6 +271,7 @@ const AddItemForm = ({
               precision={2}
               placeholder="0.00"
               onKeyDown={(event) => onKeyDownTypeNumber(event, "price")}
+              readOnly={item?.view?.visible}
             />
           </Form.Item>
           <Form.Item
@@ -278,6 +292,7 @@ const AddItemForm = ({
               placeholder="0"
               style={{ width: "100%" }}
               onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
+              readOnly={item?.view?.visible}
             />
           </Form.Item>
         </div>

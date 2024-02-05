@@ -285,7 +285,7 @@ const AddPetForm = ({
             },
           ]}
         >
-          <Input allowClear />
+          <Input allowClear readOnly={pet?.view?.visible} />
         </Form.Item>
         <Form.Item
           name="petSupplier"
@@ -311,7 +311,11 @@ const AddPetForm = ({
           />
         </Form.Item>
         <Form.Item name="petDescription" label="Pet Description">
-          <TextArea allowClear autoSize={{ minRows: 3, maxRows: 7 }} />
+          <TextArea
+            allowClear={!pet?.view?.visible}
+            autoSize={{ minRows: 3, maxRows: 7 }}
+            readOnly={pet?.view?.visible}
+          />
         </Form.Item>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <Form.Item
@@ -332,6 +336,7 @@ const AddPetForm = ({
               precision={2}
               placeholder="0.00"
               onKeyDown={(event) => onKeyDownTypeNumber(event, "price")}
+              readOnly={pet?.view?.visible}
             />
           </Form.Item>
           <Form.Item
@@ -352,6 +357,7 @@ const AddPetForm = ({
               precision={2}
               placeholder="0.00"
               onKeyDown={(event) => onKeyDownTypeNumber(event, "price")}
+              readOnly={pet?.view?.visible}
             />
           </Form.Item>
           <Form.Item
@@ -404,7 +410,11 @@ const AddPetForm = ({
           </Form.Item>
         </div>
         <Form.Item name="petType" label="Type">
-          <Radio.Group onChange={onChange} value={petType}>
+          <Radio.Group
+            onChange={onChange}
+            value={petType}
+            disabled={pet?.view?.visible || item?.view?.visible}
+          >
             <Radio value={"unique"}>Unique</Radio>
             <Radio value={"group"}>Group</Radio>
           </Radio.Group>
@@ -428,6 +438,7 @@ const AddPetForm = ({
               placeholder="0"
               style={{ width: "100%" }}
               onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
+              readOnly={pet?.view?.visible}
             />
           </Form.Item>
         )}

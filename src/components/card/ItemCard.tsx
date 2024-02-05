@@ -7,7 +7,7 @@ import {
   truncateString,
 } from "../util/customMethods";
 import { Button, Dropdown, Modal, Typography } from "antd";
-import { DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
+import { DeleteTwoTone, EditTwoTone, EyeOutlined } from "@ant-design/icons";
 import { useContext } from "react";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
@@ -37,6 +37,19 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
   } = data;
 
   const items = [
+    {
+      key: "view",
+      label: "view",
+      icon: <EyeOutlined />,
+      onClick: () => {
+        if (inventoryObject === "Pet") {
+          pet?.view?.setVisible(true);
+        } else if (inventoryObject === "Item") {
+          item?.view?.setVisible(true);
+        }
+        set(data);
+      },
+    },
     {
       key: "edit",
       label: "Edit",

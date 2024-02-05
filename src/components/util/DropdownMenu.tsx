@@ -55,7 +55,11 @@ const DropdownMenu: React.FC<DropdownMenu> = ({
 
   return (
     <>
-      <Dropdown menu={{ items, onClick: handleMenuClick }} trigger={[trigger]}>
+      <Dropdown
+        menu={{ items, onClick: handleMenuClick }}
+        trigger={[trigger]}
+        disabled={pet?.view?.visible || item?.view?.visible}
+      >
         <Button style={style}>
           <Space
             align="center"
