@@ -7,7 +7,7 @@ const Dashboard = () => {
         This project is still under development
       </p>
       <p style={{ marginBottom: "1rem" }}>
-        Pure front-end, no back-end included yet but it is functional.
+        No database included yet but it is functional.
       </p>
       <p style={{ marginBottom: "1rem" }}>
         It is just a recreation of our capstone project with my own code and
