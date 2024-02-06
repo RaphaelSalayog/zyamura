@@ -14,6 +14,7 @@
     "antd": "^5.12.2",
     "antd-img-crop": "^4.18.0",
     "moment": "^2.30.1",
+    "mongodb": "^6.3.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",

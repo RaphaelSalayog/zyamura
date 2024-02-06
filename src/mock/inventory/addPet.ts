@@ -1,14 +1,41 @@
-export const addPetMockData = {
-  inventoryId: "1136683242",
-  inventoryObject: "Pet",
-  inventoryName: "Pug",
-  inventorySupplier: "JCX Corporation",
-  inventoryDescription: "2 months old",
-  inventorySellingPrice: 2000,
-  inventoryInvestmentCost: 1500,
-  inventoryCategory: "Dog",
-  inventoryGender: "Male",
-  inventoryType: "Group",
-  inventoryQuantity: 5,
-  inventoryImage: [],
+export const accounts = {
+  _id: "101",
+  username: "",
+  password: "",
+  name: "",
+  role: "",
 };
+
+export interface inventoryInitialState {
+  inventoryId: string;
+  inventoryObject: string;
+  inventoryName: string;
+  inventorySupplier: string;
+  inventoryDescription: string;
+  inventorySellingPrice: number;
+  inventoryInvestmentCost: number;
+  inventoryCategory: string | null;
+  inventoryGender: string | null;
+  inventoryType: string | null;
+  inventoryQuantity: number;
+  inventoryImage: any[];
+}
+
+export interface Transaction {
+  date: string;
+  transactionData: {
+    transactionId: string;
+    time: string;
+    orderedItems: {
+      productId: string;
+      itemDetails: inventoryInitialState;
+      quantity: number;
+      price: number;
+      totalItemPrice: number;
+    }[];
+    totalPrice: number;
+    cash: number;
+    change: number;
+  }[];
+  totalPricePerDay: number;
+}

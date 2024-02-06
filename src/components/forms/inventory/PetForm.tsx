@@ -169,6 +169,26 @@ const AddPetForm = ({
     if (pet?.add?.visible) {
       isLoadingHandler(true);
       await dispatch(addPet(newData));
+      // Mongo DB
+      await fetch("/api/inventory", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          // inventoryId: newData.petId,
+          inventoryObject: "Pet",
+          inventoryName: newData.petName,
+          inventorySupplier: newData.petSupplier,
+          inventoryDescription: newData.petDescription,
+          inventorySellingPrice: newData.petSellingPrice,
+          inventoryInvestmentCost: newData.petInvestmentCost,
+          inventoryCategory: newData.petCategory,
+          inventoryGender: newData.petGender,
+          inventoryType: newData.petType,
+          inventoryQuantity: newData.petQuantity,
+          inventoryImage: newData.petImage,
+        }),
+      });
+      // console.log(qwe);
       resetState();
       form.resetFields();
       pet?.add?.setVisible(false);

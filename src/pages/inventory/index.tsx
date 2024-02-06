@@ -15,6 +15,8 @@ import useSelectedData from "@/common/hooks/useSelectedData";
 import { ItemModal } from "@/components/modal/inventory/ItemModal";
 import { PetMainModal } from "@/components/modal/inventory/PetModal";
 import MainLayout from "@/components/layout/MainLayout";
+import connectToDatabase from "@/pages/api/mongodb";
+import ObjectId from "mongodb";
 
 const { Title } = Typography;
 
@@ -53,7 +55,7 @@ const inventorySortItems = [
   },
 ];
 
-const Inventory = () => {
+const Inventory = ({ data: qwe }: any) => {
   const { pet, item } = useDrawerVisiblity();
   const { selectedData } = useSelectedData();
   const [inventorySort, setInventorySort] = useState();
@@ -151,5 +153,24 @@ const Inventory = () => {
     </MainLayout>
   );
 };
+
+// Mongo DB
+// export const getServerSideProps = async () => {
+//   const db = await connectToDatabase();
+//   const inventoryCollection = db.collection("inventory");
+
+//   const data = await inventoryCollection.find({}).toArray();
+
+//   const serializedData = data.map((item) => ({
+//     ...item,
+//     _id: item._id.toString(),
+//   }));
+
+//   return {
+//     props: {
+//       data: serializedData,
+//     },
+//   };
+// };
 
 export default Inventory;
