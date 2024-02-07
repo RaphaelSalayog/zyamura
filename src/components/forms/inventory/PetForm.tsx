@@ -300,7 +300,7 @@ const AddPetForm = ({
           label="Pet Name"
           rules={[
             {
-              required: true,
+              required: pet?.view?.visible ? false : true,
               message: "Please enter the pet name.",
             },
           ]}
@@ -312,7 +312,7 @@ const AddPetForm = ({
           label="Supplier"
           rules={[
             {
-              required: true,
+              required: pet?.view?.visible ? false : true,
               message: "Please enter the supplier.",
             },
           ]}
@@ -344,7 +344,7 @@ const AddPetForm = ({
             style={{ width: "23%" }}
             rules={[
               {
-                required: true,
+                required: pet?.view?.visible ? false : true,
                 message: "Please enter the selling price.",
               },
             ]}
@@ -365,7 +365,7 @@ const AddPetForm = ({
             style={{ width: "23%" }}
             rules={[
               {
-                required: true,
+                required: pet?.view?.visible ? false : true,
                 message: "Please enter the investment cost.",
               },
             ]}
@@ -386,7 +386,7 @@ const AddPetForm = ({
             style={{ width: "23%" }}
             rules={[
               {
-                required: true,
+                required: pet?.view?.visible ? false : true,
                 message: "Please enter the category.",
               },
             ]}
@@ -410,7 +410,7 @@ const AddPetForm = ({
             style={{ width: "23%" }}
             rules={[
               {
-                required: true,
+                required: pet?.view?.visible ? false : true,
                 message: "Please enter the gender.",
               },
             ]}
@@ -446,7 +446,7 @@ const AddPetForm = ({
             style={{ width: "23%" }}
             rules={[
               {
-                required: true,
+                required: pet?.view?.visible ? false : true,
                 message: "Please enter the quantity.",
               },
             ]}
@@ -467,7 +467,7 @@ const AddPetForm = ({
           label="Image"
           rules={[
             {
-              required: true,
+              required: pet?.view?.visible ? false : true,
               message: "Please upload an image.",
             },
           ]}

@@ -194,7 +194,7 @@ const AddItemForm = ({
           label="Item Name"
           rules={[
             {
-              required: true,
+              required: item?.view?.visible ? false : true,
               message: "Please enter the item name.",
             },
           ]}
@@ -206,7 +206,7 @@ const AddItemForm = ({
           label="Supplier"
           rules={[
             {
-              required: true,
+              required: item?.view?.visible ? false : true,
               message: "Please enter the supplier.",
             },
           ]}
@@ -238,7 +238,7 @@ const AddItemForm = ({
             style={{ width: "31.33%" }}
             rules={[
               {
-                required: true,
+                required: item?.view?.visible ? false : true,
                 message: "Please enter the selling price.",
               },
             ]}
@@ -259,7 +259,7 @@ const AddItemForm = ({
             style={{ width: "31.33%" }}
             rules={[
               {
-                required: true,
+                required: item?.view?.visible ? false : true,
                 message: "Please enter the investment cost.",
               },
             ]}
@@ -280,7 +280,7 @@ const AddItemForm = ({
             style={{ width: "31.33%" }}
             rules={[
               {
-                required: true,
+                required: item?.view?.visible ? false : true,
                 message: "Please enter the quantity.",
               },
             ]}
@@ -301,7 +301,7 @@ const AddItemForm = ({
           label="Image"
           rules={[
             {
-              required: true,
+              required: item?.view?.visible ? false : true,
               message: "Please upload an image.",
             },
           ]}
