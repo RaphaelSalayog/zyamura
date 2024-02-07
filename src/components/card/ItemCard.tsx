@@ -39,8 +39,8 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
   const items = [
     {
       key: "view",
-      label: "view",
-      icon: <EyeOutlined />,
+      label: "View",
+      icon: <EyeOutlined style={{ color: "#1677ff" }} />,
       onClick: () => {
         if (inventoryObject === "Pet") {
           pet?.view?.setVisible(true);
