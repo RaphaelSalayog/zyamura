@@ -1,8 +1,6 @@
-import MainLayout from "@/components/layout/MainLayout";
-
 const Dashboard = () => {
   return (
-    <MainLayout>
+    <>
       <p style={{ marginBottom: "1rem" }}>
         This project is still under development
       </p>
@@ -20,7 +18,7 @@ const Dashboard = () => {
       <p style={{ marginBottom: "1rem" }}>
         Feel free to try the available features
       </p>
-    </MainLayout>
+    </>
   );
 };
 

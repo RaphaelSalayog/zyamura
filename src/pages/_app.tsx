@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 import LoadingSpinner from "@/components/loadingSpinner";
+import MainLayout from "@/components/layout/MainLayout";
 
 export default function App({ Component, pageProps }: AppProps) {
   const [hasMounted, setHasMounted] = useState(false);
@@ -30,10 +31,24 @@ export default function App({ Component, pageProps }: AppProps) {
     }
   }, [router.pathname]);
 
+  if (router.pathname === "/login") {
+    return (
+      <Provider store={store}>
+        {hasMounted ? (
+          <Component {...pageProps} />
+        ) : (
+          <LoadingSpinner size="large" />
+        )}
+      </Provider>
+    );
+  }
+
   return (
     <Provider store={store}>
       {hasMounted ? (
-        <Component {...pageProps} />
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
       ) : (
         <LoadingSpinner size="large" />
       )}

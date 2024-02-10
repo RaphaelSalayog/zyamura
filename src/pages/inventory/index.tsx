@@ -14,9 +14,6 @@ import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import useSelectedData from "@/common/hooks/useSelectedData";
 import { ItemModal } from "@/components/modal/inventory/ItemModal";
 import { PetMainModal } from "@/components/modal/inventory/PetModal";
-import MainLayout from "@/components/layout/MainLayout";
-import connectToDatabase from "@/pages/api/mongodb";
-import ObjectId from "mongodb";
 
 const { Title } = Typography;
 
@@ -95,62 +92,59 @@ const Inventory = ({ data: qwe }: any) => {
   }, [inventorySort, data, searchItemOnChange, searchItemOnClick]);
 
   return (
-    <MainLayout>
-      <InventoryDrawerVisiblityProvider value={{ pet, item }}>
-        <SelectedDataProvider value={selectedData}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Title level={2}>INVENTORY</Title>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-              }}
-            >
-              <SearchBar
-                getValueOnChange={itemSearchOnChangeHandler}
-                getValueOnClick={itemSearchOnClickHandler}
-                sortedAndSearchedItems={sortedAndSearchedItems}
-                type="inventory"
-              />
-              <AddButton />
-              <DropdownMenu
-                type="sort"
-                items={inventorySortItems}
-                trigger="hover"
-                style={{
-                  height: "40px",
-                  marginLeft: "10px",
-                  width: "158.52px",
-                }}
-                setValue={inventorySortHandler}
-              />
-            </div>
-          </div>
+    <InventoryDrawerVisiblityProvider value={{ pet, item }}>
+      <SelectedDataProvider value={selectedData}>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <Title level={2}>INVENTORY</Title>
           <div
-            className={style.itemCardParent}
             style={{
-              justifyContent:
-                sortedAndSearchedItems?.length === 0 ? "center" : "",
-              alignContent:
-                sortedAndSearchedItems?.length === 0 ? "center" : "",
+              display: "flex",
+              justifyContent: "flex-end",
             }}
           >
-            {sortedAndSearchedItems?.map((filteredData: any) => (
-              <ItemCard key={filteredData.inventoryId} data={filteredData} />
-            ))}
-            {sortedAndSearchedItems?.length === 0 && (
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                style={{ marginBottom: "100px" }}
-              />
-            )}
+            <SearchBar
+              getValueOnChange={itemSearchOnChangeHandler}
+              getValueOnClick={itemSearchOnClickHandler}
+              sortedAndSearchedItems={sortedAndSearchedItems}
+              type="inventory"
+            />
+            <AddButton />
+            <DropdownMenu
+              type="sort"
+              items={inventorySortItems}
+              trigger="hover"
+              style={{
+                height: "40px",
+                marginLeft: "10px",
+                width: "158.52px",
+              }}
+              setValue={inventorySortHandler}
+            />
           </div>
+        </div>
+        <div
+          className={style.itemCardParent}
+          style={{
+            justifyContent:
+              sortedAndSearchedItems?.length === 0 ? "center" : "",
+            alignContent: sortedAndSearchedItems?.length === 0 ? "center" : "",
+          }}
+        >
+          {sortedAndSearchedItems?.map((filteredData: any) => (
+            <ItemCard key={filteredData.inventoryId} data={filteredData} />
+          ))}
+          {sortedAndSearchedItems?.length === 0 && (
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              style={{ marginBottom: "100px" }}
+            />
+          )}
+        </div>
 
-          <PetMainModal.PetInformationModal />
-          <ItemModal.AddItemModal />
-        </SelectedDataProvider>
-      </InventoryDrawerVisiblityProvider>
-    </MainLayout>
+        <PetMainModal.PetInformationModal />
+        <ItemModal.AddItemModal />
+      </SelectedDataProvider>
+    </InventoryDrawerVisiblityProvider>
   );
 };
 

@@ -4,6 +4,7 @@ import {
   FileDoneOutlined,
   LaptopOutlined,
   LogoutOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import { Affix, Layout, Menu } from "antd";
 import style from "@/styles/mainNavigation.module.css";
@@ -51,11 +52,11 @@ const items = [
   //   icon: <UploadOutlined />,
   //   label: "Activity Log",
   // },
-  // {
-  //   key: "/accounts",
-  //   icon: <UploadOutlined />,
-  //   label: "Accounts",
-  // },
+  {
+    key: "/accounts",
+    icon: <UploadOutlined />,
+    label: "Accounts",
+  },
   {
     key: "/login",
     icon: <LogoutOutlined />,

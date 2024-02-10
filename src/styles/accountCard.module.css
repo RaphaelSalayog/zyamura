@@ -1,0 +1,23 @@
+.accountCard {
+  background-color: white;
+  min-width: 230px;
+  max-width: 230px;
+  height: 350px;
+  border-radius: 8px;
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+  margin: 20px;
+  flex: 0 1 calc(20% - 40px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 15px;
+}
+
+.accountCard:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.accountCard:not(:hover) {
+  transform: scale(1);
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
+}

@@ -12,7 +12,6 @@ import { PosModalVisibilityProvider } from "@/common/contexts/PosModalVisibility
 import useModalVisibility from "@/common/hooks/useModalVisibility";
 import { useEffect, useState } from "react";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
-import MainLayout from "@/components/layout/MainLayout";
 import ReceiptModal from "@/components/modal/point-of-sales/ReceiptModal";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import useSelectedData from "@/common/hooks/useSelectedData";
@@ -62,89 +61,87 @@ const PointOfSales = () => {
   };
 
   return (
-    <MainLayout>
-      <PosModalVisibilityProvider value={{ modal, receiptModal }}>
-        <SelectedDataProvider value={selectedData}>
-          <div className={style.container}>
-            <div className={style.leftPane}>
-              <header className={style.leftPaneHeader}>
-                <Title level={2}>POINT OF SALES</Title>
-                <div>
-                  <SearchBar
-                    getValueOnChange={itemSearchOnChangeHandler}
-                    getValueOnClick={itemSearchOnClickHandler}
-                    sortedAndSearchedItems={sortedAndSearchedItems}
-                    type="inventory"
-                  />
-                  {/* <Button>FILTER</Button> */}
-                </div>
-              </header>
+    <PosModalVisibilityProvider value={{ modal, receiptModal }}>
+      <SelectedDataProvider value={selectedData}>
+        <div className={style.container}>
+          <div className={style.leftPane}>
+            <header className={style.leftPaneHeader}>
+              <Title level={2}>POINT OF SALES</Title>
+              <div>
+                <SearchBar
+                  getValueOnChange={itemSearchOnChangeHandler}
+                  getValueOnClick={itemSearchOnClickHandler}
+                  sortedAndSearchedItems={sortedAndSearchedItems}
+                  type="inventory"
+                />
+                {/* <Button>FILTER</Button> */}
+              </div>
+            </header>
 
-              <section
-                className={style.leftPaneContent}
-                style={{
-                  justifyContent:
-                    sortedAndSearchedItems?.length === 0 ? "center" : "",
-                  alignContent:
-                    sortedAndSearchedItems?.length === 0 ? "center" : "",
+            <section
+              className={style.leftPaneContent}
+              style={{
+                justifyContent:
+                  sortedAndSearchedItems?.length === 0 ? "center" : "",
+                alignContent:
+                  sortedAndSearchedItems?.length === 0 ? "center" : "",
+              }}
+            >
+              {sortedAndSearchedItems?.map((value: any) => (
+                <PosItemCard key={value.inventoryId} data={value} />
+              ))}
+
+              {sortedAndSearchedItems?.length === 0 && (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  style={{ marginBottom: "100px" }}
+                />
+              )}
+            </section>
+          </div>
+          <Divider type="vertical" style={{ height: "100%" }} />
+          <div className={style.rightPane}>
+            <div className={style.rightPaneHeader}>
+              <Title level={4}>Current Transaction</Title>
+              <Button
+                onClick={() => {
+                  dispatch(clearAllOrder());
                 }}
               >
-                {sortedAndSearchedItems?.map((value: any) => (
-                  <PosItemCard key={value.inventoryId} data={value} />
-                ))}
-
-                {sortedAndSearchedItems?.length === 0 && (
-                  <Empty
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    style={{ marginBottom: "100px" }}
-                  />
-                )}
-              </section>
+                CLEAR ALL
+              </Button>
             </div>
-            <Divider type="vertical" style={{ height: "100%" }} />
-            <div className={style.rightPane}>
-              <div className={style.rightPaneHeader}>
-                <Title level={4}>Current Transaction</Title>
-                <Button
-                  onClick={() => {
-                    dispatch(clearAllOrder());
-                  }}
-                >
-                  CLEAR ALL
-                </Button>
-              </div>
-              <Divider style={{ margin: "0.5rem 0" }} />
+            <Divider style={{ margin: "0.5rem 0" }} />
 
-              <ul className={style.rightPaneContent}>
-                {orderedItem.map((item: any) => (
-                  <li>
-                    <PosOrderedItemCard orderedItem={item} />
-                  </li>
-                ))}
-              </ul>
+            <ul className={style.rightPaneContent}>
+              {orderedItem.map((item: any) => (
+                <li>
+                  <PosOrderedItemCard orderedItem={item} />
+                </li>
+              ))}
+            </ul>
 
-              <Divider style={{ margin: "0.5rem 0" }} />
-              <div className={style.rightPaneFooter}>
-                <div className={style.rightPaneFooterContent}>
-                  <p>Total</p>
-                  <p>₱{addCommas(totalPrice)}</p>
-                </div>
-                <Button
-                  type="primary"
-                  disabled={orderedItem.length === 0}
-                  className={style.rightPaneFooterButton}
-                  onClick={confirmTransactionHandler}
-                >
-                  Confirm Transaction
-                </Button>
+            <Divider style={{ margin: "0.5rem 0" }} />
+            <div className={style.rightPaneFooter}>
+              <div className={style.rightPaneFooterContent}>
+                <p>Total</p>
+                <p>₱{addCommas(totalPrice)}</p>
               </div>
+              <Button
+                type="primary"
+                disabled={orderedItem.length === 0}
+                className={style.rightPaneFooterButton}
+                onClick={confirmTransactionHandler}
+              >
+                Confirm Transaction
+              </Button>
             </div>
           </div>
-          <AmountChangeModal />
-          <ReceiptModal />
-        </SelectedDataProvider>
-      </PosModalVisibilityProvider>
-    </MainLayout>
+        </div>
+        <AmountChangeModal />
+        <ReceiptModal />
+      </SelectedDataProvider>
+    </PosModalVisibilityProvider>
   );
 };
 
