@@ -306,7 +306,10 @@ const AddItemForm = ({
             },
           ]}
         >
-          <ImageUploader getValue={itemImageHandler} />
+          <ImageUploader
+            listType={"picture-card"}
+            getValue={itemImageHandler}
+          />
         </Form.Item>
         {children}
       </Form>

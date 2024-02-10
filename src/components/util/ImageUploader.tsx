@@ -6,10 +6,11 @@ import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVi
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 interface ImageUploader {
+  listType: "picture-card" | "picture-circle";
   getValue: (value: any[]) => void;
 }
 
-const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
+const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
   const { pet, item } = useContext(InventoryDrawerVisiblityContext);
   const { get } = useContext(SelectedDataContext);
 
@@ -59,7 +60,7 @@ const ImageUploader: React.FC<ImageUploader> = ({ getValue }) => {
             }, 0);
           }
         }}
-        listType="picture-card"
+        listType={listType}
         fileList={fileList}
         onChange={onChange}
         showUploadList={{

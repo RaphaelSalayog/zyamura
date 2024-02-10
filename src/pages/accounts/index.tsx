@@ -11,6 +11,7 @@ import {
   MailOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { AccountModal } from "@/components/modal/account/AccountModal";
 
 const { Title, Text } = Typography;
 
@@ -163,6 +164,7 @@ const Accounts: React.FC<any> = () => {
             </Row>
           </Row>
         </Row>
+        {/* <AccountModal.AddAccountModal /> */}
         {/* </SelectedDataProvider> */}
       </InventoryDrawerVisiblityProvider>
     </>

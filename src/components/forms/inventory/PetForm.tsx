@@ -473,7 +473,7 @@ const AddPetForm = ({
           ]}
           dependencies={["petImage"]}
         >
-          <ImageUploader getValue={petImageHandler} />
+          <ImageUploader listType={"picture-card"} getValue={petImageHandler} />
         </Form.Item>
         {children}
       </Form>

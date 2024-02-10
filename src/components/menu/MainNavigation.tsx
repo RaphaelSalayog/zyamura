@@ -52,11 +52,11 @@ const items = [
   //   icon: <UploadOutlined />,
   //   label: "Activity Log",
   // },
-  {
-    key: "/accounts",
-    icon: <UploadOutlined />,
-    label: "Accounts",
-  },
+  // {
+  //   key: "/accounts",
+  //   icon: <UploadOutlined />,
+  //   label: "Accounts",
+  // },
   {
     key: "/login",
     icon: <LogoutOutlined />,
