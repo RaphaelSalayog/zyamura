@@ -1,8 +1,9 @@
 import { AccountForm } from "@/components/forms/account/AccountForm";
 import CustomModal from "../CustomModal";
 import { Tabs } from "antd";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import CustomFormButton from "@/components/forms/CustomFormButton";
+import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 
 const items = [
   {
@@ -12,20 +13,23 @@ const items = [
   },
   {
     key: "user-authentication",
-    label: "User-Authentication",
+    label: "User Authentication",
     children: <AccountForm.UserAuthentication />,
   },
 ];
 
 const AddAccountModal = () => {
+  const { add, edit, remove } = useContext(DrawerVisibilityContext);
   const [activeTabKey, setActiveTabKey] = useState("personal-information");
   return (
     <>
       <CustomModal
         title={"Add New Account"}
-        open={true}
-        width={500}
-        onClose={() => {}}
+        open={add?.visible || edit?.visible || remove?.visible}
+        width={550}
+        onClose={() => {
+          add?.setVisible(false);
+        }}
       >
         <Tabs
           defaultActiveKey={activeTabKey}
@@ -35,7 +39,7 @@ const AddAccountModal = () => {
           }}
         />
         <CustomFormButton
-          text="Confirm"
+          text="Next"
           handleModalOnClose={() => {}}
           confirmLoading={false}
         />

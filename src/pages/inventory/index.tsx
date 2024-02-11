@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 import { inventorySortItem } from "@/components/util/customMethods";
 import { InventoryDrawerVisiblityProvider } from "@/common/contexts/InventoryDrawerVisibilityContext";
-import useDrawerVisiblity from "@/common/hooks/useDrawerVisibility";
+import useInventoryDrawerVisiblity from "@/common/hooks/useInventoryDrawerVisibility";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import useSelectedData from "@/common/hooks/useSelectedData";
 import { ItemModal } from "@/components/modal/inventory/ItemModal";
@@ -53,7 +53,7 @@ const inventorySortItems = [
 ];
 
 const Inventory = ({ data: qwe }: any) => {
-  const { pet, item } = useDrawerVisiblity();
+  const { pet, item } = useInventoryDrawerVisiblity();
   const { selectedData } = useSelectedData();
   const [inventorySort, setInventorySort] = useState();
   const [searchItemOnChange, setSearchItemOnChange] = useState("");

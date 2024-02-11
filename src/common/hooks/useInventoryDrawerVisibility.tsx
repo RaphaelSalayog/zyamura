@@ -5,7 +5,7 @@ interface DrawerState {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export interface DrawerVisiblity {
+export interface InventoryDrawerVisiblity {
   pet?: {
     add?: DrawerState;
     edit?: DrawerState;
@@ -20,7 +20,7 @@ export interface DrawerVisiblity {
   };
 }
 
-const useDrawerVisiblity = (): DrawerVisiblity => {
+const useInventoryDrawerVisiblity = (): InventoryDrawerVisiblity => {
   const [isPetAddDrawerVisible, setIsPetAddDrawerVisible] = useState(false);
   const [isPetEditDrawerVisible, setIsPetEditDrawerVisible] = useState(false);
   const [isPetRemoveDrawerVisible, setIsPetRemoveDrawerVisible] =
@@ -73,4 +73,4 @@ const useDrawerVisiblity = (): DrawerVisiblity => {
   };
 };
 
-export default useDrawerVisiblity;
+export default useInventoryDrawerVisiblity;

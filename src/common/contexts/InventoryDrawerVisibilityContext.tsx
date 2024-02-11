@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { DrawerVisiblity } from "../hooks/useDrawerVisibility";
+import { InventoryDrawerVisiblity } from "../hooks/useInventoryDrawerVisibility";
 
 const initialValue = {
   pet: {
@@ -40,7 +40,7 @@ const initialValue = {
   },
 };
 const InventoryDrawerVisiblityContext =
-  createContext<DrawerVisiblity>(initialValue);
+  createContext<InventoryDrawerVisiblity>(initialValue);
 
 export const InventoryDrawerVisiblityProvider =
   InventoryDrawerVisiblityContext.Provider;

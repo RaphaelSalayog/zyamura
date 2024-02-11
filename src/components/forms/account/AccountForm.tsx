@@ -1,21 +1,18 @@
 import ImageUploader from "@/components/util/ImageUploader";
-import { Form, Input, Row, Select } from "antd";
-const { Option } = Select;
+import { DatePicker, Form, Input, Radio, Row, Select } from "antd";
+import { useState } from "react";
 
 const UserInformation: React.FC<any> = () => {
   const [form] = Form.useForm();
+  const [isFirstLetter, setIsFirstLetter] = useState(true);
+  const [role, setRole] = useState("");
+
+  const onChange = (e: any) => {
+    setRole(e.target.value);
+  };
 
   const submitHandler = async (value: any) => {};
   const onFinishFailed = (errorInfo: any) => {};
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
-      </Select>
-    </Form.Item>
-  );
 
   return (
     <>
@@ -25,6 +22,7 @@ const UserInformation: React.FC<any> = () => {
         id="addItemForm"
         layout="vertical"
         onFinishFailed={onFinishFailed}
+        initialValues={{ role: "employee" }}
         onValuesChange={(changedValues, allValues) => {
           // To capitalize the first letter for every word
         }}
@@ -32,31 +30,109 @@ const UserInformation: React.FC<any> = () => {
         <Row justify={"center"}>
           <Form.Item
             name="accountImage"
-            //   rules={[
-            //     {
-            //       required: item?.view?.visible ? false : true,
-            //       message: "Please upload an image.",
-            //     },
-            //   ]}
+            rules={[
+              {
+                required: true,
+                message: "Please upload an image.",
+              },
+            ]}
           >
             <ImageUploader listType="picture-circle" getValue={() => {}} />
           </Form.Item>
         </Row>
-        <Form.Item name="accountName" label="Name">
-          <Input allowClear /*readOnly={item?.view?.visible}*/ />
-        </Form.Item>
+        <Row justify={"space-between"}>
+          <Form.Item
+            name="firstName"
+            label="First Name"
+            rules={[
+              { required: true, message: "Please input your first name!" },
+            ]}
+            style={{ width: "48%" }}
+          >
+            <Input allowClear /*readOnly={item?.view?.visible}*/ />
+          </Form.Item>
+          <Form.Item
+            name="lastName"
+            label="Last Name"
+            rules={[
+              { required: true, message: "Please input your last name!" },
+            ]}
+            style={{ width: "48%" }}
+          >
+            <Input allowClear /*readOnly={item?.view?.visible}*/ />
+          </Form.Item>
+        </Row>
         <Form.Item
-          name="phone"
-          label="Phone Number"
-          rules={[
-            { required: true, message: "Please input your phone number!" },
-          ]}
+          name="address"
+          label="Address"
+          rules={[{ required: true, message: "Please input your address!" }]}
         >
-          <Input addonBefore={prefixSelector} style={{ width: "100%" }} />
-        </Form.Item>
-        <Form.Item name="email" label="Email">
           <Input allowClear /*readOnly={item?.view?.visible}*/ />
         </Form.Item>
+
+        <Row justify={"space-between"}>
+          <Form.Item
+            name="phone"
+            label="Phone Number"
+            rules={[
+              { required: true, message: "Please input your phone number!" },
+            ]}
+            style={{ width: "48%" }}
+          >
+            <Input
+              // addonBefore={"+63"}
+              onChange={(e) => {
+                const data = e.target.value.split("");
+                if (data.length === 0) {
+                  setIsFirstLetter(true);
+                } else {
+                  setIsFirstLetter(false);
+                }
+              }}
+              onKeyPress={(e) => {
+                if (!/^[0-9\b]$/.test(e.key)) {
+                  e.preventDefault();
+                } else {
+                  console.log(isFirstLetter);
+                  if (e.key === "0" && isFirstLetter) {
+                    e.preventDefault();
+                  }
+                }
+              }}
+              maxLength={10}
+            />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[{ required: true, message: "Please input your email!" }]}
+            style={{ width: "48%" }}
+          >
+            <Input type="email" allowClear /*readOnly={item?.view?.visible}*/ />
+          </Form.Item>
+        </Row>
+        <Row justify={"space-between"}>
+          <Form.Item
+            name="birthDate"
+            label="Birth Date"
+            rules={[
+              { required: true, message: "Please input your birth date!" },
+            ]}
+            style={{ width: "48%" }}
+          >
+            <DatePicker style={{ width: "100%" }} />
+          </Form.Item>
+          <Form.Item name="role" label="Job Position" style={{ width: "48%" }}>
+            <Radio.Group
+              onChange={onChange}
+              value={role}
+              // disabled={pet?.view?.visible || item?.view?.visible}
+            >
+              <Radio value={"employee"}>Employee</Radio>
+              <Radio value={"admin"}>Admin</Radio>
+            </Radio.Group>
+          </Form.Item>
+        </Row>
       </Form>
     </>
   );

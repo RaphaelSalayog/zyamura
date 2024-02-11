@@ -9,13 +9,17 @@ import {
   EditTwoTone,
   EyeOutlined,
   MailOutlined,
+  PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { AccountModal } from "@/components/modal/account/AccountModal";
+import { DrawerVisiblityProvider } from "@/common/contexts/DrawerVisibilityContext";
+import useDrawerVisibility from "@/common/hooks/useDrawerVisiblity";
 
 const { Title, Text } = Typography;
 
 const Accounts: React.FC<any> = () => {
+  const { add, edit, remove, view } = useDrawerVisibility();
   const items = [
     {
       key: "view",
@@ -42,9 +46,10 @@ const Accounts: React.FC<any> = () => {
     //   onClick: () => {},
     // },
   ];
+
   return (
     <>
-      <InventoryDrawerVisiblityProvider value={{}}>
+      <DrawerVisiblityProvider value={{ add, edit, remove, view }}>
         {/* <SelectedDataProvider value={{}}> */}
         <Row justify={"space-between"}>
           <Title level={2}>ACCOUNTS</Title>
@@ -58,6 +63,9 @@ const Accounts: React.FC<any> = () => {
             <Button
               type="primary"
               style={{ height: "40px", marginLeft: "10px" }}
+              onClick={() => {
+                add?.setVisible(true);
+              }}
             >
               Add Account
             </Button>
@@ -133,7 +141,7 @@ const Accounts: React.FC<any> = () => {
                     alignItems: "center",
                   }}
                 >
-                  <EyeOutlined
+                  <PhoneOutlined
                     style={{ color: "#1677ff", marginRight: "8px" }}
                   />
                   <Text>(+63) 9451472698</Text>
@@ -164,9 +172,9 @@ const Accounts: React.FC<any> = () => {
             </Row>
           </Row>
         </Row>
-        {/* <AccountModal.AddAccountModal /> */}
+        <AccountModal.AddAccountModal />
         {/* </SelectedDataProvider> */}
-      </InventoryDrawerVisiblityProvider>
+      </DrawerVisiblityProvider>
     </>
   );
 };

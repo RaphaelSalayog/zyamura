@@ -68,7 +68,7 @@ export const PetMainModal = {
   PetInformationModal,
 };
 
-// onKeyPress={(event) => {
+// onKeyDown={(event) => {
 //   if (
 //     !/[0-9\b.]/.test(event.key) ||
 //     (event.key === "." &&
