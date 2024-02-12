@@ -1,6 +1,6 @@
 import CustomModal from "../CustomModal";
 import { ItemForm } from "@/components/forms/inventory/ItemForm";
-import CustomFormButton from "@/components/forms/CustomFormButton";
+import CustomInventoryFormButton from "@/components/forms/CustomInventoryFormButton";
 import { useContext, useState } from "react";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 
@@ -46,7 +46,7 @@ const AddItemModal = () => {
           isLoadingHandler={isLoadingHandler}
         >
           {!item?.view?.visible && (
-            <CustomFormButton
+            <CustomInventoryFormButton
               text={
                 item?.add?.visible
                   ? "Add New Item"

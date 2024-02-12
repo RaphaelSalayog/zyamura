@@ -6,7 +6,7 @@ interface IFormButton {
   confirmLoading: boolean;
 }
 
-const CustomFormButton = ({
+const CustomInventoryFormButton = ({
   text,
   handleModalOnClose,
   confirmLoading,
@@ -29,4 +29,4 @@ const CustomFormButton = ({
   );
 };
 
-export default CustomFormButton;
+export default CustomInventoryFormButton;

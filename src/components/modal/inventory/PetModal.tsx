@@ -1,6 +1,6 @@
 import CustomModal from "@/components/modal/CustomModal";
 import { PetForm } from "@/components/forms/inventory/PetForm";
-import CustomFormButton from "@/components/forms/CustomFormButton";
+import CustomInventoryFormButton from "@/components/forms/CustomInventoryFormButton";
 import { useContext, useState } from "react";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 
@@ -46,7 +46,7 @@ const PetInformationModal = () => {
           isLoadingHandler={isLoadingHandler}
         >
           {!pet?.view?.visible && (
-            <CustomFormButton
+            <CustomInventoryFormButton
               text={
                 pet?.add?.visible
                   ? "Add New Pet"

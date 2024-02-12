@@ -1,168 +1,141 @@
 import ImageUploader from "@/components/util/ImageUploader";
-import { DatePicker, Form, Input, Radio, Row, Select } from "antd";
+import { DatePicker, Form, Input, Radio, Row } from "antd";
 import { useState } from "react";
 
-const UserInformation: React.FC<any> = () => {
-  const [form] = Form.useForm();
-  const [isFirstLetter, setIsFirstLetter] = useState(true);
+const UserInformation = ({
+  petImageHandler,
+}: {
+  petImageHandler: (value: any) => void;
+}) => {
   const [role, setRole] = useState("");
+  const [isFirstLetter, setIsFirstLetter] = useState(true);
 
   const onChange = (e: any) => {
     setRole(e.target.value);
   };
 
-  const submitHandler = async (value: any) => {};
-  const onFinishFailed = (errorInfo: any) => {};
-
   return (
     <>
-      <Form
-        form={form}
-        onFinish={submitHandler}
-        id="addItemForm"
-        layout="vertical"
-        onFinishFailed={onFinishFailed}
-        initialValues={{ role: "employee" }}
-        onValuesChange={(changedValues, allValues) => {
-          // To capitalize the first letter for every word
-        }}
-      >
-        <Row justify={"center"}>
-          <Form.Item
-            name="accountImage"
-            rules={[
-              {
-                required: true,
-                message: "Please upload an image.",
-              },
-            ]}
-          >
-            <ImageUploader listType="picture-circle" getValue={() => {}} />
-          </Form.Item>
-        </Row>
-        <Row justify={"space-between"}>
-          <Form.Item
-            name="firstName"
-            label="First Name"
-            rules={[
-              { required: true, message: "Please input your first name!" },
-            ]}
-            style={{ width: "48%" }}
-          >
-            <Input allowClear /*readOnly={item?.view?.visible}*/ />
-          </Form.Item>
-          <Form.Item
-            name="lastName"
-            label="Last Name"
-            rules={[
-              { required: true, message: "Please input your last name!" },
-            ]}
-            style={{ width: "48%" }}
-          >
-            <Input allowClear /*readOnly={item?.view?.visible}*/ />
-          </Form.Item>
-        </Row>
+      <Row justify={"center"}>
         <Form.Item
-          name="address"
-          label="Address"
-          rules={[{ required: true, message: "Please input your address!" }]}
+          name="image"
+          rules={[
+            {
+              required: true,
+              message: "Please upload an image.",
+            },
+          ]}
+        >
+          <ImageUploader listType="picture-circle" getValue={petImageHandler} />
+        </Form.Item>
+      </Row>
+      <Row justify={"space-between"}>
+        <Form.Item
+          name="firstName"
+          label="First Name"
+          rules={[{ required: true, message: "Please input your first name!" }]}
+          style={{ width: "48%" }}
         >
           <Input allowClear /*readOnly={item?.view?.visible}*/ />
         </Form.Item>
+        <Form.Item
+          name="lastName"
+          label="Last Name"
+          rules={[{ required: true, message: "Please input your last name!" }]}
+          style={{ width: "48%" }}
+        >
+          <Input allowClear /*readOnly={item?.view?.visible}*/ />
+        </Form.Item>
+      </Row>
+      <Form.Item
+        name="address"
+        label="Address"
+        rules={[{ required: true, message: "Please input your address!" }]}
+      >
+        <Input allowClear /*readOnly={item?.view?.visible}*/ />
+      </Form.Item>
 
-        <Row justify={"space-between"}>
-          <Form.Item
-            name="phone"
-            label="Phone Number"
-            rules={[
-              { required: true, message: "Please input your phone number!" },
-            ]}
-            style={{ width: "48%" }}
-          >
-            <Input
-              // addonBefore={"+63"}
-              onChange={(e) => {
-                const data = e.target.value.split("");
-                if (data.length === 0) {
-                  setIsFirstLetter(true);
-                } else {
-                  setIsFirstLetter(false);
-                }
-              }}
-              onKeyPress={(e) => {
-                if (!/^[0-9\b]$/.test(e.key)) {
+      <Row justify={"space-between"}>
+        <Form.Item
+          name="phone"
+          label="Phone Number"
+          rules={[
+            { required: true, message: "Please input your phone number!" },
+          ]}
+          style={{ width: "48%" }}
+        >
+          <Input
+            addonBefore={"+63"}
+            onChange={(e) => {
+              const data = e.target.value.split("");
+              if (data.length === 0) {
+                setIsFirstLetter(true);
+              } else {
+                setIsFirstLetter(false);
+              }
+            }}
+            onKeyPress={(e) => {
+              if (!/^[0-9\b]$/.test(e.key)) {
+                e.preventDefault();
+              } else {
+                if (e.key === "0" && isFirstLetter) {
                   e.preventDefault();
-                } else {
-                  console.log(isFirstLetter);
-                  if (e.key === "0" && isFirstLetter) {
-                    e.preventDefault();
-                  }
                 }
-              }}
-              maxLength={10}
-            />
-          </Form.Item>
-          <Form.Item
-            name="email"
-            label="Email"
-            rules={[{ required: true, message: "Please input your email!" }]}
-            style={{ width: "48%" }}
+              }
+            }}
+            maxLength={10}
+          />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          label="Email"
+          rules={[{ required: true, message: "Please input your email!" }]}
+          style={{ width: "48%" }}
+        >
+          <Input type="email" allowClear /*readOnly={item?.view?.visible}*/ />
+        </Form.Item>
+      </Row>
+      <Row justify={"space-between"}>
+        <Form.Item
+          name="birthDate"
+          label="Birth Date"
+          rules={[{ required: true, message: "Please input your birth date!" }]}
+          style={{ width: "48%" }}
+        >
+          <DatePicker style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item name="role" label="Job Position" style={{ width: "48%" }}>
+          <Radio.Group
+            onChange={onChange}
+            value={role}
+            // disabled={pet?.view?.visible || item?.view?.visible}
           >
-            <Input type="email" allowClear /*readOnly={item?.view?.visible}*/ />
-          </Form.Item>
-        </Row>
-        <Row justify={"space-between"}>
-          <Form.Item
-            name="birthDate"
-            label="Birth Date"
-            rules={[
-              { required: true, message: "Please input your birth date!" },
-            ]}
-            style={{ width: "48%" }}
-          >
-            <DatePicker style={{ width: "100%" }} />
-          </Form.Item>
-          <Form.Item name="role" label="Job Position" style={{ width: "48%" }}>
-            <Radio.Group
-              onChange={onChange}
-              value={role}
-              // disabled={pet?.view?.visible || item?.view?.visible}
-            >
-              <Radio value={"employee"}>Employee</Radio>
-              <Radio value={"admin"}>Admin</Radio>
-            </Radio.Group>
-          </Form.Item>
-        </Row>
-      </Form>
+            <Radio value={"employee"}>Employee</Radio>
+            <Radio value={"admin"}>Admin</Radio>
+          </Radio.Group>
+        </Form.Item>
+      </Row>
     </>
   );
 };
 
-const UserAuthentication: React.FC<any> = () => {
-  const [form] = Form.useForm();
-
-  const submitHandler = async (value: any) => {};
-  const onFinishFailed = (errorInfo: any) => {};
+const UserAuthentication = () => {
   return (
     <>
-      <Form
-        form={form}
-        onFinish={submitHandler}
-        id="addItemForm"
-        layout="vertical"
-        onFinishFailed={onFinishFailed}
-        onValuesChange={(changedValues, allValues) => {
-          // To capitalize the first letter for every word
-        }}
+      <Form.Item
+        name="username"
+        label="Username"
+        rules={[{ required: true, message: "Please input your username!" }]}
       >
-        <Form.Item name="username" label="Username">
-          <Input allowClear /*readOnly={item?.view?.visible}*/ />
-        </Form.Item>
-        <Form.Item name="password" label="Password">
-          <Input.Password /*readOnly={item?.view?.visible}*/ />
-        </Form.Item>
-        {/* {children} */}
-      </Form>
+        <Input allowClear /*readOnly={item?.view?.visible}*/ />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        label="Password"
+        rules={[{ required: true, message: "Please input your password!" }]}
+      >
+        <Input.Password /*readOnly={item?.view?.visible}*/ />
+      </Form.Item>
     </>
   );
 };
