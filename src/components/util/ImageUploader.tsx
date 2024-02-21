@@ -1,7 +1,7 @@
 import ImgCrop from "antd-img-crop";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Upload } from "antd";
-import type { RcFile, UploadFile, UploadProps } from "antd/es/upload/interface";
+import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
@@ -46,20 +46,22 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
   ]);
 
   useEffect(() => {
-    getValue(fileList);
+    if (fileList[0]?.status === "done") {
+      getValue([fileList[0]?.originFileObj]);
+    }
   }, [fileList]);
   return (
     <ImgCrop>
       <Upload
         // action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188" for API call only
         // to avoid sending POST request to upload the file
-        customRequest={({ onSuccess }) => {
-          if (onSuccess) {
-            setTimeout(() => {
-              onSuccess("ok", undefined);
-            }, 0);
-          }
-        }}
+        // customRequest={({ onSuccess }) => {
+        //   if (onSuccess) {
+        //     setTimeout(() => {
+        //       onSuccess("ok", undefined);
+        //     }, 0);
+        //   }
+        // }}
         listType={listType}
         fileList={fileList}
         onChange={onChange}

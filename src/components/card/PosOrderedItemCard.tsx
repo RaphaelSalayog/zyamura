@@ -50,7 +50,7 @@ const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
         <div className={style.image}>
           <img
             alt="example"
-            src={itemDetails.inventoryImage[0].thumbUrl}
+            src={itemDetails.inventoryImage[0]?.thumbUrl}
             style={{ objectFit: "cover", height: "100%", width: "100%" }}
           />
         </div>
