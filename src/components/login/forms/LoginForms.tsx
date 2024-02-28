@@ -13,21 +13,53 @@ type FieldType = {
 };
 
 const LoginForms = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [disableSubmit, setDisableSubmit] = useState(true);
   const [isUsernameError, setIsUsernameError] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
   useEffect(() => {
-    if (email && password) {
+    if (username && password) {
       setDisableSubmit(false);
     } else {
       setDisableSubmit(true);
     }
-  }, [email, password]);
+  }, [username, password]);
 
-  const submitHandler = (event: any) => {
+  const submitHandler = async (event: any) => {
+    // try {
+    //   setIsLoading(true);
+    //   const response = await fetch("http://localhost:3000/login", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({
+    //       username: username,
+    //       password: password,
+    //     }),
+    //   });
+    //   const data = await response.json();
+    //   console.log(data);
+    //   if (response.ok) {
+    //     localStorage.setItem("token", data.token);
+    //     localStorage.setItem("username", data.email);
+    //     localStorage.setItem("user", data.user);
+    //     localStorage.setItem("role", data.role);
+    //     router.push("/dashboard");
+    //   } else {
+    //     if (data.message === "Invalid Username") {
+    //       setIsUsernameError(true);
+    //       setIsPasswordError(true);
+    //     } else {
+    //       setIsPasswordError(true);
+    //     }
+    //   }
+    //   setIsLoading(false);
+    // } catch (err) {
+    //   console.log(err);
+    // }
     if (event.username === "zyamura" && event.password === "zyamura") {
       localStorage.setItem("token", "token");
       router.push("/dashboard");
@@ -83,7 +115,7 @@ const LoginForms = () => {
             onChange={(event) => {
               setIsUsernameError(false);
               setIsPasswordError(false);
-              setEmail(event.target.value);
+              setUsername(event.target.value);
             }}
             placeholder="zyamura"
             style={{ borderRadius: "0px" }}
@@ -114,6 +146,7 @@ const LoginForms = () => {
             htmlType="submit"
             style={{ minWidth: "100%", borderRadius: "0px" }}
             disabled={disableSubmit}
+            loading={isLoading}
           >
             Login
           </Button>
