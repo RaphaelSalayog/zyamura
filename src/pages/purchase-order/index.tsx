@@ -1,6 +1,6 @@
 import { DrawerVisiblityProvider } from "@/common/contexts/DrawerVisibilityContext";
 import SearchBar from "@/components/filter/inventory/SearchBar";
-import PurchaseOrderTable from "@/components/table/purchase-order/PurchaseOrderTable";
+// import PurchaseOrderTable from "@/components/table/purchase-order/PurchaseOrderTable";
 import { Button, Col, Row } from "antd";
 import Title from "antd/es/typography/Title";
 
@@ -49,7 +49,7 @@ const PurchaseOrder = () => {
             position: "relative",
           }}
         >
-          <PurchaseOrderTable />
+          {/* <PurchaseOrderTable /> */}
         </Row>
       </DrawerVisiblityProvider>
     </>
