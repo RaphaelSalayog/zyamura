@@ -58,7 +58,7 @@ const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
         <div className={style.content}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Title level={5} style={{ margin: "0" }}>
-              {truncateString(itemDetails.inventoryName, 36)}
+              {truncateString(itemDetails.name, 36)}
             </Title>
             <Button
               type="default"

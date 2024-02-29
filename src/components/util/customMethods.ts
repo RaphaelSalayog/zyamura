@@ -6,14 +6,10 @@ function inventorySortItem(inventorySort: any, inventory: any[]) {
     case "Oldest":
       return items?.reverse();
     case "Name (A-Z)":
-      return items?.sort((a: any, b: any) =>
-        a.inventoryName.localeCompare(b.inventoryName)
-      );
+      return items?.sort((a: any, b: any) => a.name.localeCompare(b.name));
     case "Name (Z-A)":
       return items
-        ?.sort((a: any, b: any) =>
-          a.inventoryName.localeCompare(b.inventoryName)
-        )
+        ?.sort((a: any, b: any) => a.name.localeCompare(b.name))
         .reverse();
     case "Highest Price":
       return items

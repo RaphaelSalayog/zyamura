@@ -9,7 +9,7 @@ export const accounts = {
 export interface inventoryInitialState {
   inventoryId: string;
   inventoryObject: string;
-  inventoryName: string;
+  name: string;
   inventorySupplier: string;
   inventoryDescription: string;
   inventorySellingPrice: number;

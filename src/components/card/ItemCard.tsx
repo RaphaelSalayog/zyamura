@@ -26,7 +26,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
   const { set } = useContext(SelectedDataContext);
   const dispatch = useDispatch();
   const {
-    inventoryName,
+    name,
     inventoryQuantity,
     inventorySellingPrice,
     inventoryObject,
@@ -126,7 +126,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
         </div>
 
         <div className={style.itemCardContent}>
-          <Title level={5}>{truncateString(inventoryName, 40)}</Title>
+          <Title level={5}>{truncateString(name, 40)}</Title>
           <div>
             <div
               style={{

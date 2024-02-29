@@ -3,7 +3,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 export interface inventoryInitialState {
   inventoryId: string;
   inventoryObject: string;
-  inventoryName: string;
+  name: string;
   inventorySupplier: string;
   inventoryDescription: string;
   inventorySellingPrice: number;
@@ -59,7 +59,7 @@ const petData = (payload: any) => {
   return {
     inventoryId: payload.petId,
     inventoryObject: "Pet",
-    inventoryName: payload.petName,
+    name: payload.petName,
     inventorySupplier: payload.petSupplier,
     inventoryDescription: payload.petDescription,
     inventorySellingPrice: payload.petSellingPrice,
@@ -76,7 +76,7 @@ const itemData = (payload: any) => {
   return {
     inventoryId: payload.itemId,
     inventoryObject: "Item",
-    inventoryName: payload.itemName,
+    name: payload.itemName,
     inventorySupplier: payload.itemSupplier,
     inventoryDescription: payload.itemDescription,
     inventorySellingPrice: payload.itemSellingPrice,

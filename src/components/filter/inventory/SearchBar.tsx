@@ -36,7 +36,7 @@ const SearchBar: React.FC<SearchBar> = ({
       // To know if the item is duplicate. If it is, it will just increment the number
       sortedAndSearchedItems?.map((item: inventoryInitialState) => {
         const existingItem = array.find(
-          (existing) => existing.itemName === item.inventoryName
+          (existing) => existing.itemName === item.name
         );
 
         if (existingItem) {
@@ -44,7 +44,7 @@ const SearchBar: React.FC<SearchBar> = ({
         } else {
           // If item doesn't exist, add a new object to the array
           array.push({
-            itemName: item.inventoryName,
+            itemName: item.name,
             number: 1, // Assuming you start with 1 when adding a new item
           });
         }

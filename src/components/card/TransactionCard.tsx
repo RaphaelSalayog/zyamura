@@ -24,10 +24,10 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
   const { receiptModal } = useContext(PosModalVisibilityContext);
   const { set } = useContext(SelectedDataContext);
 
-  const inventoryName = useMemo(
+  const name = useMemo(
     () =>
       data?.orderedItems?.map((item) => {
-        return item.itemDetails.inventoryName;
+        return item.itemDetails.name;
       }),
     [data]
   );
@@ -106,7 +106,7 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
             wordWrap: "break-word",
           }}
         >
-          <p>{truncateString(inventoryName.join(", "), 81)}</p>
+          <p>{truncateString(name.join(", "), 81)}</p>
         </Col>
         <Col
           style={{

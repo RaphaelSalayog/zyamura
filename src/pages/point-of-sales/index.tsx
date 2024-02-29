@@ -38,11 +38,11 @@ const PointOfSales = () => {
     // filter the sorted items by search key
     const sortedAndSearchedItem = sortedItems.filter((items: any) => {
       if (searchItemOnClick == "") {
-        return items.inventoryName
+        return items.name
           .toLowerCase()
           .includes(searchItemOnChange.toLowerCase());
       } else {
-        return items.inventoryName === searchItemOnClick;
+        return items.name === searchItemOnClick;
       }
     });
     setSortedAndSearchedItems(sortedAndSearchedItem);

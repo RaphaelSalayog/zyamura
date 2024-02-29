@@ -173,17 +173,17 @@ const AddPetForm = ({
 
         // Mongo DB
         const formData = new FormData();
-        formData.append("inventoryObject", "Pet");
-        formData.append("inventoryName", newData.petName);
-        formData.append("inventorySupplier", newData.petSupplier);
-        formData.append("inventoryDescription", newData.petDescription);
-        formData.append("inventorySellingPrice", newData.petSellingPrice);
-        formData.append("inventoryInvestmentCost", newData.petInvestmentCost);
-        formData.append("inventoryCategory", newData.petCategory);
-        formData.append("inventoryGender", newData.petGender);
-        formData.append("inventoryType", newData.petType);
-        formData.append("inventoryQuantity", newData.petQuantity);
-        formData.append("inventoryImage", newData.petImage);
+        formData.append("object", "Pet");
+        formData.append("name", newData.petName);
+        formData.append("supplier", newData.petSupplier);
+        formData.append("description", newData.petDescription);
+        formData.append("sellingPrice", newData.petSellingPrice);
+        formData.append("investmentCost", newData.petInvestmentCost);
+        formData.append("category", newData.petCategory);
+        formData.append("gender", newData.petGender);
+        formData.append("type", newData.petType);
+        formData.append("quantity", newData.petQuantity);
+        formData.append("imageUrl", newData.petImage);
 
         const auth = localStorage.getItem("token");
         await fetch("http://localhost:3000/inventory", {
@@ -229,7 +229,7 @@ const AddPetForm = ({
     if (pet?.edit?.visible || pet?.view?.visible) {
       if (get) {
         form.setFieldsValue({
-          petName: get.inventoryName,
+          petName: get.name,
           petSupplier: get.inventorySupplier,
           petDescription: get.inventoryDescription,
           petSellingPrice: get.inventorySellingPrice,

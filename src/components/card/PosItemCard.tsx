@@ -19,7 +19,7 @@ const { Text, Title } = Typography;
 const PosItemCard: React.FC<any> = ({ data }) => {
   const {
     inventoryId,
-    inventoryName,
+    name,
     inventoryQuantity,
     inventorySellingPrice,
     inventoryDescription,
@@ -88,7 +88,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
           <div className={style.itemCardSection1}>
             <div className={style.itemCardSection1Content}>
               <Title level={5} style={{ margin: "0" }}>
-                {truncateString(inventoryName, 36)}
+                {truncateString(name, 36)}
               </Title>
               <div>
                 <div

@@ -113,7 +113,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
                 >
                   <p style={{ maxWidth: type === "modal" ? "280px" : "320px" }}>
                     {truncateString(
-                      item.itemDetails.inventoryName,
+                      item.itemDetails.name,
                       type === "modal" ? 77 : 87
                     )}
                   </p>

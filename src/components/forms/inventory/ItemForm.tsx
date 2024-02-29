@@ -126,7 +126,7 @@ const AddItemForm = ({
     if (item?.edit?.visible || item?.view?.visible) {
       if (get) {
         form.setFieldsValue({
-          itemName: get.inventoryName,
+          itemName: get.name,
           itemSupplier: get.inventorySupplier,
           itemDescription: get.inventoryDescription,
           itemSellingPrice: get.inventorySellingPrice,
