@@ -68,8 +68,19 @@ const MainNavigation = () => {
   const router = useRouter();
   const selectHandler = (item: any) => {
     if (item.key === "/login") {
-      localStorage.removeItem("token");
-      router.push("/login");
+      const auth = localStorage.getItem("token");
+      fetch("http://localhost:3000/logout", {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + auth,
+        },
+        credentials: "include",
+      })
+        .then(() => {
+          localStorage.removeItem("token");
+          router.push("/login");
+        })
+        .catch((err) => console.log(err));
     } else {
       router.push(item.key);
     }
