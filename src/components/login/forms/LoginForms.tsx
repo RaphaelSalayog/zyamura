@@ -47,7 +47,9 @@ const LoginForms = () => {
         localStorage.setItem("username", data.username);
         localStorage.setItem("user", data.user);
         localStorage.setItem("role", data.role);
-        router.push("/dashboard");
+        router.push("/dashboard").then(() => {
+          setIsLoading(false);
+        });
       } else {
         if (data.message === "Invalid Username") {
           setIsUsernameError(true);
@@ -55,8 +57,8 @@ const LoginForms = () => {
         } else {
           setIsPasswordError(true);
         }
+        setIsLoading(false);
       }
-      setIsLoading(false);
     } catch (err) {
       console.log(err);
     }

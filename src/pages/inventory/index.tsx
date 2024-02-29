@@ -14,6 +14,7 @@ import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import useSelectedData from "@/common/hooks/useSelectedData";
 import { ItemModal } from "@/components/modal/inventory/ItemModal";
 import { PetMainModal } from "@/components/modal/inventory/PetModal";
+import { GetServerSidePropsContext } from "next";
 
 const { Title } = Typography;
 
@@ -52,7 +53,7 @@ const inventorySortItems = [
   },
 ];
 
-const Inventory = ({ data: qwe }: any) => {
+const Inventory = ({ data }: any) => {
   const { pet, item } = useInventoryDrawerVisiblity();
   const { selectedData } = useSelectedData();
   const [inventorySort, setInventorySort] = useState();
@@ -61,7 +62,7 @@ const Inventory = ({ data: qwe }: any) => {
   const [sortedAndSearchedItems, setSortedAndSearchedItems] =
     useState<inventoryInitialState[]>();
 
-  const data = useSelector((store: any) => store.inventory.inventory);
+  // const data = useSelector((store: any) => store.inventory.inventory);
 
   const itemSearchOnChangeHandler = (value: string) => {
     setSearchItemOnChange(value);
@@ -131,7 +132,7 @@ const Inventory = ({ data: qwe }: any) => {
           }}
         >
           {sortedAndSearchedItems?.map((filteredData: any) => (
-            <ItemCard key={filteredData.inventoryId} data={filteredData} />
+            <ItemCard key={filteredData._id} data={filteredData} />
           ))}
           {sortedAndSearchedItems?.length === 0 && (
             <Empty
@@ -149,22 +150,37 @@ const Inventory = ({ data: qwe }: any) => {
 };
 
 // Mongo DB
-// export const getServerSideProps = async () => {
-//   const db = await connectToDatabase();
-//   const inventoryCollection = db.collection("inventory");
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  try {
+    // We can't get the token from localStorage because it is for client side only.
+    // We use context.req.cookies to access the token from Express.js middleware. ( Check it in Controllers > auth.js > res.setHeader("Set-Cookie", `token=${token}; Max-Age=${60 * 60 * 24}; HttpOnly; Secure;`); )
+    const token = ctx?.req?.cookies;
+    const response = await fetch("http://localhost:3000/inventory", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token.authToken,
+      },
+    });
 
-//   const data = await inventoryCollection.find({}).toArray();
+    if (!response.ok) {
+      throw new Error("Failed fetching inventory");
+    }
 
-//   const serializedData = data.map((item) => ({
-//     ...item,
-//     _id: item._id.toString(),
-//   }));
+    const data = await response.json();
 
-//   return {
-//     props: {
-//       data: serializedData,
-//     },
-//   };
-// };
+    return {
+      props: {
+        data: data,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: {
+        data: [],
+      },
+    };
+  }
+};
 
 export default Inventory;
