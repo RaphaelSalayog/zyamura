@@ -82,7 +82,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
           }}
         >
           <div className={style.imageItemCard}>
-            <img alt="example" src={imageUrl[0]?.thumbUrl} />
+            <img alt="example" src={imageUrl} />
           </div>
 
           <div className={style.itemCardSection1}>

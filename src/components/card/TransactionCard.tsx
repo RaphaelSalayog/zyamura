@@ -67,7 +67,7 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
             const randomIndex = Math.floor(Math.random() * colors.length);
             return (
               <Avatar
-                src={item.itemDetails.imageUrl[0]?.thumbUrl}
+                src={item.itemDetails.imageUrl}
                 style={{ backgroundColor: colors[randomIndex] }}
               />
             );

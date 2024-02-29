@@ -39,6 +39,7 @@ const LoginForms = () => {
           username: username,
           password: password,
         }),
+        credentials: "include", // to be able to set the token in cookie from server side express js
       });
       const data = await response.json();
 

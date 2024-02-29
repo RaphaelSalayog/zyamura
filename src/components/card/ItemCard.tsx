@@ -120,7 +120,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
           </div>
           <img
             alt="example"
-            src={imageUrl[0]?.thumbUrl}
+            src={imageUrl}
             style={{ objectFit: "cover", height: "100%", width: "100%" }}
           />
         </div>

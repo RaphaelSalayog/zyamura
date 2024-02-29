@@ -5,7 +5,6 @@ import AddButton from "@/components/filter/inventory/AddButton";
 import SearchBar from "@/components/filter/inventory/SearchBar";
 import DropdownMenu from "@/components/util/DropdownMenu";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 import { inventorySortItem } from "@/components/util/customMethods";
 import { InventoryDrawerVisiblityProvider } from "@/common/contexts/InventoryDrawerVisibilityContext";
@@ -153,12 +152,13 @@ const Inventory = ({ data }: any) => {
 export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   try {
     // We can't get the token from localStorage because it is for client side only.
-    // We use context.req.cookies to access the token from Express.js middleware. ( Check it in Controllers > auth.js > res.setHeader("Set-Cookie", `token=${token}; Max-Age=${60 * 60 * 24}; HttpOnly; Secure;`); )
-    const token = ctx?.req?.cookies;
+    // We use context.req.headers.cookie to access the token from Express.js middleware. ( Check it in Controllers > auth.js > res.setHeader("Set-Cookie", `token=${token}; Max-Age=${60 * 60 * 24}; HttpOnly; Secure;`); )
+    const getToken = ctx.req.headers.cookie;
+    const token = getToken?.split("=")[1];
     const response = await fetch("http://localhost:3000/inventory", {
       method: "GET",
       headers: {
-        Authorization: "Bearer " + token.authToken,
+        Authorization: "Bearer " + token,
       },
     });
 
@@ -168,9 +168,28 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     const data = await response.json();
 
+    const modifiedData = data.map(
+      (item: {
+        _id: string;
+        object: string;
+        name: string;
+        supplier: string;
+        description: string;
+        sellingPrice: string;
+        invenstmentCost: number;
+        category: string;
+        gender: string;
+        type: string;
+        quantity: number;
+        imageUrl: string;
+      }) => {
+        return { ...item, imageUrl: `http://localhost:3000/${item.imageUrl}` };
+      }
+    );
+
     return {
       props: {
-        data: data,
+        data: modifiedData,
       },
     };
   } catch (err) {
