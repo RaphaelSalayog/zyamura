@@ -14,15 +14,17 @@ export default function App({ Component, pageProps }: AppProps) {
   const isAuth = useCallback(async () => {
     const auth = localStorage.getItem("token");
     try {
-      // const response = await fetch("http://localhost:3000/login", {
-      //   headers: {
-      //     Authorization: "Bearer " + auth,
-      //   },
-      // });
-      // await response.json(); // automatically set the token and other data to localStorage
+      const response = await fetch("http://localhost:3000/login", {
+        headers: {
+          Authorization: "Bearer " + auth,
+        },
+      });
+      await response.json(); // automatically set the token and other data to localStorage
 
-      // if (auth === undefined || auth === null || !response.ok)
-      if (auth === undefined || auth === null) {
+      if (auth === undefined || auth === null || !response.ok) {
+        localStorage.removeItem("username");
+        localStorage.removeItem("user");
+        localStorage.removeItem("role");
         localStorage.removeItem("token");
         router.push("/login").then(() => {
           setHasMounted(true);

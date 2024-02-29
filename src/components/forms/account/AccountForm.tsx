@@ -1,6 +1,8 @@
 import ImageUploader from "@/components/util/ImageUploader";
+import { setIsUsernameExist } from "@/store/reducers/accountSlice";
 import { DatePicker, Form, Input, Radio, Row } from "antd";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const UserInformation = ({
   petImageHandler,
@@ -18,7 +20,7 @@ const UserInformation = ({
     <>
       <Row justify={"center"}>
         <Form.Item
-          name="image"
+          name="profilePicture"
           rules={[
             {
               required: true,
@@ -57,10 +59,15 @@ const UserInformation = ({
 
       <Row justify={"space-between"}>
         <Form.Item
-          name="phone"
+          name="phoneNumber"
           label="Phone Number"
           rules={[
             { required: true, message: "Please input your phone number!" },
+            {
+              min: 10,
+              message: "Phone number must be at least 10 characters long",
+              validateTrigger: "onSubmit",
+            },
           ]}
           style={{ width: "48%" }}
         >
@@ -120,14 +127,25 @@ const UserInformation = ({
 };
 
 const UserAuthentication = () => {
+  const isUsernameExist = useSelector(
+    (store: any) => store.account.isUsernameExist
+  );
+  const dispatch = useDispatch();
   return (
     <>
       <Form.Item
         name="username"
         label="Username"
         rules={[{ required: true, message: "Please input your username!" }]}
+        validateStatus={isUsernameExist ? "error" : ""}
+        help={isUsernameExist ? "Username already exist!" : undefined}
       >
-        <Input allowClear /*readOnly={item?.view?.visible}*/ />
+        <Input
+          allowClear
+          /*readOnly={item?.view?.visible}*/ onChange={() => {
+            dispatch(setIsUsernameExist(false));
+          }}
+        />
       </Form.Item>
       <Form.Item
         name="password"

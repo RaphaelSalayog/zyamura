@@ -5,9 +5,13 @@ import { useContext, useState } from "react";
 import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 import CustomAccountFormButton from "@/components/forms/CustomAccountFormButton";
 import { capitalizeFirstLetter } from "@/components/util/customMethods";
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { setIsUsernameExist } from "@/store/reducers/accountSlice";
 
 const AddAccountModal = () => {
   const { add, edit, remove } = useContext(DrawerVisibilityContext);
+  const dispatch = useDispatch();
   const [activeTabKey, setActiveTabKey] = useState("personal-information");
 
   const [form] = Form.useForm();
@@ -22,7 +26,7 @@ const AddAccountModal = () => {
   };
 
   const petImageHandler = (value: any) => {
-    form.setFieldsValue({ image: value }); // To set the value of Form.Item from custom Dropdown component
+    form.setFieldsValue({ profilePicture: value }); // To set the value of Form.Item from custom Dropdown component
   };
 
   const items = [
@@ -43,6 +47,51 @@ const AddAccountModal = () => {
     },
   ];
 
+  const submitHandler = (data: any) => {
+    if (activeTabKey === "user-authentication") {
+      console.log("submit");
+
+      // MongoDB
+      const formData = new FormData();
+      formData.append("firstName", data.firstName);
+      formData.append("lastName", data.lastName);
+      formData.append("address", data.address);
+      formData.append("phoneNumber", data.phoneNumber);
+      formData.append("email", data.email);
+      formData.append(
+        "birthDate",
+        moment(data.birthDate).format("MMM D, YYYY")
+      );
+      formData.append("role", data.role);
+      formData.append("username", data.username);
+      formData.append("password", data.password);
+      formData.append("profilePicture", data.profilePicture[0]);
+
+      const auth = localStorage.getItem("token");
+      fetch("http://localhost:3000/signup", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + auth,
+        },
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // if username is already exist
+          if (data.statusCode === 409) {
+            dispatch(setIsUsernameExist(true));
+          } else {
+            dispatch(setIsUsernameExist(false));
+            add?.setVisible(false);
+            setActiveTabKey(items[0].key);
+            form.resetFields();
+          }
+        })
+        .catch((err) => console.log("error >>", err));
+    } else {
+      nextHandler();
+    }
+  };
   return (
     <>
       <CustomModal
@@ -51,18 +100,14 @@ const AddAccountModal = () => {
         width={550}
         onClose={() => {
           add?.setVisible(false);
+          form.resetFields();
+          dispatch(setIsUsernameExist(false));
+          setActiveTabKey(items[0].key);
         }}
       >
         <Form
           form={form}
-          onFinish={(e) => {
-            console.log(e);
-            if (activeTabKey === "user-authentication") {
-              console.log("submit");
-            } else {
-              nextHandler();
-            }
-          }}
+          onFinish={submitHandler}
           id="accountForm"
           layout="vertical"
           initialValues={{ role: "employee" }}
@@ -87,7 +132,7 @@ const AddAccountModal = () => {
             items={items}
             onTabClick={(e) => {
               // if (view?.visible) {
-              setActiveTabKey(e);
+              //   setActiveTabKey(e);
               // }
             }}
           />

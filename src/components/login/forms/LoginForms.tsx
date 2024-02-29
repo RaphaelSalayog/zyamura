@@ -30,47 +30,47 @@ const LoginForms = () => {
   }, [username, password]);
 
   const submitHandler = async (event: any) => {
-    // try {
-    //   setIsLoading(true);
-    //   const response = await fetch("http://localhost:3000/login", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({
-    //       username: username,
-    //       password: password,
-    //     }),
-    //   });
-    //   const data = await response.json();
-    //   console.log(data);
-    //   if (response.ok) {
-    //     localStorage.setItem("token", data.token);
-    //     localStorage.setItem("username", data.email);
-    //     localStorage.setItem("user", data.user);
-    //     localStorage.setItem("role", data.role);
-    //     router.push("/dashboard");
-    //   } else {
-    //     if (data.message === "Invalid Username") {
-    //       setIsUsernameError(true);
-    //       setIsPasswordError(true);
-    //     } else {
-    //       setIsPasswordError(true);
-    //     }
-    //   }
-    //   setIsLoading(false);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    if (event.username === "zyamura" && event.password === "zyamura") {
-      localStorage.setItem("token", "token");
-      router.push("/dashboard");
-    } else {
-      if (event.username !== "zyamura") {
-        setIsUsernameError(true);
+    try {
+      setIsLoading(true);
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("username", data.username);
+        localStorage.setItem("user", data.user);
+        localStorage.setItem("role", data.role);
+        router.push("/dashboard");
+      } else {
+        if (data.message === "Invalid Username") {
+          setIsUsernameError(true);
+          setIsPasswordError(true);
+        } else {
+          setIsPasswordError(true);
+        }
       }
-      if (event.username !== "zyamura" || event.password !== "zyamura") {
-        setIsPasswordError(true);
-      }
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
     }
+    // if (event.username === "zyamura" && event.password === "zyamura") {
+    //   localStorage.setItem("token", "token");
+    //   router.push("/dashboard");
+    // } else {
+    //   if (event.username !== "zyamura") {
+    //     setIsUsernameError(true);
+    //   }
+    //   if (event.username !== "zyamura" || event.password !== "zyamura") {
+    //     setIsPasswordError(true);
+    //   }
+    // }
   };
 
   return (

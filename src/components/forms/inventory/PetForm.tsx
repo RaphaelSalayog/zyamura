@@ -167,37 +167,41 @@ const AddPetForm = ({
 
     // Add data to Inventory Slice in Redux
     if (pet?.add?.visible) {
-      isLoadingHandler(true);
-      await dispatch(addPet(newData));
+      try {
+        isLoadingHandler(true);
+        await dispatch(addPet(newData));
 
-      // Mongo DB
-      // const formData = new FormData();
-      // formData.append("inventoryObject", "Pet");
-      // formData.append("inventoryName", newData.petName);
-      // formData.append("inventorySupplier", newData.petSupplier);
-      // formData.append("inventoryDescription", newData.petDescription);
-      // formData.append("inventorySellingPrice", newData.petSellingPrice);
-      // formData.append("inventoryInvestmentCost", newData.petInvestmentCost);
-      // formData.append("inventoryCategory", newData.petCategory);
-      // formData.append("inventoryGender", newData.petGender);
-      // formData.append("inventoryType", newData.petType);
-      // formData.append("inventoryQuantity", newData.petQuantity);
-      // formData.append("inventoryImage", newData.petImage);
+        // Mongo DB
+        const formData = new FormData();
+        formData.append("inventoryObject", "Pet");
+        formData.append("inventoryName", newData.petName);
+        formData.append("inventorySupplier", newData.petSupplier);
+        formData.append("inventoryDescription", newData.petDescription);
+        formData.append("inventorySellingPrice", newData.petSellingPrice);
+        formData.append("inventoryInvestmentCost", newData.petInvestmentCost);
+        formData.append("inventoryCategory", newData.petCategory);
+        formData.append("inventoryGender", newData.petGender);
+        formData.append("inventoryType", newData.petType);
+        formData.append("inventoryQuantity", newData.petQuantity);
+        formData.append("inventoryImage", newData.petImage);
 
-      // const auth = localStorage.getItem("token");
-      // await fetch("http://localhost:3000/inventory", {
-      //   method: "POST",
-      //   body: formData,
-      //   headers: {
-      //     Authorization: "Bearer " + auth,
-      //   },
-      // });
+        const auth = localStorage.getItem("token");
+        await fetch("http://localhost:3000/inventory", {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: "Bearer " + auth,
+          },
+        });
 
-      resetState();
-      form.resetFields();
-      pet?.add?.setVisible(false);
-      pet?.edit?.setVisible(false);
-      isLoadingHandler(false);
+        resetState();
+        form.resetFields();
+        pet?.add?.setVisible(false);
+        pet?.edit?.setVisible(false);
+        isLoadingHandler(false);
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     // Update data from Inventory Slice in Redux
