@@ -127,15 +127,15 @@ const AddItemForm = ({
       if (get) {
         form.setFieldsValue({
           itemName: get.name,
-          itemSupplier: get.inventorySupplier,
-          itemDescription: get.inventoryDescription,
-          itemSellingPrice: get.inventorySellingPrice,
-          itemInvestmentCost: get.inventoryInvestmentCost,
-          itemQuantity: get.inventoryQuantity,
-          itemImage: get.inventoryImage,
+          itemSupplier: get.supplier,
+          itemDescription: get.description,
+          itemSellingPrice: get.sellingPrice,
+          itemInvestmentCost: get.investmentCost,
+          itemQuantity: get.quantity,
+          itemImage: get.imageUrl,
         });
-        setItemSupplier(get.inventorySupplier);
-        setItemImage(get.inventoryImage);
+        setItemSupplier(get.supplier);
+        setItemImage(get.imageUrl);
       }
     }
 

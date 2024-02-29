@@ -2,17 +2,17 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface inventoryInitialState {
   inventoryId: string;
-  inventoryObject: string;
+  object: string;
   name: string;
-  inventorySupplier: string;
-  inventoryDescription: string;
-  inventorySellingPrice: number;
-  inventoryInvestmentCost: number;
-  inventoryCategory: string | null;
-  inventoryGender: string | null;
-  inventoryType: string | null;
-  inventoryQuantity: number;
-  inventoryImage: any[];
+  supplier: string;
+  description: string;
+  sellingPrice: number;
+  investmentCost: number;
+  category: string | null;
+  gender: string | null;
+  type: string | null;
+  quantity: number;
+  imageUrl: any[];
 }
 
 export interface initialState {
@@ -58,34 +58,34 @@ interface deductOrderedItems {
 const petData = (payload: any) => {
   return {
     inventoryId: payload.petId,
-    inventoryObject: "Pet",
+    object: "Pet",
     name: payload.petName,
-    inventorySupplier: payload.petSupplier,
-    inventoryDescription: payload.petDescription,
-    inventorySellingPrice: payload.petSellingPrice,
-    inventoryInvestmentCost: payload.petInvestmentCost,
-    inventoryCategory: payload.petCategory,
-    inventoryGender: payload.petGender,
-    inventoryType: payload.petType,
-    inventoryQuantity: payload.petQuantity,
-    inventoryImage: payload.petImage,
+    supplier: payload.petSupplier,
+    description: payload.petDescription,
+    sellingPrice: payload.petSellingPrice,
+    investmentCost: payload.petInvestmentCost,
+    category: payload.petCategory,
+    gender: payload.petGender,
+    type: payload.petType,
+    quantity: payload.petQuantity,
+    imageUrl: payload.petImage,
   };
 };
 
 const itemData = (payload: any) => {
   return {
     inventoryId: payload.itemId,
-    inventoryObject: "Item",
+    object: "Item",
     name: payload.itemName,
-    inventorySupplier: payload.itemSupplier,
-    inventoryDescription: payload.itemDescription,
-    inventorySellingPrice: payload.itemSellingPrice,
-    inventoryInvestmentCost: payload.itemInvestmentCost,
-    inventoryCategory: null,
-    inventoryGender: null,
-    inventoryType: null,
-    inventoryQuantity: payload.itemQuantity,
-    inventoryImage: payload.itemImage,
+    supplier: payload.itemSupplier,
+    description: payload.itemDescription,
+    sellingPrice: payload.itemSellingPrice,
+    investmentCost: payload.itemInvestmentCost,
+    category: null,
+    gender: null,
+    type: null,
+    quantity: payload.itemQuantity,
+    imageUrl: payload.itemImage,
   };
 };
 
@@ -133,7 +133,7 @@ const inventorySlice = createSlice({
       payload.map((item) =>
         state.inventory.map((value) => {
           if (item.productId === value.inventoryId) {
-            value.inventoryQuantity -= item.quantity;
+            value.quantity -= item.quantity;
           }
         })
       );

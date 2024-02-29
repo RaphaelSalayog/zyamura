@@ -35,7 +35,7 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
         item?.view?.visible) &&
       get
     ) {
-      setFileList(get.inventoryImage);
+      setFileList(get.imageUrl);
     }
   }, [
     get,

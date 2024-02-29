@@ -26,7 +26,7 @@ const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
   } = orderedItem;
 
   const inputNumberHandler = (value: number | null) => {
-    if (value === 0 || (value && value <= itemDetails.inventoryQuantity)) {
+    if (value === 0 || (value && value <= itemDetails.quantity)) {
       dispatch(
         onChangeOrderedQuantity({
           productId: itemDetails.inventoryId,
@@ -50,7 +50,7 @@ const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
         <div className={style.image}>
           <img
             alt="example"
-            src={itemDetails.inventoryImage[0]?.thumbUrl}
+            src={itemDetails.imageUrl[0]?.thumbUrl}
             style={{ objectFit: "cover", height: "100%", width: "100%" }}
           />
         </div>
@@ -75,22 +75,13 @@ const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
                 display: "flex",
               }}
             >
-              {itemDetails.inventoryObject === "Pet" ? (
+              {itemDetails.object === "Pet" ? (
                 <>
-                  <InventoryTag
-                    data={itemDetails.inventoryCategory}
-                    color="#1677ff"
-                  />
-                  <InventoryTag
-                    data={itemDetails.inventoryGender}
-                    color="#1677ff"
-                  />
+                  <InventoryTag data={itemDetails.category} color="#1677ff" />
+                  <InventoryTag data={itemDetails.gender} color="#1677ff" />
                 </>
               ) : (
-                <InventoryTag
-                  data={itemDetails.inventoryObject}
-                  color="#1677ff"
-                />
+                <InventoryTag data={itemDetails.object} color="#1677ff" />
               )}
             </div>
             <div className={style.contentSection1}>

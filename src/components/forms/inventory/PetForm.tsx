@@ -230,22 +230,21 @@ const AddPetForm = ({
       if (get) {
         form.setFieldsValue({
           petName: get.name,
-          petSupplier: get.inventorySupplier,
-          petDescription: get.inventoryDescription,
-          petSellingPrice: get.inventorySellingPrice,
-          petInvestmentCost: get.inventoryInvestmentCost,
-          petCategory: get.inventoryCategory,
-          petGender: get.inventoryGender,
-          petType: get.inventoryType,
-          petQuantity:
-            get.inventoryType === "group" ? get.inventoryQuantity : "",
-          petImage: get.inventoryImage,
+          petSupplier: get.supplier,
+          petDescription: get.description,
+          petSellingPrice: get.sellingPrice,
+          petInvestmentCost: get.investmentCost,
+          petCategory: get.category,
+          petGender: get.gender,
+          petType: get.type,
+          petQuantity: get.type === "group" ? get.quantity : "",
+          petImage: get.imageUrl,
         });
-        setPetSupplier(get.inventorySupplier);
-        setPetCategory(get.inventoryCategory);
-        setPetGender(get.inventoryGender);
-        setPetType(get.inventoryType);
-        setPetImage(get.inventoryImage);
+        setPetSupplier(get.supplier);
+        setPetCategory(get.category);
+        setPetGender(get.gender);
+        setPetType(get.type);
+        setPetImage(get.imageUrl);
       }
     }
 

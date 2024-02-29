@@ -20,17 +20,17 @@ const PosItemCard: React.FC<any> = ({ data }) => {
   const {
     inventoryId,
     name,
-    inventoryQuantity,
-    inventorySellingPrice,
-    inventoryDescription,
-    inventoryObject,
-    inventoryType,
-    inventoryCategory,
-    inventoryGender,
-    inventoryImage,
+    quantity,
+    sellingPrice,
+    description,
+    object,
+    type,
+    category,
+    gender,
+    imageUrl,
   } = data;
 
-  const [quantity, setQuantity] = useState<any>("1");
+  const [qty, setQty] = useState<any>("1");
   const itemStock = useSelector((store: any) => store.pointOfSales.itemStock);
   const stock = itemStock.find((item: any) => item.productId === inventoryId);
 
@@ -40,36 +40,36 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     dispatch(
       setStock({
         productId: inventoryId,
-        stock: inventoryQuantity,
+        stock: quantity,
       })
     );
-  }, [inventoryId, inventoryQuantity]);
+  }, [inventoryId, quantity]);
 
   const inputNumberHandler = (value: string | null) => {
     if (value || value == "0") {
-      setQuantity(value);
+      setQty(value);
     } else {
-      setQuantity(null);
+      setQty(null);
     }
   };
 
   const addHandler = () => {
-    if (quantity <= stock?.stock) {
+    if (qty <= stock?.stock) {
       dispatch(
         deductStock({
           productId: inventoryId,
-          quantity: quantity,
+          quantity: qty,
         })
       );
       dispatch(
         addOrder({
           productId: inventoryId,
           itemDetails: data,
-          quantity: +quantity,
-          price: inventorySellingPrice,
+          quantity: +qty,
+          price: sellingPrice,
         })
       );
-      setQuantity("1");
+      setQty("1");
     }
   };
   return (
@@ -82,7 +82,7 @@ const PosItemCard: React.FC<any> = ({ data }) => {
           }}
         >
           <div className={style.imageItemCard}>
-            <img alt="example" src={inventoryImage[0]?.thumbUrl} />
+            <img alt="example" src={imageUrl[0]?.thumbUrl} />
           </div>
 
           <div className={style.itemCardSection1}>
@@ -96,20 +96,20 @@ const PosItemCard: React.FC<any> = ({ data }) => {
                     display: "flex",
                   }}
                 >
-                  {inventoryObject === "Pet" ? (
+                  {object === "Pet" ? (
                     <>
-                      <InventoryTag data={inventoryCategory} color="#1677ff" />
-                      <InventoryTag data={inventoryGender} color="#1677ff" />
+                      <InventoryTag data={category} color="#1677ff" />
+                      <InventoryTag data={gender} color="#1677ff" />
                     </>
                   ) : (
-                    <InventoryTag data={inventoryObject} color="#1677ff" />
+                    <InventoryTag data={object} color="#1677ff" />
                   )}
                 </div>
                 <p style={{ marginTop: "5px" }}>Stock: {stock?.stock}</p>
               </div>
             </div>
             <Text style={{ fontWeight: "bold", color: "#237804" }}>
-              ₱{addCommas(inventorySellingPrice)}
+              ₱{addCommas(sellingPrice)}
             </Text>
           </div>
         </div>
@@ -120,28 +120,26 @@ const PosItemCard: React.FC<any> = ({ data }) => {
               type="number"
               min={"0"}
               precision={0}
-              value={quantity}
-              status={quantity > stock?.stock || quantity === 0 ? "error" : ""}
+              value={qty}
+              status={qty > stock?.stock || qty === 0 ? "error" : ""}
               style={{ width: "36%" }}
               onChange={inputNumberHandler}
               onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
             />
-            {+quantity > stock?.stock && (
+            {+qty > stock?.stock && (
               <WarningTooltip
                 text="You have reached the maximum quantity available for this
                         item."
               />
             )}
-            {quantity == "0" && (
-              <WarningTooltip text="Minimum of 1 quantity." />
-            )}
+            {qty == "0" && <WarningTooltip text="Minimum of 1 quantity." />}
           </div>
 
           <Button
             type="primary"
             style={{ height: "100%" }}
             onClick={addHandler}
-            disabled={!quantity || quantity > stock?.stock}
+            disabled={!qty || qty > stock?.stock}
           >
             Add
           </Button>

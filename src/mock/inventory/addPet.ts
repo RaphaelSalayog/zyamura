@@ -8,17 +8,17 @@ export const accounts = {
 
 export interface inventoryInitialState {
   inventoryId: string;
-  inventoryObject: string;
+  object: string;
   name: string;
-  inventorySupplier: string;
-  inventoryDescription: string;
-  inventorySellingPrice: number;
-  inventoryInvestmentCost: number;
-  inventoryCategory: string | null;
-  inventoryGender: string | null;
-  inventoryType: string | null;
-  inventoryQuantity: number;
-  inventoryImage: any[];
+  supplier: string;
+  description: string;
+  sellingPrice: number;
+  investmentCost: number;
+  category: string | null;
+  gender: string | null;
+  type: string | null;
+  quantity: number;
+  imageUrl: any[];
 }
 
 export interface Transaction {

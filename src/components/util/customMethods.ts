@@ -13,22 +13,14 @@ function inventorySortItem(inventorySort: any, inventory: any[]) {
         .reverse();
     case "Highest Price":
       return items
-        ?.sort(
-          (a: any, b: any) => a.inventorySellingPrice - b.inventorySellingPrice
-        )
+        ?.sort((a: any, b: any) => a.sellingPrice - b.sellingPrice)
         .reverse();
     case "Lowest Price":
-      return items?.sort(
-        (a: any, b: any) => a.inventorySellingPrice - b.inventorySellingPrice
-      );
+      return items?.sort((a: any, b: any) => a.sellingPrice - b.sellingPrice);
     case "Highest Quantity":
-      return items
-        ?.sort((a: any, b: any) => a.inventoryQuantity - b.inventoryQuantity)
-        .reverse();
+      return items?.sort((a: any, b: any) => a.quantity - b.quantity).reverse();
     case "Lowest Quantity":
-      return items?.sort(
-        (a: any, b: any) => a.inventoryQuantity - b.inventoryQuantity
-      );
+      return items?.sort((a: any, b: any) => a.quantity - b.quantity);
     default:
       return items;
   }
@@ -38,7 +30,7 @@ function posSortItem(inventory: any[]) {
   const items = [...inventory];
 
   return items?.sort((a, b) =>
-    a.inventoryQuantity === 0 ? 1 : b.inventoryQuantity - a.inventoryQuantity
+    a.quantity === 0 ? 1 : b.quantity - a.quantity
   );
 }
 

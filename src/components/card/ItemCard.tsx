@@ -27,13 +27,13 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
   const dispatch = useDispatch();
   const {
     name,
-    inventoryQuantity,
-    inventorySellingPrice,
-    inventoryObject,
-    inventoryType,
-    inventoryCategory,
-    inventoryGender,
-    inventoryImage,
+    quantity,
+    sellingPrice,
+    object,
+    type,
+    category,
+    gender,
+    imageUrl,
   } = data;
 
   const items = [
@@ -42,9 +42,9 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
       label: "View",
       icon: <EyeOutlined style={{ color: "#1677ff" }} />,
       onClick: () => {
-        if (inventoryObject === "Pet") {
+        if (object === "Pet") {
           pet?.view?.setVisible(true);
-        } else if (inventoryObject === "Item") {
+        } else if (object === "Item") {
           item?.view?.setVisible(true);
         }
         set(data);
@@ -55,9 +55,9 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
       label: "Edit",
       icon: <EditTwoTone />,
       onClick: () => {
-        if (inventoryObject === "Pet") {
+        if (object === "Pet") {
           pet?.edit?.setVisible(true);
-        } else if (inventoryObject === "Item") {
+        } else if (object === "Item") {
           item?.edit?.setVisible(true);
         }
         set(data);
@@ -100,12 +100,12 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
           <div
             className={style.itemCardImageContent}
             style={{
-              justifyContent: !inventoryType ? "flex-end" : "space-between",
+              justifyContent: !type ? "flex-end" : "space-between",
             }}
           >
-            {inventoryType && (
+            {type && (
               <InventoryTag
-                data={capitalizeFirstLetter(inventoryType)}
+                data={capitalizeFirstLetter(type)}
                 color="#003eb3"
               />
             )}
@@ -120,7 +120,7 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
           </div>
           <img
             alt="example"
-            src={inventoryImage[0]?.thumbUrl}
+            src={imageUrl[0]?.thumbUrl}
             style={{ objectFit: "cover", height: "100%", width: "100%" }}
           />
         </div>
@@ -133,13 +133,13 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
                 display: "flex",
               }}
             >
-              {inventoryObject === "Pet" ? (
+              {object === "Pet" ? (
                 <>
-                  <InventoryTag data={inventoryCategory} color="#1677ff" />
-                  <InventoryTag data={inventoryGender} color="#1677ff" />
+                  <InventoryTag data={category} color="#1677ff" />
+                  <InventoryTag data={gender} color="#1677ff" />
                 </>
               ) : (
-                <InventoryTag data={inventoryObject} color="#1677ff" />
+                <InventoryTag data={object} color="#1677ff" />
               )}
             </div>
 
@@ -150,9 +150,9 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
                 marginTop: "5px",
               }}
             >
-              <Text>Quantity: {inventoryQuantity}</Text>
+              <Text>Quantity: {quantity}</Text>
               <Text style={{ fontWeight: "bold", color: "#237804" }}>
-                ₱{addCommas(inventorySellingPrice)}
+                ₱{addCommas(sellingPrice)}
               </Text>
             </div>
           </div>
