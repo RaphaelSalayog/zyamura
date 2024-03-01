@@ -94,11 +94,40 @@ const AddItemForm = ({
     if (item?.add?.visible) {
       isLoadingHandler(true);
       await dispatch(addItem(newData));
-      resetState();
-      form.resetFields();
-      item?.add?.setVisible(false);
-      item?.edit?.setVisible(false);
-      isLoadingHandler(false);
+
+      try {
+        // Mongo DB
+        const formData = new FormData();
+        formData.append("object", "Item");
+        formData.append("name", newData.itemName);
+        formData.append("supplier", newData.itemSupplier);
+        formData.append("description", newData.itemDescription);
+        formData.append("sellingPrice", newData.itemSellingPrice);
+        formData.append("investmentCost", newData.itemInvestmentCost);
+        formData.append("quantity", newData.itemQuantity);
+        formData.append("imageUrl", newData.itemImage[0]);
+
+        const auth = localStorage.getItem("token");
+        const response = await fetch("http://localhost:3000/inventory", {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: "Bearer " + auth,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to submit item");
+        }
+
+        resetState();
+        form.resetFields();
+        item?.add?.setVisible(false);
+        item?.edit?.setVisible(false);
+        isLoadingHandler(false);
+      } catch (err) {
+        console.log(err);
+      }
     }
 
     // Update data from Inventory Slice in Redux

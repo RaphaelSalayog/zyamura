@@ -35,7 +35,14 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
         item?.view?.visible) &&
       get
     ) {
-      setFileList(get.imageUrl);
+      setFileList([
+        {
+          uid: get._id,
+          name: get.name,
+          status: "done",
+          url: get.imageUrl,
+        },
+      ]);
     }
   }, [
     get,

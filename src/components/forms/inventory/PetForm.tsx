@@ -162,7 +162,7 @@ const AddPetForm = ({
       petCategory: petCategory,
       petGender: petGender,
       petSupplier: petSupplier,
-      petImage: petImage[0],
+      petImage: petImage,
     };
 
     // Add data to Inventory Slice in Redux
@@ -183,16 +183,20 @@ const AddPetForm = ({
         formData.append("gender", newData.petGender);
         formData.append("type", newData.petType);
         formData.append("quantity", newData.petQuantity);
-        formData.append("imageUrl", newData.petImage);
+        formData.append("imageUrl", newData.petImage[0]);
 
         const auth = localStorage.getItem("token");
-        await fetch("http://localhost:3000/inventory", {
+        const response = await fetch("http://localhost:3000/inventory", {
           method: "POST",
           body: formData,
           headers: {
             Authorization: "Bearer " + auth,
           },
         });
+
+        if (!response.ok) {
+          throw new Error("Failed to submit pet");
+        }
 
         resetState();
         form.resetFields();
