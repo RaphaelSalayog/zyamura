@@ -78,8 +78,27 @@ const ItemCard: React.FC<IProps> = ({ data }) => {
             </>
           ),
           onOk: async () => {
-            await dispatch(removeInventoryItem({ inventoryId: data._id }));
-            await dispatch(removeOrderItem({ productId: data._id }));
+            try {
+              const auth = localStorage.getItem("token");
+              const response = await fetch(
+                "http://localhost:3000/inventory/" + data._id,
+                {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: "Bearer " + auth,
+                  },
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error("Failed to delete inventory");
+              }
+
+              await dispatch(removeInventoryItem({ inventoryId: data._id }));
+              await dispatch(removeOrderItem({ productId: data._id }));
+            } catch (err) {
+              console.log(err);
+            }
           },
           centered: true,
         });
