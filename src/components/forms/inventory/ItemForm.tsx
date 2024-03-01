@@ -82,13 +82,26 @@ const AddItemForm = ({
   };
 
   const submitHandler = async (value: any) => {
-    const id = generateUniqueId(data.map((item: any) => item.inventoryId));
+    // const id = generateUniqueId(data.map((item: any) => item.inventoryId));
     const newData = {
-      itemId: item?.add?.visible ? id : get.inventoryId,
+      // itemId: item?.add?.visible ? id : get.inventoryId,
       ...value,
       itemSupplier: itemSupplier,
       itemImage: itemImage,
     };
+
+    // Mongo DB
+    const formData = new FormData();
+    formData.append("object", "Item");
+    formData.append("name", newData.itemName);
+    formData.append("supplier", newData.itemSupplier);
+    formData.append("description", newData.itemDescription);
+    formData.append("sellingPrice", newData.itemSellingPrice);
+    formData.append("investmentCost", newData.itemInvestmentCost);
+    formData.append("quantity", newData.itemQuantity);
+    formData.append("imageUrl", newData.itemImage[0]);
+
+    const auth = localStorage.getItem("token");
 
     // Add data to Inventory Slice in Redux
     if (item?.add?.visible) {
@@ -96,18 +109,6 @@ const AddItemForm = ({
       await dispatch(addItem(newData));
 
       try {
-        // Mongo DB
-        const formData = new FormData();
-        formData.append("object", "Item");
-        formData.append("name", newData.itemName);
-        formData.append("supplier", newData.itemSupplier);
-        formData.append("description", newData.itemDescription);
-        formData.append("sellingPrice", newData.itemSellingPrice);
-        formData.append("investmentCost", newData.itemInvestmentCost);
-        formData.append("quantity", newData.itemQuantity);
-        formData.append("imageUrl", newData.itemImage[0]);
-
-        const auth = localStorage.getItem("token");
         const response = await fetch("http://localhost:3000/inventory", {
           method: "POST",
           body: formData,
@@ -138,12 +139,32 @@ const AddItemForm = ({
         onOk: async () => {
           isLoadingHandler(true);
           await dispatch(updateItem(newData));
-          await dispatch(removeOrderItem({ productId: newData.itemId }));
-          resetState();
-          form.resetFields();
-          item?.add?.setVisible(false);
-          item?.edit?.setVisible(false);
-          isLoadingHandler(false);
+          await dispatch(removeOrderItem({ productId: get._id }));
+
+          try {
+            const response = await fetch(
+              "http://localhost:3000/inventory/" + get._id,
+              {
+                method: "PUT",
+                body: formData,
+                headers: {
+                  Authorization: "Bearer " + auth,
+                },
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Failed to edit item");
+            }
+
+            resetState();
+            form.resetFields();
+            item?.add?.setVisible(false);
+            item?.edit?.setVisible(false);
+            isLoadingHandler(false);
+          } catch (err) {
+            console.log(err);
+          }
         },
         centered: true,
       });
