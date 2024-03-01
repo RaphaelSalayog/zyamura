@@ -49,8 +49,6 @@ const AddAccountModal = () => {
 
   const submitHandler = (data: any) => {
     if (activeTabKey === "user-authentication") {
-      console.log("submit");
-
       // MongoDB
       const formData = new FormData();
       formData.append("firstName", data.firstName);

@@ -14,6 +14,7 @@ import useSelectedData from "@/common/hooks/useSelectedData";
 import { ItemModal } from "@/components/modal/inventory/ItemModal";
 import { PetMainModal } from "@/components/modal/inventory/PetModal";
 import { GetServerSidePropsContext } from "next";
+import { IInventory } from "@/common/model/inventory.model";
 
 const { Title } = Typography;
 
@@ -52,14 +53,18 @@ const inventorySortItems = [
   },
 ];
 
-const Inventory = ({ data }: any) => {
+interface IProps {
+  data: IInventory[];
+}
+
+const Inventory: React.FC<IProps> = ({ data }) => {
   const { pet, item } = useInventoryDrawerVisiblity();
   const { selectedData } = useSelectedData();
   const [inventorySort, setInventorySort] = useState();
   const [searchItemOnChange, setSearchItemOnChange] = useState("");
   const [searchItemOnClick, setSearchItemOnClick] = useState("");
   const [sortedAndSearchedItems, setSortedAndSearchedItems] =
-    useState<inventoryInitialState[]>();
+    useState<IInventory[]>();
 
   // const data = useSelector((store: any) => store.inventory.inventory);
 

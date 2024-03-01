@@ -154,9 +154,9 @@ const AddPetForm = ({
   };
 
   const submitHandler = async (value: any) => {
-    const id = generateUniqueId(data.map((item: any) => item.inventoryId));
+    // const id = generateUniqueId(data.map((item: any) => item.inventoryId));
     const newData = {
-      petId: pet?.add?.visible ? id : get.inventoryId,
+      // petId: pet?.add?.visible ? id : get.inventoryId,
       ...value,
       petQuantity: value.petType === "unique" ? 1 : value?.petQuantity,
       petCategory: petCategory,
@@ -165,27 +165,28 @@ const AddPetForm = ({
       petImage: petImage,
     };
 
+    // Mongo DB
+    const formData = new FormData();
+    formData.append("object", "Pet");
+    formData.append("name", newData.petName);
+    formData.append("supplier", newData.petSupplier);
+    formData.append("description", newData.petDescription);
+    formData.append("sellingPrice", newData.petSellingPrice);
+    formData.append("investmentCost", newData.petInvestmentCost);
+    formData.append("category", newData.petCategory);
+    formData.append("gender", newData.petGender);
+    formData.append("type", newData.petType);
+    formData.append("quantity", newData.petQuantity);
+    formData.append("imageUrl", newData.petImage[0]);
+
+    const auth = localStorage.getItem("token");
+
     // Add data to Inventory Slice in Redux
     if (pet?.add?.visible) {
       try {
         isLoadingHandler(true);
         await dispatch(addPet(newData));
 
-        // Mongo DB
-        const formData = new FormData();
-        formData.append("object", "Pet");
-        formData.append("name", newData.petName);
-        formData.append("supplier", newData.petSupplier);
-        formData.append("description", newData.petDescription);
-        formData.append("sellingPrice", newData.petSellingPrice);
-        formData.append("investmentCost", newData.petInvestmentCost);
-        formData.append("category", newData.petCategory);
-        formData.append("gender", newData.petGender);
-        formData.append("type", newData.petType);
-        formData.append("quantity", newData.petQuantity);
-        formData.append("imageUrl", newData.petImage[0]);
-
-        const auth = localStorage.getItem("token");
         const response = await fetch("http://localhost:3000/inventory", {
           method: "POST",
           body: formData,
@@ -216,12 +217,32 @@ const AddPetForm = ({
         onOk: async () => {
           isLoadingHandler(true);
           await dispatch(updatePet(newData));
-          await dispatch(removeOrderItem({ productId: newData.petId }));
-          resetState();
-          form.resetFields();
-          pet?.add?.setVisible(false);
-          pet?.edit?.setVisible(false);
-          isLoadingHandler(false);
+          await dispatch(removeOrderItem({ productId: get._id }));
+
+          try {
+            const response = await fetch(
+              "http://localhost:3000/inventory/" + get._id,
+              {
+                method: "PUT",
+                body: formData,
+                headers: {
+                  Authorization: "Bearer " + auth,
+                },
+              }
+            );
+
+            if (!response.ok) {
+              throw new Error("Failed to edit pet");
+            }
+
+            resetState();
+            form.resetFields();
+            pet?.add?.setVisible(false);
+            pet?.edit?.setVisible(false);
+            isLoadingHandler(false);
+          } catch (err) {
+            console.log(err);
+          }
         },
         centered: true,
       });

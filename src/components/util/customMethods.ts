@@ -1,4 +1,6 @@
-function inventorySortItem(inventorySort: any, inventory: any[]) {
+import { IInventory } from "@/common/model/inventory.model";
+
+function inventorySortItem(inventorySort: any, inventory: IInventory[]) {
   const items = [...inventory];
   switch (inventorySort) {
     case "Latest":

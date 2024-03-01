@@ -11,10 +11,10 @@ import AmountChangeModal from "@/components/modal/point-of-sales/AmountChangeMod
 import { PosModalVisibilityProvider } from "@/common/contexts/PosModalVisibilityContext";
 import useModalVisibility from "@/common/hooks/useModalVisibility";
 import { useEffect, useState } from "react";
-import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 import ReceiptModal from "@/components/modal/point-of-sales/ReceiptModal";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import useSelectedData from "@/common/hooks/useSelectedData";
+import { IInventory } from "@/common/model/inventory.model";
 
 const PointOfSales = () => {
   const data = useSelector((store: any) => store.inventory.inventory);
@@ -30,7 +30,7 @@ const PointOfSales = () => {
   const [searchItemOnChange, setSearchItemOnChange] = useState("");
   const [searchItemOnClick, setSearchItemOnClick] = useState("");
   const [sortedAndSearchedItems, setSortedAndSearchedItems] =
-    useState<inventoryInitialState[]>();
+    useState<IInventory[]>();
 
   useEffect(() => {
     // sorted items

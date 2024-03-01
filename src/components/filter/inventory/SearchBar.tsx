@@ -3,11 +3,12 @@ import { AutoComplete, Input } from "antd";
 import type { SelectProps } from "antd/es/select";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 import { Transaction } from "@/store/reducers/transactionSlice";
+import { IInventory } from "@/common/model/inventory.model";
 
 interface SearchBar {
   getValueOnClick: (value: string) => void;
   getValueOnChange: (value: string) => void;
-  sortedAndSearchedItems?: inventoryInitialState[] | Transaction[] | undefined;
+  sortedAndSearchedItems?: IInventory[] | Transaction[] | undefined;
   type: "inventory" | "transaction";
 }
 

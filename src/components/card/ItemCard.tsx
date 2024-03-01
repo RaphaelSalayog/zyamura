@@ -14,14 +14,15 @@ import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import { useDispatch } from "react-redux";
 import { removeInventoryItem } from "@/store/reducers/inventorySlice";
 import { removeOrderItem } from "@/store/reducers/pointOfSalesSlice";
+import { IInventory } from "@/common/model/inventory.model";
 
 const { Text } = Typography;
 
-interface ItemCard {
-  data: any;
+interface IProps {
+  data: IInventory;
 }
 
-const ItemCard: React.FC<ItemCard> = ({ data }) => {
+const ItemCard: React.FC<IProps> = ({ data }) => {
   const { pet, item } = useContext(InventoryDrawerVisiblityContext);
   const { set } = useContext(SelectedDataContext);
   const dispatch = useDispatch();
@@ -77,10 +78,8 @@ const ItemCard: React.FC<ItemCard> = ({ data }) => {
             </>
           ),
           onOk: async () => {
-            await dispatch(
-              removeInventoryItem({ inventoryId: data.inventoryId })
-            );
-            await dispatch(removeOrderItem({ productId: data.inventoryId }));
+            await dispatch(removeInventoryItem({ inventoryId: data._id }));
+            await dispatch(removeOrderItem({ productId: data._id }));
           },
           centered: true,
         });
