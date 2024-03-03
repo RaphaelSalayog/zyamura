@@ -175,7 +175,20 @@ const AddPetForm = ({
     formData.append("gender", newData.petGender);
     formData.append("type", newData.petType);
     formData.append("quantity", newData.petQuantity);
-    formData.append("imageUrl", newData.petImage[0]);
+    // to check if the imageUrl is a file or url
+    /* if typeof petImage[0] is an object {
+          object = file  - eto lang pinagbasehan ko para malaman kung file o hindi
+          file means the user uploaded a new image
+       } else {
+          string = url
+          url means the user didn't upload a new file
+       }*/
+    formData.append(
+      "imageUrl",
+      typeof newData.petImage[0] === "object"
+        ? newData.petImage[0]
+        : newData.petImage[0].split("localhost:3000/")[1]
+    );
 
     const auth = localStorage.getItem("token");
 

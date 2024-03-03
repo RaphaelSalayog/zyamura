@@ -54,7 +54,12 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
 
   useEffect(() => {
     if (fileList[0]?.status === "done") {
-      getValue([fileList[0]?.originFileObj]);
+      // to determine if the image is a file or url
+      if (fileList[0]?.originFileObj) {
+        getValue([fileList[0]?.originFileObj]);
+      } else {
+        getValue([fileList[0]?.url]);
+      }
     }
   }, [fileList]);
   return (
