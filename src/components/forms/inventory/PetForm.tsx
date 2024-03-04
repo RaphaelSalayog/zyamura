@@ -228,7 +228,7 @@ const AddPetForm = ({
         onOk: async () => {
           isLoadingHandler(true);
           await dispatch(updatePet(newData));
-          await dispatch(removeOrderItem({ productId: get._id }));
+          await dispatch(removeOrderItem({ _id: get._id }));
 
           try {
             const response = await fetch(

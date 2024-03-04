@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export interface inventoryInitialState {
-  inventoryId: string;
+  _id: string;
   object: string;
   name: string;
   supplier: string;
@@ -45,11 +45,11 @@ interface addItem {
 }
 
 interface removeItem {
-  inventoryId: string;
+  _id: string;
 }
 
 interface deductOrderedItems {
-  productId: string;
+  _id: string;
   quantity: number;
   price: number;
   totalItemPrice: number;
@@ -57,7 +57,7 @@ interface deductOrderedItems {
 
 const petData = (payload: any) => {
   return {
-    inventoryId: payload.petId,
+    _id: payload.petId,
     object: "Pet",
     name: payload.petName,
     supplier: payload.petSupplier,
@@ -74,7 +74,7 @@ const petData = (payload: any) => {
 
 const itemData = (payload: any) => {
   return {
-    inventoryId: payload.itemId,
+    _id: payload.itemId,
     object: "Item",
     name: payload.itemName,
     supplier: payload.itemSupplier,
@@ -105,20 +105,20 @@ const inventorySlice = createSlice({
     },
     updatePet: (state, { payload }) => {
       const index = state.inventory.findIndex(
-        (item) => item.inventoryId === payload.petId
+        (item) => item._id === payload.petId
       );
       state.inventory[index] = petData(payload); // Update the specified properties for the object
     },
     updateItem: (state, { payload }) => {
       // Check if the item is existing
       const index = state.inventory.findIndex(
-        (item) => item.inventoryId === payload.itemId
+        (item) => item._id === payload.itemId
       );
       state.inventory[index] = itemData(payload); // Update the specified properties for the object
     },
     removeInventoryItem: (state, { payload }: PayloadAction<removeItem>) => {
       const indexToRemove = state.inventory.findIndex(
-        (item) => item.inventoryId === payload.inventoryId
+        (item) => item._id === payload._id
       );
 
       // Remove the object if found
@@ -132,7 +132,7 @@ const inventorySlice = createSlice({
     ) => {
       payload.map((item) =>
         state.inventory.map((value) => {
-          if (item.productId === value.inventoryId) {
+          if (item._id === value._id) {
             value.quantity -= item.quantity;
           }
         })

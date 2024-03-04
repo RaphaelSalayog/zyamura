@@ -29,7 +29,7 @@ const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
     if (value === 0 || (value && value <= itemDetails.quantity)) {
       dispatch(
         onChangeOrderedQuantity({
-          productId: itemDetails.inventoryId,
+          _id: itemDetails._id,
           quantity: value,
         })
       );
@@ -39,7 +39,7 @@ const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
   const onClickHandler = () => {
     dispatch(
       onChangeOrderedQuantity({
-        productId: itemDetails.inventoryId,
+        _id: itemDetails._id,
         quantity: 0,
       })
     );
@@ -50,7 +50,7 @@ const PosOrderedItemCard: React.FC<{ orderedItem: orderedItems }> = ({
         <div className={style.image}>
           <img
             alt="example"
-            src={itemDetails.imageUrl[0]?.thumbUrl}
+            src={itemDetails.imageUrl}
             style={{ objectFit: "cover", height: "100%", width: "100%" }}
           />
         </div>

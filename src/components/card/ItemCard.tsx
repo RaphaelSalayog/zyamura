@@ -94,8 +94,8 @@ const ItemCard: React.FC<IProps> = ({ data }) => {
                 throw new Error("Failed to delete inventory");
               }
 
-              await dispatch(removeInventoryItem({ inventoryId: data._id }));
-              await dispatch(removeOrderItem({ productId: data._id }));
+              // await dispatch(removeInventoryItem({ _id: data._id }));
+              // await dispatch(removeOrderItem({ _id: data._id }));
             } catch (err) {
               console.log(err);
             }

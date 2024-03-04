@@ -14,11 +14,16 @@ import {
   setStock,
 } from "@/store/reducers/pointOfSalesSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { IInventory } from "@/common/model/inventory.model";
 const { Text, Title } = Typography;
 
-const PosItemCard: React.FC<any> = ({ data }) => {
+interface IProps {
+  data: IInventory;
+}
+
+const PosItemCard: React.FC<IProps> = ({ data }) => {
   const {
-    inventoryId,
+    _id,
     name,
     quantity,
     sellingPrice,
@@ -32,18 +37,18 @@ const PosItemCard: React.FC<any> = ({ data }) => {
 
   const [qty, setQty] = useState<any>("1");
   const itemStock = useSelector((store: any) => store.pointOfSales.itemStock);
-  const stock = itemStock.find((item: any) => item.productId === inventoryId);
+  const stock = itemStock.find((item: any) => item._id === _id);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(
       setStock({
-        productId: inventoryId,
+        _id: _id,
         stock: quantity,
       })
     );
-  }, [inventoryId, quantity]);
+  }, [_id, quantity]);
 
   const inputNumberHandler = (value: string | null) => {
     if (value || value == "0") {
@@ -57,13 +62,13 @@ const PosItemCard: React.FC<any> = ({ data }) => {
     if (qty <= stock?.stock) {
       dispatch(
         deductStock({
-          productId: inventoryId,
+          _id: _id,
           quantity: qty,
         })
       );
       dispatch(
         addOrder({
-          productId: inventoryId,
+          _id: _id,
           itemDetails: data,
           quantity: +qty,
           price: sellingPrice,

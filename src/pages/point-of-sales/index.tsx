@@ -10,14 +10,19 @@ import { clearAllOrder } from "@/store/reducers/pointOfSalesSlice";
 import AmountChangeModal from "@/components/modal/point-of-sales/AmountChangeModal";
 import { PosModalVisibilityProvider } from "@/common/contexts/PosModalVisibilityContext";
 import useModalVisibility from "@/common/hooks/useModalVisibility";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReceiptModal from "@/components/modal/point-of-sales/ReceiptModal";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import useSelectedData from "@/common/hooks/useSelectedData";
 import { IInventory } from "@/common/model/inventory.model";
+import { GetServerSidePropsContext } from "next";
 
-const PointOfSales = () => {
-  const data = useSelector((store: any) => store.inventory.inventory);
+interface IProps {
+  dataDb: IInventory[];
+}
+
+const PointOfSales: React.FC<IProps> = ({ dataDb: data }) => {
+  // const data = useSelector((store: any) => store.inventory.inventory);
   const orderedItem = useSelector(
     (store: any) => store.pointOfSales.orderedItems
   );
@@ -36,7 +41,7 @@ const PointOfSales = () => {
     // sorted items
     const sortedItems = posSortItem(data);
     // filter the sorted items by search key
-    const sortedAndSearchedItem = sortedItems.filter((items: any) => {
+    const sortedAndSearchedItem = sortedItems.filter((items: IInventory) => {
       if (searchItemOnClick == "") {
         return items.name
           .toLowerCase()
@@ -48,17 +53,17 @@ const PointOfSales = () => {
     setSortedAndSearchedItems(sortedAndSearchedItem);
   }, [data, searchItemOnChange, searchItemOnClick]);
 
-  const itemSearchOnChangeHandler = (value: string) => {
+  const itemSearchOnChangeHandler = useCallback((value: string) => {
     setSearchItemOnChange(value);
-  };
+  }, []);
 
-  const itemSearchOnClickHandler = (value: string) => {
+  const itemSearchOnClickHandler = useCallback((value: string) => {
     setSearchItemOnClick(value);
-  };
+  }, []);
 
-  const confirmTransactionHandler = () => {
+  const confirmTransactionHandler = useCallback(() => {
     modal?.setVisible(true);
-  };
+  }, []);
 
   return (
     <PosModalVisibilityProvider value={{ modal, receiptModal }}>
@@ -87,8 +92,8 @@ const PointOfSales = () => {
                   sortedAndSearchedItems?.length === 0 ? "center" : "",
               }}
             >
-              {sortedAndSearchedItems?.map((value: any) => (
-                <PosItemCard key={value.inventoryId} data={value} />
+              {sortedAndSearchedItems?.map((value: IInventory) => (
+                <PosItemCard key={value._id} data={value} />
               ))}
 
               {sortedAndSearchedItems?.length === 0 && (
@@ -115,7 +120,7 @@ const PointOfSales = () => {
 
             <ul className={style.rightPaneContent}>
               {orderedItem.map((item: any) => (
-                <li>
+                <li key={orderedItem._id}>
                   <PosOrderedItemCard orderedItem={item} />
                 </li>
               ))}
@@ -143,6 +148,45 @@ const PointOfSales = () => {
       </SelectedDataProvider>
     </PosModalVisibilityProvider>
   );
+};
+
+// Mongo DB
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  try {
+    // We can't get the token from localStorage because it is for client side only.
+    // We use context.req.headers.cookie to access the token from Express.js middleware. ( Check it in Controllers > auth.js > res.setHeader("Set-Cookie", `token=${token}; Max-Age=${60 * 60 * 24}; HttpOnly; Secure;`); )
+    const getToken = ctx.req.headers.cookie;
+    const token = getToken?.split("=")[1];
+    const response = await fetch("http://localhost:3000/inventory", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed fetching inventory");
+    }
+
+    const data = await response.json();
+
+    const modifiedData = data.map((item: IInventory) => {
+      return { ...item, imageUrl: `http://localhost:3000/${item.imageUrl}` };
+    });
+
+    return {
+      props: {
+        dataDb: modifiedData,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: {
+        dataDb: [],
+      },
+    };
+  }
 };
 
 export default PointOfSales;

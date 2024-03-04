@@ -1,16 +1,17 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { inventoryInitialState } from "./inventorySlice";
+import { IInventory } from "@/common/model/inventory.model";
 
 export interface orderedItems {
-  productId: string;
-  itemDetails: inventoryInitialState;
+  _id: string;
+  itemDetails: IInventory;
   quantity: number;
   price: number;
   totalItemPrice: number;
 }
 
 export interface itemStock {
-  productId: string;
+  _id: string;
   stock: number;
 }
 
@@ -21,29 +22,29 @@ interface initialState {
 }
 
 interface addPetAndItem {
-  productId: string;
-  itemDetails: inventoryInitialState;
+  _id: string;
+  itemDetails: IInventory;
   quantity: number;
   price: number;
 }
 
 interface setStock {
-  productId: string;
+  _id: string;
   stock: number;
 }
 
 interface deductOrderedQuantity {
-  productId: string;
+  _id: string;
   quantity: number;
 }
 
 interface deductStock {
-  productId: string;
+  _id: string;
   quantity: number;
 }
 
 interface revmoveOrderItem {
-  productId: string;
+  _id: string;
 }
 
 const initialState: initialState = {
@@ -57,9 +58,7 @@ const pointOfSalesSlice = createSlice({
   initialState,
   reducers: {
     addOrder: (state, { payload }: PayloadAction<addPetAndItem>) => {
-      const id = state.orderedItems.find(
-        (item) => item.productId == payload.productId
-      );
+      const id = state.orderedItems.find((item) => item._id == payload._id);
 
       const totalItemPrice = payload.quantity * payload.price;
       if (id) {
@@ -78,10 +77,10 @@ const pointOfSalesSlice = createSlice({
       { payload }: PayloadAction<deductOrderedQuantity>
     ) => {
       const orderedItemsId = state.orderedItems.find(
-        (item) => item.productId === payload.productId
+        (item) => item._id === payload._id
       );
       const itemStockId = state.itemStock.find(
-        (item) => item.productId === payload.productId
+        (item) => item._id === payload._id
       );
       // Note: Do not re-arrange the order of this code because it will affect the result
       if (orderedItemsId && itemStockId) {
@@ -100,7 +99,7 @@ const pointOfSalesSlice = createSlice({
         // To check if the quantity of ordered item is 0. If it is true, it will be remove in the orderedItems array
         if (payload.quantity === 0) {
           const indexToRemove = state.orderedItems.findIndex(
-            (item) => item.productId === payload.productId
+            (item) => item._id === payload._id
           );
           if (indexToRemove !== -1) {
             state.orderedItems.splice(indexToRemove, 1);
@@ -110,10 +109,10 @@ const pointOfSalesSlice = createSlice({
     },
     setStock: (state, { payload }: PayloadAction<setStock>) => {
       const itemStock = state.itemStock.find(
-        (item) => item.productId === payload.productId
+        (item) => item._id === payload._id
       );
       const orderedItemsId = state.orderedItems.find(
-        (item) => item.productId === payload.productId
+        (item) => item._id === payload._id
       );
       if (itemStock) {
         if (!orderedItemsId) {
@@ -127,16 +126,14 @@ const pointOfSalesSlice = createSlice({
       }
     },
     deductStock: (state, { payload }: PayloadAction<deductStock>) => {
-      const id = state.itemStock.find(
-        (item) => item.productId === payload.productId
-      );
+      const id = state.itemStock.find((item) => item._id === payload._id);
       if (id) {
         id.stock -= payload.quantity;
       }
     },
     removeOrderItem: (state, { payload }: PayloadAction<revmoveOrderItem>) => {
       const indexToRemove = state.orderedItems.findIndex(
-        (item) => item.productId === payload.productId
+        (item) => item._id === payload._id
       );
       if (indexToRemove !== -1) {
         // Deduct total price
@@ -148,7 +145,7 @@ const pointOfSalesSlice = createSlice({
     clearAllOrder: (state) => {
       state.orderedItems.map((item) => {
         state.itemStock.map((value) => {
-          if (item.productId === value.productId) {
+          if (item._id === value._id) {
             value.stock += item.quantity;
           }
         });

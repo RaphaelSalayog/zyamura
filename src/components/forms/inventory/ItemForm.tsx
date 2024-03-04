@@ -82,9 +82,9 @@ const AddItemForm = ({
   };
 
   const submitHandler = async (value: any) => {
-    // const id = generateUniqueId(data.map((item: any) => item.inventoryId));
+    // const id = generateUniqueId(data.map((item: any) => item._id));
     const newData = {
-      // itemId: item?.add?.visible ? id : get.inventoryId,
+      // itemId: item?.add?.visible ? id : get._id,
       ...value,
       itemSupplier: itemSupplier,
       itemImage: itemImage,
@@ -138,8 +138,8 @@ const AddItemForm = ({
         content: `Are you sure you want to save the changes made? This action cannot be undone.`,
         onOk: async () => {
           isLoadingHandler(true);
-          await dispatch(updateItem(newData));
-          await dispatch(removeOrderItem({ productId: get._id }));
+          // await dispatch(updateItem(newData));
+          // await dispatch(removeOrderItem({ _id: get._id }));
 
           try {
             const response = await fetch(

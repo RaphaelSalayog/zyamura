@@ -7,7 +7,7 @@ export const accounts = {
 };
 
 export interface inventoryInitialState {
-  inventoryId: string;
+  _id: string;
   object: string;
   name: string;
   supplier: string;
@@ -27,7 +27,7 @@ export interface Transaction {
     transactionId: string;
     time: string;
     orderedItems: {
-      productId: string;
+      _id: string;
       itemDetails: inventoryInitialState;
       quantity: number;
       price: number;

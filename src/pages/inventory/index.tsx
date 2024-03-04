@@ -234,24 +234,9 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
 
     const data = await response.json();
 
-    const modifiedData = data.map(
-      (item: {
-        _id: string;
-        object: string;
-        name: string;
-        supplier: string;
-        description: string;
-        sellingPrice: string;
-        invenstmentCost: number;
-        category: string;
-        gender: string;
-        type: string;
-        quantity: number;
-        imageUrl: string;
-      }) => {
-        return { ...item, imageUrl: `http://localhost:3000/${item.imageUrl}` };
-      }
-    );
+    const modifiedData = data.map((item: IInventory) => {
+      return { ...item, imageUrl: `http://localhost:3000/${item.imageUrl}` };
+    });
 
     return {
       props: {
