@@ -12,3 +12,8 @@ export interface IInventory {
   quantity: number;
   imageUrl: string;
 }
+
+export interface ISocketInventory {
+  action: string;
+  inventory: any;
+}
