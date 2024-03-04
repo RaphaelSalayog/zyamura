@@ -56,29 +56,42 @@ const AmountChangeModal = () => {
       title: "Confirm Transaction",
       content: `Are you sure you want to confirm the transaction? This action cannot be undone.`,
       onOk: async () => {
-        const transactionId = generateUniqueId(
-          transaction.map((item: Transaction) =>
-            item.transactionData.map((value) => value.transactionId)
-          )
-        );
-        dispatch(
-          addTransaction({
-            date: formattedDate.date,
-            transactionData: {
-              transactionId: transactionId,
-              time: formattedDate.time,
-              orderedItems: orderedItem,
-              totalPrice: totalPrice,
-              cash: value!,
-              change: change,
+        try {
+          const transactionId = generateUniqueId(
+            transaction.map((item: Transaction) =>
+              item.transactionData.map((value) => value.transactionId)
+            )
+          );
+          dispatch(
+            addTransaction({
+              date: formattedDate.date,
+              transactionData: {
+                transactionId: transactionId,
+                time: formattedDate.time,
+                orderedItems: orderedItem,
+                totalPrice: totalPrice,
+                cash: value!,
+                change: change,
+              },
+            })
+          );
+
+          await fetch("http://localhost:3000/inventory/deductQuantity", {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
             },
-          })
-        );
-        dispatch(removeOrder());
-        dispatch(deductOrderedItems(orderedItem));
-        set(transactionId);
-        resetValues();
-        receiptModal?.setVisible(true);
+            body: JSON.stringify(orderedItem),
+          });
+
+          dispatch(removeOrder());
+          dispatch(deductOrderedItems(orderedItem));
+          set(transactionId);
+          resetValues();
+          receiptModal?.setVisible(true);
+        } catch (err) {
+          console.log(err);
+        }
       },
       centered: true,
     });
