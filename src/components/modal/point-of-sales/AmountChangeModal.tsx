@@ -126,6 +126,8 @@ const AmountChangeModal = () => {
         width={500}
         onClose={() => {
           modal?.setVisible(false);
+          setValue(null);
+          setChange(0);
         }}
         centered={"centered"}
       >

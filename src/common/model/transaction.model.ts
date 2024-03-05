@@ -2,10 +2,8 @@ import { IInventory } from "./inventory.model";
 
 export interface ITransaction {
   _id: string;
-  data: {
-    date: string;
-    transactionData: TransactionData;
-  };
+  date: string;
+  transactionData: TransactionData;
 }
 
 export interface TransactionData {

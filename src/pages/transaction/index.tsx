@@ -190,25 +190,23 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
         if (currentIndex === 0) {
           return [
             {
-              _id: item._id,
-              date: item.data.date,
-              totalPricePerDay: item.data.transactionData.totalPrice,
-              transactionData: [item.data.transactionData],
+              ...item,
+              totalPricePerDay: item.transactionData.totalPrice,
+              transactionData: [item.transactionData],
             },
           ];
         }
-        if (item.data.date === array[currentIndex - 1].data.date) {
+        if (item.date === array[currentIndex - 1].date) {
           accumolator[accumolator.length - 1].transactionData.push(
-            item.data.transactionData
+            item.transactionData
           );
           accumolator[accumolator.length - 1].totalPricePerDay +=
-            item.data.transactionData.totalPrice;
+            item.transactionData.totalPrice;
         } else {
           accumolator.push({
-            _id: item._id,
-            totalPricePerDay: item.data.transactionData.totalPrice,
-            date: item.data.date,
-            transactionData: [item.data.transactionData],
+            ...item,
+            totalPricePerDay: item.transactionData.totalPrice,
+            transactionData: [item.transactionData],
           });
         }
         return accumolator;
