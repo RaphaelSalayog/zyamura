@@ -39,11 +39,11 @@ const Transaction = () => {
     const sortedAndSearchedItem = transaction.map((items) => {
       const filteredData = items.transactionData.filter((value) => {
         if (searchItemOnClick == "") {
-          return value.transactionId
+          return value._id
             .toLowerCase()
             .includes(searchItemOnChange.toLowerCase());
         } else {
-          return value.transactionId === searchItemOnClick;
+          return value._id === searchItemOnClick;
         }
       });
       return {
@@ -70,6 +70,7 @@ const Transaction = () => {
         </Row>
         {sortedAndSearchedItems?.map((item) => (
           <Row
+            key={item.date}
             style={{
               width: "100%",
               height: "81vh",
@@ -117,7 +118,7 @@ const Transaction = () => {
                   }}
                 >
                   {item.transactionData.map((value) => (
-                    <TransactionCard data={value} />
+                    <TransactionCard key={value._id} data={value} />
                   ))}
                 </Row>
               </Row>

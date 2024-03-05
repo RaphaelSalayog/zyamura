@@ -57,7 +57,7 @@ const SearchBar: React.FC<SearchBar> = ({
       sortedAndSearchedItems?.map((item: Transaction) => {
         item.transactionData.map((value) => {
           const existingItem = array.find(
-            (existing) => existing.itemName === value.transactionId
+            (existing) => existing.itemName === value._id
           );
 
           if (existingItem) {
@@ -65,7 +65,7 @@ const SearchBar: React.FC<SearchBar> = ({
           } else {
             // If item doesn't exist, add a new object to the array
             array.push({
-              itemName: value.transactionId,
+              itemName: value._id,
               number: 1, // Assuming you start with 1 when adding a new item
             });
           }

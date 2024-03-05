@@ -120,7 +120,7 @@ const PointOfSales: React.FC<IProps> = ({ dataDb: data }) => {
 
             <ul className={style.rightPaneContent}>
               {orderedItem.map((item: any) => (
-                <li key={orderedItem._id}>
+                <li key={item._id}>
                   <PosOrderedItemCard orderedItem={item} />
                 </li>
               ))}

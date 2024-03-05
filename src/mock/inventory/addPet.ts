@@ -24,7 +24,7 @@ export interface inventoryInitialState {
 export interface Transaction {
   date: string;
   transactionData: {
-    transactionId: string;
+    _id: string;
     time: string;
     orderedItems: {
       _id: string;

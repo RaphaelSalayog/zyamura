@@ -10,7 +10,7 @@ export interface OrderedItems {
 }
 
 export interface TransactionData {
-  transactionId: string;
+  _id: string;
   time: string;
   orderedItems: OrderedItems[];
   totalPrice: number;

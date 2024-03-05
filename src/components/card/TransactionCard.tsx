@@ -33,7 +33,7 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
   );
 
   const invoiceHandler = () => {
-    set(data.transactionId);
+    set(data._id);
     receiptModal?.setVisible(true);
   };
   return (
@@ -67,6 +67,7 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
             const randomIndex = Math.floor(Math.random() * colors.length);
             return (
               <Avatar
+                key={item._id}
                 src={item.itemDetails.imageUrl}
                 style={{ backgroundColor: colors[randomIndex] }}
               />
@@ -94,7 +95,7 @@ const TransactionCard = ({ data }: { data: TransactionData }) => {
           }}
         >
           <p>Raphael Salayog</p>
-          <p style={{ color: "#bfbfbf" }}>#{data.transactionId}</p>
+          <p style={{ color: "#bfbfbf" }}>#{data._id}</p>
         </Col>
         <Col
           style={{

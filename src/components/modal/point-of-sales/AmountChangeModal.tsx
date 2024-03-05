@@ -57,16 +57,16 @@ const AmountChangeModal = () => {
       content: `Are you sure you want to confirm the transaction? This action cannot be undone.`,
       onOk: async () => {
         try {
-          const transactionId = generateUniqueId(
+          const _id = generateUniqueId(
             transaction.map((item: Transaction) =>
-              item.transactionData.map((value) => value.transactionId)
+              item.transactionData.map((value) => value._id)
             )
           );
           dispatch(
             addTransaction({
               date: formattedDate.date,
               transactionData: {
-                transactionId: transactionId,
+                _id: _id,
                 time: formattedDate.time,
                 orderedItems: orderedItem,
                 totalPrice: totalPrice,
@@ -76,17 +76,39 @@ const AmountChangeModal = () => {
             })
           );
 
+          const auth = localStorage.getItem("token");
+
+          await fetch("http://localhost:3000/transaction", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + auth,
+            },
+            body: JSON.stringify({
+              date: formattedDate.date,
+              transactionData: {
+                _id: _id,
+                time: formattedDate.time,
+                orderedItems: orderedItem,
+                totalPrice: totalPrice,
+                cash: value!,
+                change: change,
+              },
+            }),
+          });
+
           await fetch("http://localhost:3000/inventory/deductQuantity", {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
+              Authorization: "Bearer " + auth,
             },
             body: JSON.stringify(orderedItem),
           });
 
           dispatch(removeOrder());
           dispatch(deductOrderedItems(orderedItem));
-          set(transactionId);
+          set(_id);
           resetValues();
           receiptModal?.setVisible(true);
         } catch (err) {
