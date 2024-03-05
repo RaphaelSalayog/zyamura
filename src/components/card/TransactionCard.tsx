@@ -1,4 +1,4 @@
-import { TransactionData } from "@/store/reducers/transactionSlice";
+import { TransactionData } from "@/common/model/transaction.model";
 import { EyeOutlined } from "@ant-design/icons";
 import { Avatar, Button, Col, Row } from "antd";
 import { addCommas, truncateString } from "../util/customMethods";

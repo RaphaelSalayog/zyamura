@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { AutoComplete, Input } from "antd";
 import type { SelectProps } from "antd/es/select";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
-import { Transaction } from "@/store/reducers/transactionSlice";
 import { IInventory } from "@/common/model/inventory.model";
+import { ITransactionModified } from "@/common/model/transaction.model";
 
 interface SearchBar {
   getValueOnClick: (value: string) => void;
   getValueOnChange: (value: string) => void;
-  sortedAndSearchedItems?: IInventory[] | Transaction[] | undefined;
+  sortedAndSearchedItems?: IInventory[] | ITransactionModified[] | undefined;
   type: "inventory" | "transaction";
 }
 
@@ -54,7 +54,7 @@ const SearchBar: React.FC<SearchBar> = ({
 
     if (type === "transaction") {
       // To know if the item is duplicate. If it is, it will just increment the number
-      sortedAndSearchedItems?.map((item: Transaction) => {
+      sortedAndSearchedItems?.map((item: ITransactionModified) => {
         item.transactionData.map((value) => {
           const existingItem = array.find(
             (existing) => existing.itemName === value._id

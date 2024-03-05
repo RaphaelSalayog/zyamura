@@ -12,8 +12,15 @@ import ReceiptModal from "@/components/modal/point-of-sales/ReceiptModal";
 import { PosModalVisibilityProvider } from "@/common/contexts/PosModalVisibilityContext";
 import useModalVisibility from "@/common/hooks/useModalVisibility";
 import { useEffect, useState } from "react";
+import { GetServerSidePropsContext } from "next";
+import {
+  ITransaction,
+  ITransactionModified,
+} from "@/common/model/transaction.model";
 
-const Transaction = () => {
+const Transaction: React.FC<{ dataDb: ITransactionModified[] }> = ({
+  dataDb,
+}) => {
   const transaction: Transaction[] = useSelector(
     (store: any) => store.transaction.transaction
   );
@@ -24,7 +31,7 @@ const Transaction = () => {
   const [searchItemOnChange, setSearchItemOnChange] = useState("");
   const [searchItemOnClick, setSearchItemOnClick] = useState("");
   const [sortedAndSearchedItems, setSortedAndSearchedItems] =
-    useState<Transaction[]>();
+    useState<ITransactionModified[]>();
 
   const itemSearchOnChangeHandler = (value: string) => {
     setSearchItemOnChange(value);
@@ -36,7 +43,7 @@ const Transaction = () => {
 
   useEffect(() => {
     // filter the sorted items by search key
-    const sortedAndSearchedItem = transaction.map((items) => {
+    const sortedAndSearchedItem = dataDb.map((items) => {
       const filteredData = items.transactionData.filter((value) => {
         if (searchItemOnClick == "") {
           return value._id
@@ -154,6 +161,74 @@ const Transaction = () => {
       </SelectedDataProvider>
     </PosModalVisibilityProvider>
   );
+};
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  try {
+    const getToken = ctx.req.headers.cookie;
+    const token = getToken?.split("=")[1];
+    const response = await fetch("http://localhost:3000/transaction", {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed fetching transaction");
+    }
+
+    const data = await response.json();
+
+    const modifiedData = data.reduce(
+      (
+        accumolator: ITransactionModified[],
+        item: ITransaction,
+        currentIndex: number,
+        array: ITransaction[]
+      ) => {
+        if (currentIndex === 0) {
+          return [
+            {
+              _id: item._id,
+              date: item.data.date,
+              totalPricePerDay: item.data.transactionData.totalPrice,
+              transactionData: [item.data.transactionData],
+            },
+          ];
+        }
+        if (item.data.date === array[currentIndex - 1].data.date) {
+          accumolator[accumolator.length - 1].transactionData.push(
+            item.data.transactionData
+          );
+          accumolator[accumolator.length - 1].totalPricePerDay +=
+            item.data.transactionData.totalPrice;
+        } else {
+          accumolator.push({
+            _id: item._id,
+            totalPricePerDay: item.data.transactionData.totalPrice,
+            date: item.data.date,
+            transactionData: [item.data.transactionData],
+          });
+        }
+        return accumolator;
+      },
+      []
+    );
+
+    return {
+      props: {
+        dataDb: modifiedData,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: {
+        dataDb: [],
+      },
+    };
+  }
 };
 
 export default Transaction;
