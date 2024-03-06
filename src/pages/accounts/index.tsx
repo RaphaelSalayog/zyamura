@@ -1,51 +1,17 @@
-import { InventoryDrawerVisiblityProvider } from "@/common/contexts/InventoryDrawerVisibilityContext";
-import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import SearchBar from "@/components/filter/inventory/SearchBar";
-import { Button, Col, Dropdown, Row } from "antd";
+import { Button, Row } from "antd";
 import Typography from "antd/es/typography";
-import style from "@/styles/accountCard.module.css";
-import {
-  DeleteTwoTone,
-  EditTwoTone,
-  EyeOutlined,
-  MailOutlined,
-  PhoneOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
 import { AccountModal } from "@/components/modal/account/AccountModal";
 import { DrawerVisiblityProvider } from "@/common/contexts/DrawerVisibilityContext";
 import useDrawerVisibility from "@/common/hooks/useDrawerVisiblity";
+import UserCard from "@/components/card/UserCard";
+import { GetServerSidePropsContext } from "next";
+import { IUsers } from "@/common/model/account.model";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
-const Accounts: React.FC<any> = () => {
+const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
   const { add, edit, remove, view } = useDrawerVisibility();
-  const items = [
-    {
-      key: "view",
-      label: "View",
-      icon: <EyeOutlined style={{ color: "#1677ff" }} />,
-      onClick: () => {},
-    },
-    {
-      key: "edit",
-      label: "Edit",
-      icon: <EditTwoTone />,
-      onClick: () => {},
-    },
-    {
-      key: "delete",
-      label: "Delete",
-      icon: <DeleteTwoTone twoToneColor={"red"} />,
-      onClick: () => {},
-    },
-    // {
-    //   key: "archive",
-    //   label: "Archive",
-    //   icon: <DeleteTwoTone />,
-    //   onClick: () => {},
-    // },
-  ];
 
   return (
     <>
@@ -81,102 +47,48 @@ const Accounts: React.FC<any> = () => {
             position: "relative",
           }}
         >
-          <Row className={style.accountCard}>
-            <Row
-              justify={"center"}
-              style={{
-                // border: "1px solid black",
-                height: "50%",
-                width: "100%",
-                marginBottom: "5px",
-                position: "relative",
-              }}
-            >
-              <Row style={{ position: "absolute", right: "0" }}>
-                <Dropdown menu={{ items }} placement="bottom">
-                  <Button
-                    type="primary"
-                    className={style.itemCardImageContentButton}
-                  >
-                    ···
-                  </Button>
-                </Dropdown>
-              </Row>
-              <img
-                src="https://img.freepik.com/free-photo/portrait-young-beautiful-businesswoman-smiling_176420-9906.jpg?w=1380&t=st=1707590994~exp=1707591594~hmac=e8943c0d41be38ce805baaab070c403efb7ea3ad088a3b56b9883d4e51b32ba3"
-                style={{
-                  height: "159px",
-                  width: "159px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                }}
-              />
-            </Row>
-            <Row style={{ height: "48%", width: "100%" }}>
-              <Row
-                style={{
-                  height: "57.66px",
-                  width: "100%",
-                }}
-              >
-                <Title
-                  level={5}
-                  style={{
-                    margin: "0",
-                    textAlign: "center",
-                    width: "100%",
-                  }}
-                >
-                  Raphael Earl L. Salayog
-                </Title>
-              </Row>
-              <Row
-                style={{
-                  height: "95px",
-                }}
-              >
-                <Row
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <PhoneOutlined
-                    style={{ color: "#1677ff", marginRight: "8px" }}
-                  />
-                  <Text>(+63) 9451472698</Text>
-                </Row>
-                <Row
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <MailOutlined
-                    style={{ color: "#1677ff", marginRight: "8px" }}
-                  />
-                  <Text>rsalayog0199@gmail.com</Text>
-                </Row>
-                <Row
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <UserOutlined
-                    style={{ color: "#1677ff", marginRight: "8px" }}
-                  />
-                  <Text>Employee</Text>
-                </Row>
-              </Row>
-            </Row>
-          </Row>
+          {dataDb.map((item) => (
+            <UserCard user={item} />
+          ))}
         </Row>
         <AccountModal.AddAccountModal />
         {/* </SelectedDataProvider> */}
       </DrawerVisiblityProvider>
     </>
   );
+};
+
+export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  try {
+    const getToken = ctx.req.headers.cookie;
+    const token = getToken?.split("=")[1];
+    const response = await fetch("http://localhost:3000/users", {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    const data = await response.json();
+
+    const modifiedData = data.map((item: IUsers) => {
+      return {
+        ...item,
+        profilePicture: `http://localhost:3000/${item.profilePicture}`,
+      };
+    });
+
+    return {
+      props: {
+        dataDb: modifiedData,
+      },
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      props: {
+        dataDb: [],
+      },
+    };
+  }
 };
 
 export default Accounts;

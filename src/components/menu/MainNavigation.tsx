@@ -5,6 +5,7 @@ import {
   LaptopOutlined,
   LogoutOutlined,
   UploadOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Affix, Layout, Menu } from "antd";
 import style from "@/styles/mainNavigation.module.css";
@@ -12,11 +13,11 @@ import { useRouter } from "next/router";
 import logo from "@/assets/zyamuraLogo.svg";
 
 const items = [
-  {
-    key: "/dashboard",
-    icon: <DashboardOutlined />,
-    label: "Dashboard",
-  },
+  // {
+  //   key: "/dashboard",
+  //   icon: <DashboardOutlined />,
+  //   label: "Dashboard",
+  // },
   {
     key: "/inventory",
     icon: <DropboxOutlined />,
@@ -52,11 +53,11 @@ const items = [
   //   icon: <UploadOutlined />,
   //   label: "Activity Log",
   // },
-  // {
-  //   key: "/accounts",
-  //   icon: <UploadOutlined />,
-  //   label: "Accounts",
-  // },
+  {
+    key: "/accounts",
+    icon: <UserOutlined />,
+    label: "Accounts",
+  },
   {
     key: "/login",
     icon: <LogoutOutlined />,
