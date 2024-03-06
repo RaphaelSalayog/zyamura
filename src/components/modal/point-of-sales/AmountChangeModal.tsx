@@ -78,7 +78,7 @@ const AmountChangeModal = () => {
 
           const auth = localStorage.getItem("token");
 
-          await fetch("http://localhost:3000/transaction", {
+          const response = await fetch("http://localhost:3000/transaction", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -96,6 +96,7 @@ const AmountChangeModal = () => {
               },
             }),
           });
+          const id = await response.json();
 
           await fetch("http://localhost:3000/inventory/deductQuantity", {
             method: "PATCH",
@@ -108,7 +109,7 @@ const AmountChangeModal = () => {
 
           dispatch(removeOrder());
           dispatch(deductOrderedItems(orderedItem));
-          set(_id);
+          set(id);
           resetValues();
           receiptModal?.setVisible(true);
         } catch (err) {

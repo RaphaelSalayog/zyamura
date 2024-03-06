@@ -1,9 +1,8 @@
 import { Row } from "antd";
 import { addCommas, truncateString } from "./customMethods";
-import { useSelector } from "react-redux";
-import { useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
-import { Transaction } from "@/store/reducers/transactionSlice";
+import { ITransaction } from "@/common/model/transaction.model";
 
 const pdfDivider =
   "---------------------------------------------------------------------------------------------------------------------";
@@ -11,28 +10,62 @@ const modalDivider =
   "-----------------------------------------------------------------------------------------------------------";
 
 const ReceiptFormat = ({ type }: { type?: string }) => {
-  const transaction = useSelector(
-    (store: any) => store.transaction.transaction
-  );
+  // const transaction = useSelector(
+  //   (store: any) => store.transaction.transaction
+  // );
   const { get } = useContext(SelectedDataContext);
 
-  const [index, setIndex] = useState(0);
+  const [transactionData, setData] = useState<ITransaction>();
 
-  const transactionData: Transaction[] = useMemo(
-    () =>
-      transaction?.map((item: Transaction, index: number) => {
-        const data = item.transactionData.filter((value) => value._id === get);
+  const getTransactionById = useCallback(
+    async (_id: string) => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          "http://localhost:3000/transaction/" + _id,
+          {
+            method: "GET",
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
-        if (data) {
-          setIndex(index);
+        if (!response.ok) {
+          throw new Error("Failed to fetch transaction");
         }
-        return {
-          date: item.date,
-          transactionData: data,
-        };
-      }),
-    [get, transaction]
+
+        const data = await response.json();
+        console.log(data);
+        setData(data);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    [get]
   );
+
+  useEffect(() => {
+    getTransactionById(get);
+  }, [get]);
+
+  // const [index, setIndex] = useState(0);
+
+  // const transactionData: Transaction[] = useMemo(
+  //   () =>
+  //     transaction?.map((item: Transaction, index: number) => {
+  //       const data = item.transactionData.filter((value) => value._id === get);
+
+  //       if (data) {
+  //         setIndex(index);
+  //       }
+  //       return {
+  //         date: item.date,
+  //         transactionData: data,
+  //       };
+  //     }),
+  //   [get, transaction]
+  // );
 
   return (
     <>
@@ -72,11 +105,11 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           }}
         >
           <Row justify={"space-between"} style={{ width: "100%" }}>
-            <p>Date : {transactionData[index]?.date}</p>
-            <p>Time: {transactionData[index]?.transactionData[0]?.time}</p>
+            <p>Date : {transactionData?.date}</p>
+            <p>Time: {transactionData?.transactionData?.time}</p>
           </Row>
           <p>Sales Clerk : Raphael Salayog</p>
-          <p>Invoice No. : {transactionData[index]?.transactionData[0]?._id}</p>
+          <p>Invoice No. : {transactionData?.transactionData?._id}</p>
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>
         <Row style={{ padding: "0.5rem 1.5rem" }}>
@@ -95,29 +128,27 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
               Total Unit Cost
             </p>
           </Row>
-          {transactionData[index]?.transactionData[0]?.orderedItems.map(
-            (item) => (
-              <Row
-                key={item._id}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "2.7fr 0.5fr 0.8fr 1fr",
-                  width: "100%",
-                  wordWrap: "break-word",
-                }}
-              >
-                <p style={{ maxWidth: type === "modal" ? "280px" : "320px" }}>
-                  {truncateString(
-                    item.itemDetails.name,
-                    type === "modal" ? 77 : 87
-                  )}
-                </p>
-                <p style={{ textAlign: "center" }}>{item?.quantity}</p>
-                <p style={{ textAlign: "end" }}>{item?.price}</p>
-                <p style={{ textAlign: "end" }}>{item?.totalItemPrice}</p>
-              </Row>
-            )
-          )}
+          {transactionData?.transactionData?.orderedItems.map((item) => (
+            <Row
+              key={item._id}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "2.7fr 0.5fr 0.8fr 1fr",
+                width: "100%",
+                wordWrap: "break-word",
+              }}
+            >
+              <p style={{ maxWidth: type === "modal" ? "280px" : "320px" }}>
+                {truncateString(
+                  item.itemDetails.name,
+                  type === "modal" ? 77 : 87
+                )}
+              </p>
+              <p style={{ textAlign: "center" }}>{item?.quantity}</p>
+              <p style={{ textAlign: "end" }}>{item?.price}</p>
+              <p style={{ textAlign: "end" }}>{item?.totalItemPrice}</p>
+            </Row>
+          ))}
         </Row>
         <Row>{type === "modal" ? modalDivider : pdfDivider}</Row>
         <Row
@@ -136,10 +167,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p style={{ fontWeight: "bold" }}>TOTAL</p>
             <p style={{ fontWeight: "bold", textAlign: "end" }}>
-              ₱
-              {addCommas(
-                transactionData[index]?.transactionData[0]?.totalPrice
-              )}
+              ₱{addCommas(transactionData?.transactionData?.totalPrice)}
             </p>
           </Row>
           <Row
@@ -151,7 +179,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p>Cash</p>
             <p style={{ textAlign: "end" }}>
-              ₱{addCommas(transactionData[index]?.transactionData[0]?.cash)}
+              ₱{addCommas(transactionData?.transactionData?.cash)}
             </p>
           </Row>
           <Row
@@ -163,7 +191,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
           >
             <p>Change</p>
             <p style={{ textAlign: "end" }}>
-              ₱{addCommas(transactionData[index]?.transactionData[0]?.change)}
+              ₱{addCommas(transactionData?.transactionData?.change)}
             </p>
           </Row>
         </Row>
