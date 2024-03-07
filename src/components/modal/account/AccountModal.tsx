@@ -53,24 +53,26 @@ const AddAccountModal = () => {
   ];
 
   const submitHandler = (data: any) => {
-    if (activeTabKey === "user-authentication") {
-      // MongoDB
-      const formData = new FormData();
-      formData.append("firstName", data.firstName);
-      formData.append("lastName", data.lastName);
-      formData.append("address", data.address);
-      formData.append("phoneNumber", data.phoneNumber);
-      formData.append("email", data.email);
-      formData.append(
-        "birthDate",
-        moment(data.birthDate).format("MMM D, YYYY")
-      );
-      formData.append("role", data.role);
-      formData.append("username", data.username);
-      formData.append("password", data.password);
-      formData.append("profilePicture", data.profilePicture[0]);
+    // MongoDB
+    const formData = new FormData();
+    formData.append("firstName", data.firstName);
+    formData.append("lastName", data.lastName);
+    formData.append("address", data.address);
+    formData.append("phoneNumber", data.phoneNumber);
+    formData.append("email", data.email);
+    formData.append("birthDate", moment(data.birthDate).format("MMM D, YYYY"));
+    formData.append("role", data.role);
+    formData.append("username", data.username);
+    formData.append("password", data.password);
+    formData.append("profilePicture", data.profilePicture[0]);
 
-      const auth = localStorage.getItem("token");
+    const auth = localStorage.getItem("token");
+
+    if (edit?.visible) {
+      console.log("submit");
+    }
+
+    if (add?.visible && activeTabKey === "user-authentication") {
       fetch("http://localhost:3000/signup", {
         method: "POST",
         headers: {
@@ -92,7 +94,9 @@ const AddAccountModal = () => {
         })
         .catch((err) => console.log("error >>", err));
     } else {
-      nextHandler();
+      if (!edit?.visible) {
+        nextHandler();
+      }
     }
   };
 
@@ -175,7 +179,7 @@ const AddAccountModal = () => {
           <CustomAccountFormButton
             activeKey={activeTabKey}
             text={
-              activeTabKey === "personal-information"
+              activeTabKey === "personal-information" && !edit?.visible
                 ? "Next"
                 : edit?.visible
                 ? "Save"

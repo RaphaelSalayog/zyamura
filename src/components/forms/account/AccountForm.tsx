@@ -162,15 +162,17 @@ const UserInformation = ({
           </Radio.Group>
         </Form.Item>
 
-        <Button
-          icon={<KeyOutlined />}
-          style={{ width: "100%", marginBottom: "2rem" }}
-          onClick={() => {
-            nextHandler();
-          }}
-        >
-          Change Credentials
-        </Button>
+        {edit?.visible && (
+          <Button
+            icon={<KeyOutlined />}
+            style={{ width: "100%", marginBottom: "2rem", color: "#1677ff" }}
+            onClick={() => {
+              nextHandler();
+            }}
+          >
+            Change Credentials
+          </Button>
+        )}
       </Row>
     </>
   );

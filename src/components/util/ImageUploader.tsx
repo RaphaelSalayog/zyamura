@@ -42,7 +42,7 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
       setFileList([
         {
           uid: get._id,
-          name: get.name || `${get.firstName} ${get.lastName}`,
+          name: get.name || get.fullName,
           status: "done",
           url: get.imageUrl || get.profilePicture,
         },

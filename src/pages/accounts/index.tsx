@@ -9,12 +9,32 @@ import { GetServerSidePropsContext } from "next";
 import { IUsers } from "@/common/model/account.model";
 import useSelectedData from "@/common/hooks/useSelectedData";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
+import { useEffect, useState } from "react";
 
 const { Title } = Typography;
 
 const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
   const { add, edit, remove, view } = useDrawerVisibility();
   const { selectedData } = useSelectedData();
+
+  const [searchItemOnChange, setSearchItemOnChange] = useState("");
+  const [searchItemOnClick, setSearchItemOnClick] = useState("");
+  const [sortedAndSearchedItems, setSortedAndSearchedItems] =
+    useState<IUsers[]>();
+
+  useEffect(() => {
+    // filter the sorted items by search key
+    const sortedAndSearchedItem = dataDb.filter((items) => {
+      if (searchItemOnClick == "") {
+        return items.fullName
+          .toLowerCase()
+          .includes(searchItemOnChange.toLowerCase());
+      } else {
+        return items.fullName === searchItemOnClick;
+      }
+    });
+    setSortedAndSearchedItems(sortedAndSearchedItem);
+  }, [dataDb, searchItemOnChange, searchItemOnClick]);
 
   return (
     <>
@@ -24,10 +44,10 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
             <Title level={2}>ACCOUNTS</Title>
             <Row>
               <SearchBar
-                getValueOnChange={() => {}}
-                getValueOnClick={() => {}}
-                sortedAndSearchedItems={[]}
-                type="inventory"
+                getValueOnChange={setSearchItemOnChange}
+                getValueOnClick={setSearchItemOnClick}
+                sortedAndSearchedItems={sortedAndSearchedItems}
+                type="account"
               />
               <Button
                 type="primary"
@@ -50,8 +70,8 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
               position: "relative",
             }}
           >
-            {dataDb.map((item) => (
-              <UserCard user={item} />
+            {sortedAndSearchedItems?.map((item) => (
+              <UserCard key={item._id} user={item} />
             ))}
           </Row>
           <AccountModal.AddAccountModal />

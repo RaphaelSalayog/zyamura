@@ -34,7 +34,7 @@ const CustomAccountFormButton = ({
         {!(view?.visible && activeKey === "user-authentication") && (
           <Button
             icon={
-              activeKey !== "user-authentication" ? (
+              activeKey !== "user-authentication" && !edit?.visible ? (
                 <RightOutlined />
               ) : (
                 <SaveOutlined />

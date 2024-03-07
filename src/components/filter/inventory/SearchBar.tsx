@@ -4,12 +4,17 @@ import type { SelectProps } from "antd/es/select";
 import { inventoryInitialState } from "@/store/reducers/inventorySlice";
 import { IInventory } from "@/common/model/inventory.model";
 import { ITransactionModified } from "@/common/model/transaction.model";
+import { IUsers } from "@/common/model/account.model";
 
 interface SearchBar {
   getValueOnClick: (value: string) => void;
   getValueOnChange: (value: string) => void;
-  sortedAndSearchedItems?: IInventory[] | ITransactionModified[] | undefined;
-  type: "inventory" | "transaction";
+  sortedAndSearchedItems?:
+    | IInventory[]
+    | ITransactionModified[]
+    | IUsers[]
+    | undefined;
+  type: "inventory" | "transaction" | "account";
 }
 
 const SearchBar: React.FC<SearchBar> = ({
@@ -70,6 +75,25 @@ const SearchBar: React.FC<SearchBar> = ({
             });
           }
         });
+      });
+    }
+
+    if (type === "account") {
+      // To know if the item is duplicate. If it is, it will just increment the number
+      sortedAndSearchedItems?.map((item: IUsers) => {
+        const existingItem = array.find(
+          (existing) => existing.itemName === item.fullName
+        );
+
+        if (existingItem) {
+          existingItem.number += 1; // If item exists, increment the number
+        } else {
+          // If item doesn't exist, add a new object to the array
+          array.push({
+            itemName: item.fullName,
+            number: 1, // Assuming you start with 1 when adding a new item
+          });
+        }
       });
     }
 

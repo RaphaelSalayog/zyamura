@@ -94,7 +94,7 @@ const UserCard = ({ user }: { user: IUsers }) => {
                 width: "100%",
               }}
             >
-              {user.firstName + " " + user.lastName}
+              {user.fullName}
             </Title>
           </Row>
           <Row
