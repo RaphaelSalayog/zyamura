@@ -7,52 +7,55 @@ import useDrawerVisibility from "@/common/hooks/useDrawerVisiblity";
 import UserCard from "@/components/card/UserCard";
 import { GetServerSidePropsContext } from "next";
 import { IUsers } from "@/common/model/account.model";
+import useSelectedData from "@/common/hooks/useSelectedData";
+import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 
 const { Title } = Typography;
 
 const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
   const { add, edit, remove, view } = useDrawerVisibility();
+  const { selectedData } = useSelectedData();
 
   return (
     <>
       <DrawerVisiblityProvider value={{ add, edit, remove, view }}>
-        {/* <SelectedDataProvider value={{}}> */}
-        <Row justify={"space-between"}>
-          <Title level={2}>ACCOUNTS</Title>
-          <Row>
-            <SearchBar
-              getValueOnChange={() => {}}
-              getValueOnClick={() => {}}
-              sortedAndSearchedItems={[]}
-              type="inventory"
-            />
-            <Button
-              type="primary"
-              style={{ height: "40px", marginLeft: "10px" }}
-              onClick={() => {
-                add?.setVisible(true);
-              }}
-            >
-              Add Account
-            </Button>
+        <SelectedDataProvider value={selectedData}>
+          <Row justify={"space-between"}>
+            <Title level={2}>ACCOUNTS</Title>
+            <Row>
+              <SearchBar
+                getValueOnChange={() => {}}
+                getValueOnClick={() => {}}
+                sortedAndSearchedItems={[]}
+                type="inventory"
+              />
+              <Button
+                type="primary"
+                style={{ height: "40px", marginLeft: "10px" }}
+                onClick={() => {
+                  add?.setVisible(true);
+                }}
+              >
+                Add Account
+              </Button>
+            </Row>
           </Row>
-        </Row>
-        <Row
-          style={{
-            marginTop: "1rem",
-            height: "81vh",
-            overflowY: "auto",
-            display: "flex",
-            flexFlow: "row wrap",
-            position: "relative",
-          }}
-        >
-          {dataDb.map((item) => (
-            <UserCard user={item} />
-          ))}
-        </Row>
-        <AccountModal.AddAccountModal />
-        {/* </SelectedDataProvider> */}
+          <Row
+            style={{
+              marginTop: "1rem",
+              height: "81vh",
+              overflowY: "auto",
+              display: "flex",
+              flexFlow: "row wrap",
+              position: "relative",
+            }}
+          >
+            {dataDb.map((item) => (
+              <UserCard user={item} />
+            ))}
+          </Row>
+          <AccountModal.AddAccountModal />
+        </SelectedDataProvider>
       </DrawerVisiblityProvider>
     </>
   );

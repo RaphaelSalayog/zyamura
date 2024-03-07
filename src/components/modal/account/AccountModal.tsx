@@ -1,16 +1,18 @@
 import { AccountForm } from "@/components/forms/account/AccountForm";
 import CustomModal from "../CustomModal";
 import { Form, Tabs } from "antd";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 import CustomAccountFormButton from "@/components/forms/CustomAccountFormButton";
 import { capitalizeFirstLetter } from "@/components/util/customMethods";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { setIsUsernameExist } from "@/store/reducers/accountSlice";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 const AddAccountModal = () => {
-  const { add, edit, remove } = useContext(DrawerVisibilityContext);
+  const { add, edit, view } = useContext(DrawerVisibilityContext);
+  const { get, set } = useContext(SelectedDataContext);
   const dispatch = useDispatch();
   const [activeTabKey, setActiveTabKey] = useState("personal-information");
 
@@ -25,7 +27,7 @@ const AddAccountModal = () => {
     setActiveTabKey(items[index].key);
   };
 
-  const petImageHandler = (value: any) => {
+  const profilePictureHandler = (value: any) => {
     form.setFieldsValue({ profilePicture: value }); // To set the value of Form.Item from custom Dropdown component
   };
 
@@ -34,7 +36,10 @@ const AddAccountModal = () => {
       key: "personal-information",
       label: "Personal Information",
       children: (
-        <AccountForm.UserInformation petImageHandler={petImageHandler} />
+        <AccountForm.UserInformation
+          petImageHandler={profilePictureHandler}
+          nextHandler={nextHandler}
+        />
       ),
     },
     {
@@ -90,14 +95,47 @@ const AddAccountModal = () => {
       nextHandler();
     }
   };
+
+  useEffect(() => {
+    // Form setField for Edit and View
+    if (edit?.visible || view?.visible) {
+      if (get) {
+        form.setFieldsValue({
+          profilePicture: get.profilePicture,
+          firstName: get.firstName,
+          lastName: get.lastName,
+          address: get.address,
+          phoneNumber: get.phoneNumber,
+          email: get.email,
+          birthDate: moment(get.birthDate, "MM/DD/YYYY"),
+          username: get.credentials.username,
+          role: get.role,
+        });
+        profilePictureHandler(get.profilePicture);
+      }
+    }
+
+    // Clear form fields when closing modal
+    if (
+      !(edit?.visible || view?.visible) &&
+      !(edit?.visible || view?.visible)
+    ) {
+      // resetState();
+      form.resetFields();
+      set(null);
+    }
+  }, [get, edit?.visible, view?.visible, edit?.visible, view?.visible]);
+
   return (
     <>
       <CustomModal
         title={"Add New Account"}
-        open={add?.visible || edit?.visible || remove?.visible}
+        open={add?.visible || edit?.visible || view?.visible}
         width={550}
         onClose={() => {
           add?.setVisible(false);
+          edit?.setVisible(false);
+          view?.setVisible(false);
           form.resetFields();
           dispatch(setIsUsernameExist(false));
           setActiveTabKey(items[0].key);
@@ -139,6 +177,8 @@ const AddAccountModal = () => {
             text={
               activeTabKey === "personal-information"
                 ? "Next"
+                : edit?.visible
+                ? "Save"
                 : "Create Account"
             }
             prevHandler={prevHandler}

@@ -1,5 +1,7 @@
+import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 import { LeftOutlined, RightOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button, Row } from "antd";
+import { useContext } from "react";
 
 interface IFormButton {
   activeKey?: string;
@@ -16,6 +18,8 @@ const CustomAccountFormButton = ({
   nextHandler,
   confirmLoading,
 }: IFormButton) => {
+  const { add, edit, view } = useContext(DrawerVisibilityContext);
+
   return (
     <>
       <Row justify={"space-between"}>
@@ -26,21 +30,24 @@ const CustomAccountFormButton = ({
           icon={<LeftOutlined />}
           disabled={activeKey === "personal-information"}
         />
-        <Button
-          icon={
-            activeKey !== "user-authentication" ? (
-              <RightOutlined />
-            ) : (
-              <SaveOutlined />
-            )
-          }
-          // onClick={nextHandler}
-          type="primary"
-          htmlType="submit"
-          loading={confirmLoading}
-        >
-          {text}
-        </Button>
+
+        {!(view?.visible && activeKey === "user-authentication") && (
+          <Button
+            icon={
+              activeKey !== "user-authentication" ? (
+                <RightOutlined />
+              ) : (
+                <SaveOutlined />
+              )
+            }
+            // onClick={nextHandler}
+            type="primary"
+            htmlType="submit"
+            loading={confirmLoading}
+          >
+            {text}
+          </Button>
+        )}
       </Row>
     </>
   );

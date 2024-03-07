@@ -7,5 +7,6 @@ export interface IUsers {
   email: string;
   birthDate: string;
   role: string;
+  credentials: { username: string };
   profilePicture: string;
 }

@@ -1,14 +1,19 @@
+import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 import ImageUploader from "@/components/util/ImageUploader";
 import { setIsUsernameExist } from "@/store/reducers/accountSlice";
-import { DatePicker, Form, Input, Radio, Row } from "antd";
-import { useState } from "react";
+import { KeyOutlined } from "@ant-design/icons";
+import { Button, DatePicker, Form, Input, Radio, Row } from "antd";
+import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const UserInformation = ({
   petImageHandler,
+  nextHandler,
 }: {
   petImageHandler: (value: any) => void;
+  nextHandler: () => void;
 }) => {
+  const { add, edit, view } = useContext(DrawerVisibilityContext);
   const [role, setRole] = useState("");
   const [isFirstLetter, setIsFirstLetter] = useState(true);
 
@@ -23,10 +28,11 @@ const UserInformation = ({
           name="profilePicture"
           rules={[
             {
-              required: true,
+              required: view?.visible ? false : true,
               message: "Please upload an image.",
             },
           ]}
+          dependencies={["profilePicture"]}
         >
           <ImageUploader listType="picture-circle" getValue={petImageHandler} />
         </Form.Item>
@@ -35,26 +41,41 @@ const UserInformation = ({
         <Form.Item
           name="firstName"
           label="First Name"
-          rules={[{ required: true, message: "Please input your first name!" }]}
+          rules={[
+            {
+              required: view?.visible ? false : true,
+              message: "Please input your first name!",
+            },
+          ]}
           style={{ width: "48%" }}
         >
-          <Input allowClear /*readOnly={item?.view?.visible}*/ />
+          <Input allowClear readOnly={view?.visible} />
         </Form.Item>
         <Form.Item
           name="lastName"
           label="Last Name"
-          rules={[{ required: true, message: "Please input your last name!" }]}
+          rules={[
+            {
+              required: view?.visible ? false : true,
+              message: "Please input your last name!",
+            },
+          ]}
           style={{ width: "48%" }}
         >
-          <Input allowClear /*readOnly={item?.view?.visible}*/ />
+          <Input allowClear readOnly={view?.visible} />
         </Form.Item>
       </Row>
       <Form.Item
         name="address"
         label="Address"
-        rules={[{ required: true, message: "Please input your address!" }]}
+        rules={[
+          {
+            required: view?.visible ? false : true,
+            message: "Please input your address!",
+          },
+        ]}
       >
-        <Input allowClear /*readOnly={item?.view?.visible}*/ />
+        <Input allowClear readOnly={view?.visible} />
       </Form.Item>
 
       <Row justify={"space-between"}>
@@ -62,7 +83,10 @@ const UserInformation = ({
           name="phoneNumber"
           label="Phone Number"
           rules={[
-            { required: true, message: "Please input your phone number!" },
+            {
+              required: view?.visible ? false : true,
+              message: "Please input your phone number!",
+            },
             {
               min: 10,
               message: "Phone number must be at least 10 characters long",
@@ -91,42 +115,69 @@ const UserInformation = ({
               }
             }}
             maxLength={10}
+            allowClear
+            readOnly={view?.visible}
           />
         </Form.Item>
         <Form.Item
           name="email"
           label="Email"
-          rules={[{ required: true, message: "Please input your email!" }]}
+          rules={[
+            {
+              required: view?.visible ? false : true,
+              message: "Please input your email!",
+            },
+          ]}
           style={{ width: "48%" }}
         >
-          <Input type="email" allowClear /*readOnly={item?.view?.visible}*/ />
+          <Input type="email" allowClear readOnly={view?.visible} />
         </Form.Item>
       </Row>
       <Row justify={"space-between"}>
         <Form.Item
           name="birthDate"
           label="Birth Date"
-          rules={[{ required: true, message: "Please input your birth date!" }]}
+          rules={[
+            {
+              required: view?.visible ? false : true,
+              message: "Please input your birth date!",
+            },
+          ]}
           style={{ width: "48%" }}
         >
-          <DatePicker style={{ width: "100%" }} />
+          <DatePicker
+            style={{ width: "100%" }}
+            allowClear
+            disabled={view?.visible}
+          />
         </Form.Item>
         <Form.Item name="role" label="Job Position" style={{ width: "48%" }}>
           <Radio.Group
             onChange={onChange}
             value={role}
-            // disabled={pet?.view?.visible || item?.view?.visible}
+            disabled={view?.visible}
           >
             <Radio value={"employee"}>Employee</Radio>
             <Radio value={"admin"}>Admin</Radio>
           </Radio.Group>
         </Form.Item>
+
+        <Button
+          icon={<KeyOutlined />}
+          style={{ width: "100%", marginBottom: "2rem" }}
+          onClick={() => {
+            nextHandler();
+          }}
+        >
+          Change Credentials
+        </Button>
       </Row>
     </>
   );
 };
 
 const UserAuthentication = () => {
+  const { add, edit, view } = useContext(DrawerVisibilityContext);
   const isUsernameExist = useSelector(
     (store: any) => store.account.isUsernameExist
   );
@@ -142,18 +193,21 @@ const UserAuthentication = () => {
       >
         <Input
           allowClear
-          /*readOnly={item?.view?.visible}*/ onChange={() => {
+          readOnly={view?.visible}
+          onChange={() => {
             dispatch(setIsUsernameExist(false));
           }}
         />
       </Form.Item>
-      <Form.Item
-        name="password"
-        label="Password"
-        rules={[{ required: true, message: "Please input your password!" }]}
-      >
-        <Input.Password /*readOnly={item?.view?.visible}*/ />
-      </Form.Item>
+      {!view?.visible && (
+        <Form.Item
+          name="password"
+          label="Password"
+          rules={[{ required: true, message: "Please input your password!" }]}
+        >
+          <Input.Password /*readOnly={item?.view?.visible}*/ />
+        </Form.Item>
+      )}
     </>
   );
 };

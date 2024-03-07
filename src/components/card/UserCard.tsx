@@ -4,22 +4,34 @@ import { MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 import { DeleteTwoTone, EditTwoTone, EyeOutlined } from "@ant-design/icons";
 import Typography from "antd/es/typography";
 import { IUsers } from "@/common/model/account.model";
+import { useContext } from "react";
+import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
+import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 const { Title, Text } = Typography;
 
 const UserCard = ({ user }: { user: IUsers }) => {
+  const { edit, view } = useContext(DrawerVisibilityContext);
+  const { set } = useContext(SelectedDataContext);
+
   const items = [
     {
       key: "view",
       label: "View",
       icon: <EyeOutlined style={{ color: "#1677ff" }} />,
-      onClick: () => {},
+      onClick: () => {
+        view?.setVisible(true);
+        set(user);
+      },
     },
     {
       key: "edit",
       label: "Edit",
       icon: <EditTwoTone />,
-      onClick: () => {},
+      onClick: () => {
+        edit?.setVisible(true);
+        set(user);
+      },
     },
     {
       key: "delete",

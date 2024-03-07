@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Form, Input, InputNumber, Modal, Radio } from "antd";
+import { Form, Input, InputNumber, Modal, Radio, Row } from "antd";
 
 import DropdownMenu from "@/components/util/DropdownMenu";
 import TextArea from "antd/es/input/TextArea";
@@ -131,7 +131,7 @@ const AddPetForm = ({
   const petImageHandler = (value: any) => {
     setPetImage(value);
     setIsImageNotValid(value && false);
-    form.setFieldsValue({ petImage: value }); // To set the value of Form.Item from custom Dropdown component
+    form.setFieldsValue({ petImage: value }); // To set the value of Form.Item from custom Image Uploader component
   };
 
   // >>Radio Button
@@ -472,39 +472,41 @@ const AddPetForm = ({
             />
           </Form.Item>
         </div>
-        <Form.Item name="petType" label="Type">
-          <Radio.Group
-            onChange={onChange}
-            value={petType}
-            disabled={pet?.view?.visible || item?.view?.visible}
-          >
-            <Radio value={"unique"}>Unique</Radio>
-            <Radio value={"group"}>Group</Radio>
-          </Radio.Group>
-        </Form.Item>
-        {petType === "group" && (
-          <Form.Item
-            name="petQuantity"
-            label="Quantity"
-            style={{ width: "23%" }}
-            rules={[
-              {
-                required: pet?.view?.visible ? false : true,
-                message: "Please enter the quantity.",
-              },
-            ]}
-          >
-            <InputNumber
-              type="number"
-              min={0}
-              precision={0}
-              placeholder="0"
-              style={{ width: "100%" }}
-              onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
-              readOnly={pet?.view?.visible}
-            />
+        <Row justify={"space-between"} style={{ width: "49%" }}>
+          <Form.Item name="petType" label="Type" style={{ width: "47%" }}>
+            <Radio.Group
+              onChange={onChange}
+              value={petType}
+              disabled={pet?.view?.visible || item?.view?.visible}
+            >
+              <Radio value={"unique"}>Unique</Radio>
+              <Radio value={"group"}>Group</Radio>
+            </Radio.Group>
           </Form.Item>
-        )}
+          {petType === "group" && (
+            <Form.Item
+              name="petQuantity"
+              label="Quantity"
+              style={{ width: "47%" }}
+              rules={[
+                {
+                  required: pet?.view?.visible ? false : true,
+                  message: "Please enter the quantity.",
+                },
+              ]}
+            >
+              <InputNumber
+                type="number"
+                min={0}
+                precision={0}
+                placeholder="0"
+                style={{ width: "100%" }}
+                onKeyDown={(event) => onKeyDownTypeNumber(event, "quantity")}
+                readOnly={pet?.view?.visible}
+              />
+            </Form.Item>
+          )}
+        </Row>
         <Form.Item
           name="petImage"
           label="Image"

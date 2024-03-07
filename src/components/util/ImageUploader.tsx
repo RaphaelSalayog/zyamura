@@ -4,6 +4,7 @@ import { Upload } from "antd";
 import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
+import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 
 interface ImageUploader {
   listType: "picture-card" | "picture-circle";
@@ -12,6 +13,7 @@ interface ImageUploader {
 
 const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
   const { pet, item } = useContext(InventoryDrawerVisiblityContext);
+  const { add, edit, view } = useContext(DrawerVisibilityContext);
   const { get } = useContext(SelectedDataContext);
 
   const [fileList, setFileList] = useState<UploadFile[]>([
@@ -32,15 +34,17 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
       (pet?.edit?.visible ||
         pet?.view?.visible ||
         item?.edit?.visible ||
-        item?.view?.visible) &&
+        item?.view?.visible ||
+        edit?.visible ||
+        view?.visible) &&
       get
     ) {
       setFileList([
         {
           uid: get._id,
-          name: get.name,
+          name: get.name || `${get.firstName} ${get.lastName}`,
           status: "done",
-          url: get.imageUrl,
+          url: get.imageUrl || get.profilePicture,
         },
       ]);
     }
@@ -50,6 +54,8 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
     pet?.view?.visible,
     item?.edit?.visible,
     item?.view?.visible,
+    edit?.visible,
+    view?.visible,
   ]);
 
   useEffect(() => {
@@ -84,7 +90,7 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
           return false;
         }}
         maxCount={1}
-        disabled={pet?.view?.visible || item?.view?.visible}
+        disabled={pet?.view?.visible || item?.view?.visible || view?.visible}
         // onPreview={onPreview}
       >
         {fileList?.length < 1 && "+ Upload"}
