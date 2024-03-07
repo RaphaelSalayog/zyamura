@@ -1,6 +1,9 @@
 import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 import ImageUploader from "@/components/util/ImageUploader";
-import { setIsUsernameExist } from "@/store/reducers/accountSlice";
+import {
+  setIsChangeCredentials,
+  setIsUsernameExist,
+} from "@/store/reducers/accountSlice";
 import { KeyOutlined } from "@ant-design/icons";
 import { Button, DatePicker, Form, Input, Radio, Row } from "antd";
 import { useContext, useState } from "react";
@@ -16,6 +19,8 @@ const UserInformation = ({
   const { add, edit, view } = useContext(DrawerVisibilityContext);
   const [role, setRole] = useState("");
   const [isFirstLetter, setIsFirstLetter] = useState(true);
+
+  const dispatch = useDispatch();
 
   const onChange = (e: any) => {
     setRole(e.target.value);
@@ -167,6 +172,7 @@ const UserInformation = ({
             icon={<KeyOutlined />}
             style={{ width: "100%", marginBottom: "2rem", color: "#1677ff" }}
             onClick={() => {
+              dispatch(setIsChangeCredentials(true));
               nextHandler();
             }}
           >
@@ -202,13 +208,33 @@ const UserAuthentication = () => {
         />
       </Form.Item>
       {!view?.visible && (
-        <Form.Item
-          name="password"
-          label="Password"
-          rules={[{ required: true, message: "Please input your password!" }]}
-        >
-          <Input.Password /*readOnly={item?.view?.visible}*/ />
-        </Form.Item>
+        <>
+          <Form.Item
+            name={edit?.visible ? "oldPassword" : "password"}
+            label={edit?.visible ? "Old Password" : "Password"}
+            rules={[
+              {
+                required: true,
+                message: edit?.visible
+                  ? "Please input your old password!"
+                  : "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password /*readOnly={item?.view?.visible}*/ />
+          </Form.Item>
+          {edit?.visible && (
+            <Form.Item
+              name="newPassword"
+              label="New Password"
+              rules={[
+                { required: true, message: "Please input your new password!" },
+              ]}
+            >
+              <Input.Password /*readOnly={item?.view?.visible}*/ />
+            </Form.Item>
+          )}
+        </>
       )}
     </>
   );

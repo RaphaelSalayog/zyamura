@@ -10,6 +10,7 @@ import { IUsers } from "@/common/model/account.model";
 import useSelectedData from "@/common/hooks/useSelectedData";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import { useEffect, useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -50,7 +51,8 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
                 type="account"
               />
               <Button
-                type="primary"
+                type="default"
+                icon={<PlusOutlined />}
                 style={{ height: "40px", marginLeft: "10px" }}
                 onClick={() => {
                   add?.setVisible(true);

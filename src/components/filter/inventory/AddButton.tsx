@@ -25,8 +25,11 @@ const AddButton = () => {
   return (
     <>
       <Dropdown menu={{ items }} placement="bottom">
-        <Button style={{ height: "40px", marginLeft: "10px" }}>
-          <PlusOutlined /> Add Listing
+        <Button
+          icon={<PlusOutlined />}
+          style={{ height: "40px", marginLeft: "10px" }}
+        >
+          Add Listing
         </Button>
       </Dropdown>
     </>

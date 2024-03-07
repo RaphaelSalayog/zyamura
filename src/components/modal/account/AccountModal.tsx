@@ -6,8 +6,11 @@ import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 import CustomAccountFormButton from "@/components/forms/CustomAccountFormButton";
 import { capitalizeFirstLetter } from "@/components/util/customMethods";
 import moment from "moment";
-import { useDispatch } from "react-redux";
-import { setIsUsernameExist } from "@/store/reducers/accountSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setIsChangeCredentials,
+  setIsUsernameExist,
+} from "@/store/reducers/accountSlice";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 
 const AddAccountModal = () => {
@@ -21,6 +24,7 @@ const AddAccountModal = () => {
   const prevHandler = () => {
     const index = items.findIndex((item) => item.key === activeTabKey) - 1;
     setActiveTabKey(items[index].key);
+    dispatch(setIsChangeCredentials(false));
   };
   const nextHandler = () => {
     const index = items.findIndex((item) => item.key === activeTabKey) + 1;
@@ -87,6 +91,7 @@ const AddAccountModal = () => {
             dispatch(setIsUsernameExist(true));
           } else {
             dispatch(setIsUsernameExist(false));
+            dispatch(setIsChangeCredentials(false));
             add?.setVisible(false);
             setActiveTabKey(items[0].key);
             form.resetFields();
