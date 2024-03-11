@@ -5,13 +5,13 @@ import { DeleteTwoTone, EditTwoTone, EyeOutlined } from "@ant-design/icons";
 import Typography from "antd/es/typography";
 import { IUsers } from "@/common/model/account.model";
 import { useContext } from "react";
-import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
+import AccountDrawerVisibilityContext from "@/common/contexts/AccountDrawerVisibilityContext";
 
 const { Title, Text } = Typography;
 
 const UserCard = ({ user }: { user: IUsers }) => {
-  const { edit, view } = useContext(DrawerVisibilityContext);
+  const { edit, view } = useContext(AccountDrawerVisibilityContext);
   const { set } = useContext(SelectedDataContext);
 
   const items = [
@@ -28,10 +28,32 @@ const UserCard = ({ user }: { user: IUsers }) => {
       key: "edit",
       label: "Edit",
       icon: <EditTwoTone />,
-      onClick: () => {
-        edit?.setVisible(true);
-        set(user);
-      },
+      children: [
+        {
+          key: "user-information",
+          label: "User Information",
+          onClick: () => {
+            edit?.userInformation.setVisible(true);
+            set(user);
+          },
+        },
+        {
+          key: "username",
+          label: "Username",
+          onClick: () => {
+            edit?.username.setVisible(true);
+            set(user);
+          },
+        },
+        {
+          key: "password",
+          label: "Password",
+          onClick: () => {
+            edit?.password.setVisible(true);
+            set(user);
+          },
+        },
+      ],
     },
     {
       key: "delete",

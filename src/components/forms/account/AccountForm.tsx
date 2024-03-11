@@ -1,26 +1,19 @@
-import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
+import AccountDrawerVisibilityContext from "@/common/contexts/AccountDrawerVisibilityContext";
 import ImageUploader from "@/components/util/ImageUploader";
-import {
-  setIsChangeCredentials,
-  setIsUsernameExist,
-} from "@/store/reducers/accountSlice";
-import { KeyOutlined } from "@ant-design/icons";
-import { Button, DatePicker, Form, Input, Radio, Row } from "antd";
+import { setIsUsernameExist } from "@/store/reducers/accountSlice";
+import { DatePicker, Form, Input, Radio, Row } from "antd";
 import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const UserInformation = ({
-  petImageHandler,
-  nextHandler,
+  userImageHandler,
 }: {
-  petImageHandler: (value: any) => void;
+  userImageHandler: (value: any) => void;
   nextHandler: () => void;
 }) => {
-  const { add, edit, view } = useContext(DrawerVisibilityContext);
+  const { add, edit, view } = useContext(AccountDrawerVisibilityContext);
   const [role, setRole] = useState("");
   const [isFirstLetter, setIsFirstLetter] = useState(true);
-
-  const dispatch = useDispatch();
 
   const onChange = (e: any) => {
     setRole(e.target.value);
@@ -39,7 +32,10 @@ const UserInformation = ({
           ]}
           dependencies={["profilePicture"]}
         >
-          <ImageUploader listType="picture-circle" getValue={petImageHandler} />
+          <ImageUploader
+            listType="picture-circle"
+            getValue={userImageHandler}
+          />
         </Form.Item>
       </Row>
       <Row justify={"space-between"}>
@@ -166,74 +162,77 @@ const UserInformation = ({
             <Radio value={"admin"}>Admin</Radio>
           </Radio.Group>
         </Form.Item>
-
-        {edit?.visible && (
-          <Button
-            icon={<KeyOutlined />}
-            style={{ width: "100%", marginBottom: "2rem", color: "#1677ff" }}
-            onClick={() => {
-              dispatch(setIsChangeCredentials(true));
-              nextHandler();
-            }}
-          >
-            Change Credentials
-          </Button>
-        )}
       </Row>
     </>
   );
 };
 
 const UserAuthentication = () => {
-  const { add, edit, view } = useContext(DrawerVisibilityContext);
+  const { add, edit, view } = useContext(AccountDrawerVisibilityContext);
   const isUsernameExist = useSelector(
     (store: any) => store.account.isUsernameExist
   );
   const dispatch = useDispatch();
   return (
     <>
-      <Form.Item
-        name="username"
-        label="Username"
-        rules={[{ required: true, message: "Please input your username!" }]}
-        validateStatus={isUsernameExist ? "error" : ""}
-        help={isUsernameExist ? "Username already exist!" : undefined}
-      >
-        <Input
-          allowClear
-          readOnly={view?.visible}
-          onChange={() => {
-            dispatch(setIsUsernameExist(false));
-          }}
-        />
-      </Form.Item>
-      {!view?.visible && (
+      {(add?.visible || view?.visible || edit?.username.visible) && (
+        <Form.Item
+          name="username"
+          label="Username"
+          rules={[
+            {
+              required: view?.visible ? false : true,
+              message: "Please input your username!",
+            },
+          ]}
+          validateStatus={isUsernameExist ? "error" : ""}
+          help={isUsernameExist ? "Username already exist!" : undefined}
+        >
+          <Input
+            allowClear
+            readOnly={view?.visible}
+            onChange={() => {
+              dispatch(setIsUsernameExist(false));
+            }}
+          />
+        </Form.Item>
+      )}
+
+      {(add?.visible || edit?.password.visible) && (
         <>
           <Form.Item
-            name={edit?.visible ? "oldPassword" : "password"}
-            label={edit?.visible ? "Old Password" : "Password"}
+            name={edit?.password.visible ? "newPassword" : "password"}
+            label={edit?.password.visible ? "New Password" : "Password"}
             rules={[
               {
                 required: true,
-                message: edit?.visible
-                  ? "Please input your old password!"
+                message: edit?.userInformation.visible
+                  ? "Please input your new password!"
                   : "Please input your password!",
               },
             ]}
           >
             <Input.Password /*readOnly={item?.view?.visible}*/ />
           </Form.Item>
-          {edit?.visible && (
-            <Form.Item
-              name="newPassword"
-              label="New Password"
-              rules={[
-                { required: true, message: "Please input your new password!" },
-              ]}
-            >
-              <Input.Password /*readOnly={item?.view?.visible}*/ />
-            </Form.Item>
-          )}
+
+          <Form.Item
+            name={
+              edit?.password.visible ? "confirmNewPassword" : "confirmPassword"
+            }
+            label={
+              edit?.password.visible
+                ? "Confirm New Password"
+                : "Confirm Password"
+            }
+            rules={[
+              {
+                required: true,
+                message: "Please confirm your password!",
+              },
+            ]}
+          >
+            <Input.Password /*readOnly={item?.view?.visible}*/ />
+          </Form.Item>
         </>
       )}
     </>
@@ -241,3 +240,38 @@ const UserAuthentication = () => {
 };
 
 export const AccountForm = { UserInformation, UserAuthentication };
+
+// {(add?.visible || edit?.username.visible) && (
+//   <>
+//     <Form.Item
+//       name={
+//         edit?.userInformation.visible ? "oldPassword" : "password"
+//       }
+//       label={
+//         edit?.userInformation.visible ? "Old Password" : "Password"
+//       }
+//       rules={[
+//         {
+//           required: true,
+//           message: edit?.userInformation.visible
+//             ? "Please input your old password!"
+//             : "Please input your password!",
+//         },
+//       ]}
+//     >
+//       <Input.Password /*readOnly={item?.view?.visible}*/ />
+//     </Form.Item>
+
+//     {edit?.username.visible && (
+//       <Form.Item
+//         name="newPassword"
+//         label="New Password"
+//         rules={[
+//           { required: true, message: "Please input your new password!" },
+//         ]}
+//       >
+//         <Input.Password /*readOnly={item?.view?.visible}*/ />
+//       </Form.Item>
+//     )}
+//   </>
+// )}

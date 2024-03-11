@@ -2,8 +2,6 @@ import SearchBar from "@/components/filter/inventory/SearchBar";
 import { Button, Row } from "antd";
 import Typography from "antd/es/typography";
 import { AccountModal } from "@/components/modal/account/AccountModal";
-import { DrawerVisiblityProvider } from "@/common/contexts/DrawerVisibilityContext";
-import useDrawerVisibility from "@/common/hooks/useDrawerVisiblity";
 import UserCard from "@/components/card/UserCard";
 import { GetServerSidePropsContext } from "next";
 import { IUsers } from "@/common/model/account.model";
@@ -11,11 +9,13 @@ import useSelectedData from "@/common/hooks/useSelectedData";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
 import { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
+import { AccountDrawerVisiblityProvider } from "@/common/contexts/AccountDrawerVisibilityContext";
+import useAccountDrawerVisibility from "@/common/hooks/useAccountDrawerVisibility";
 
 const { Title } = Typography;
 
 const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
-  const { add, edit, remove, view } = useDrawerVisibility();
+  const { add, edit, remove, view } = useAccountDrawerVisibility();
   const { selectedData } = useSelectedData();
 
   const [searchItemOnChange, setSearchItemOnChange] = useState("");
@@ -39,7 +39,7 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
 
   return (
     <>
-      <DrawerVisiblityProvider value={{ add, edit, remove, view }}>
+      <AccountDrawerVisiblityProvider value={{ add, edit, remove, view }}>
         <SelectedDataProvider value={selectedData}>
           <Row justify={"space-between"}>
             <Title level={2}>ACCOUNTS</Title>
@@ -78,7 +78,7 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
           </Row>
           <AccountModal.AddAccountModal />
         </SelectedDataProvider>
-      </DrawerVisiblityProvider>
+      </AccountDrawerVisiblityProvider>
     </>
   );
 };

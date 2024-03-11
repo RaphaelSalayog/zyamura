@@ -4,6 +4,7 @@ import { Modal, Typography } from "antd";
 interface CustomModal {
   title: string;
   open?: boolean;
+  afterClose?: () => void;
   onClose?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   children?: React.ReactNode;
   style?: React.CSSProperties;
@@ -12,11 +13,12 @@ interface CustomModal {
   maskStyle?: React.CSSProperties;
 }
 
-const CustomModal: React.FC<any> = (props) => {
+const CustomModal: React.FC<CustomModal> = (props) => {
   return (
     <>
       <Modal
         closable
+        afterClose={props.afterClose}
         onCancel={props.onClose}
         open={props.open}
         footer={false}

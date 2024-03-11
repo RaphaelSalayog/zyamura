@@ -1,8 +1,7 @@
-import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
+import AccountDrawerVisibilityContext from "@/common/contexts/AccountDrawerVisibilityContext";
 import { LeftOutlined, RightOutlined, SaveOutlined } from "@ant-design/icons";
 import { Button, Row } from "antd";
 import { useContext } from "react";
-import { useSelector } from "react-redux";
 
 interface IFormButton {
   activeKey?: string;
@@ -16,43 +15,34 @@ const CustomAccountFormButton = ({
   activeKey,
   text,
   prevHandler,
-  nextHandler,
   confirmLoading,
 }: IFormButton) => {
-  const { add, edit, view } = useContext(DrawerVisibilityContext);
-  const isChangeCredentials = useSelector(
-    (store: any) => store.account.isChangeCredentials
-  );
+  const { add, edit, view } = useContext(AccountDrawerVisibilityContext);
 
   return (
     <>
-      <Row
-        justify={edit?.visible && isChangeCredentials ? "end" : "space-between"}
-      >
+      <Row justify={"space-between"}>
         <Row>
-          {(!edit?.visible || isChangeCredentials) && (
+          {add?.visible && (
             <Button
               type="default"
               onClick={prevHandler}
               style={{ marginRight: "8px" }}
-              icon={!(edit?.visible && isChangeCredentials) && <LeftOutlined />}
+              icon={<LeftOutlined />}
               disabled={activeKey === "personal-information"}
-            >
-              {edit?.visible && isChangeCredentials && "Cancel"}
-            </Button>
+            />
           )}
         </Row>
 
-        {!(view?.visible && activeKey === "user-authentication") && (
+        {!view?.visible && (
           <Button
             icon={
-              activeKey !== "user-authentication" && !edit?.visible ? (
+              activeKey !== "user-authentication" && add?.visible ? (
                 <RightOutlined />
               ) : (
                 <SaveOutlined />
               )
             }
-            // onClick={nextHandler}
             type="primary"
             htmlType="submit"
             loading={confirmLoading}

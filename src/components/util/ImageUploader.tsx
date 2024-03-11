@@ -5,6 +5,7 @@ import type { UploadFile, UploadProps } from "antd/es/upload/interface";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import DrawerVisibilityContext from "@/common/contexts/DrawerVisibilityContext";
+import AccountDrawerVisibilityContext from "@/common/contexts/AccountDrawerVisibilityContext";
 
 interface ImageUploader {
   listType: "picture-card" | "picture-circle";
@@ -13,7 +14,10 @@ interface ImageUploader {
 
 const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
   const { pet, item } = useContext(InventoryDrawerVisiblityContext);
-  const { add, edit, view } = useContext(DrawerVisibilityContext);
+  const { edit, view } = useContext(DrawerVisibilityContext);
+  const { edit: editAccount, view: viewAccount } = useContext(
+    AccountDrawerVisibilityContext
+  );
   const { get } = useContext(SelectedDataContext);
 
   const [fileList, setFileList] = useState<UploadFile[]>([
@@ -36,7 +40,9 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
         item?.edit?.visible ||
         item?.view?.visible ||
         edit?.visible ||
-        view?.visible) &&
+        view?.visible ||
+        viewAccount?.visible ||
+        editAccount?.userInformation.visible) &&
       get
     ) {
       setFileList([
@@ -90,7 +96,12 @@ const ImageUploader: React.FC<ImageUploader> = ({ listType, getValue }) => {
           return false;
         }}
         maxCount={1}
-        disabled={pet?.view?.visible || item?.view?.visible || view?.visible}
+        disabled={
+          pet?.view?.visible ||
+          item?.view?.visible ||
+          view?.visible ||
+          viewAccount?.visible
+        }
         // onPreview={onPreview}
       >
         {fileList?.length < 1 && "+ Upload"}

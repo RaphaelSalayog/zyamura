@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isUsernameExist: false,
-  isChangeCredentials: false,
 };
 
 const accountSlice = createSlice({
@@ -12,12 +11,8 @@ const accountSlice = createSlice({
     setIsUsernameExist: (state, { payload }) => {
       state.isUsernameExist = payload;
     },
-    setIsChangeCredentials: (state, { payload }) => {
-      state.isChangeCredentials = payload;
-    },
   },
 });
 
-export const { setIsUsernameExist, setIsChangeCredentials } =
-  accountSlice.actions;
+export const { setIsUsernameExist } = accountSlice.actions;
 export default accountSlice.reducer;
