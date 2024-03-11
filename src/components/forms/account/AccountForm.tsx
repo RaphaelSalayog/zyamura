@@ -1,6 +1,9 @@
 import AccountDrawerVisibilityContext from "@/common/contexts/AccountDrawerVisibilityContext";
 import ImageUploader from "@/components/util/ImageUploader";
-import { setIsUsernameExist } from "@/store/reducers/accountSlice";
+import {
+  setIsPassNotEqual,
+  setIsUsernameExist,
+} from "@/store/reducers/accountSlice";
 import { DatePicker, Form, Input, Radio, Row } from "antd";
 import { useContext, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -172,6 +175,10 @@ const UserAuthentication = () => {
   const isUsernameExist = useSelector(
     (store: any) => store.account.isUsernameExist
   );
+  const isPassNotEqual = useSelector(
+    (store: any) => store.account.isPassNotEqual
+  );
+
   const dispatch = useDispatch();
   return (
     <>
@@ -230,8 +237,17 @@ const UserAuthentication = () => {
                 message: "Please confirm your password!",
               },
             ]}
+            help={
+              isPassNotEqual ? (
+                <span style={{ color: "red" }}>Password does not match!</span>
+              ) : undefined
+            }
           >
-            <Input.Password /*readOnly={item?.view?.visible}*/ />
+            <Input.Password
+              onChange={() => {
+                dispatch(setIsPassNotEqual(false));
+              }} /*readOnly={item?.view?.visible}*/
+            />
           </Form.Item>
         </>
       )}

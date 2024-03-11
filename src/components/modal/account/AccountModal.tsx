@@ -1,16 +1,22 @@
 import { AccountForm } from "@/components/forms/account/AccountForm";
 import CustomModal from "../CustomModal";
 import { Form, Tabs } from "antd";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import CustomAccountFormButton from "@/components/forms/CustomAccountFormButton";
 import { capitalizeFirstLetter } from "@/components/util/customMethods";
 import moment from "moment";
-import { useDispatch } from "react-redux";
-import { setIsUsernameExist } from "@/store/reducers/accountSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setIsPassNotEqual,
+  setIsUsernameExist,
+} from "@/store/reducers/accountSlice";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import AccountDrawerVisibilityContext from "@/common/contexts/AccountDrawerVisibilityContext";
 
 const AddAccountModal = () => {
+  const isPassNotEqual = useSelector(
+    (store: any) => store.account.isPassNotEqual
+  );
   const { add, edit, view } = useContext(AccountDrawerVisibilityContext);
   const { get, set } = useContext(SelectedDataContext);
   const dispatch = useDispatch();
@@ -69,72 +75,97 @@ const AddAccountModal = () => {
     edit?.password.visible,
   ]);
 
-  const submitHandler = async (data: any) => {
-    // MongoDB
-    const auth = localStorage.getItem("token");
-    const formData = new FormData();
-    data.firstName && formData.append("firstName", data.firstName);
-    data.lastName && formData.append("lastName", data.lastName);
-    data.address && formData.append("address", data.address);
-    data.phoneNumber && formData.append("phoneNumber", data.phoneNumber);
-    data.email && formData.append("email", data.email);
-    data.birthDate &&
-      formData.append("birthDate", moment(data.birthDate).format("MM/DD/YYYY"));
-    data.firstName && formData.append("role", data.role);
-    data.username && formData.append("username", data.username);
-    data.password && formData.append("password", data.password);
-    // data.oldPassword && formData.append("oldPassword", data.oldPassword);
-    data.newPassword && formData.append("newPassword", data.newPassword);
-    data.firstName && formData.append("profilePicture", data.profilePicture[0]);
+  const submitHandler = useCallback(
+    async (data: any) => {
+      if (data.confirmPassword !== data.password) {
+        dispatch(setIsPassNotEqual(true));
+      } else if (data.confirmNewPassword !== data.newPassword) {
+        dispatch(setIsPassNotEqual(true));
+      } else {
+        console.log("submit");
+        // MongoDB
+        const auth = localStorage.getItem("token");
+        const formData = new FormData();
+        data.firstName && formData.append("firstName", data.firstName);
+        data.lastName && formData.append("lastName", data.lastName);
+        data.address && formData.append("address", data.address);
+        data.phoneNumber && formData.append("phoneNumber", data.phoneNumber);
+        data.email && formData.append("email", data.email);
+        data.birthDate &&
+          formData.append(
+            "birthDate",
+            moment(data.birthDate).format("MM/DD/YYYY")
+          );
+        data.firstName && formData.append("role", data.role);
+        data.username && formData.append("username", data.username);
+        data.password && formData.append("password", data.password);
+        // data.oldPassword && formData.append("oldPassword", data.oldPassword);
+        data.newPassword && formData.append("newPassword", data.newPassword);
+        data.firstName &&
+          formData.append("profilePicture", data.profilePicture[0]);
 
-    // if (edit?.visible) {
-    //   try {
-    //     const response = await fetch("http://localhost:3000/user/" + get._id, {
-    //       method: "PUT",
-    //       headers: {
-    //         Authorization: "Bearer " + auth,
-    //       },
-    //       body: formData,
-    //     });
-    //   } catch (err) {}
-    // }
+        // if (edit?.visible) {
+        //   try {
+        //     const response = await fetch("http://localhost:3000/user/" + get._id, {
+        //       method: "PUT",
+        //       headers: {
+        //         Authorization: "Bearer " + auth,
+        //       },
+        //       body: formData,
+        //     });
+        //   } catch (err) {}
+        // }
 
-    if (add?.visible && activeTabKey === "user-authentication") {
-      // try {
-      //   const response = await fetch("http://localhost:3000/signup", {
-      //     method: "POST",
-      //     headers: {
-      //       Authorization: "Bearer " + auth,
-      //     },
-      //     body: formData,
-      //   });
-      //   if (!response.ok) {
-      //     throw new Error("Failed to signup account.");
-      //   }
-      //   const data = await response.json();
-      //   // if username is already exist
-      //   if (data.statusCode === 409) {
-      //     dispatch(setIsUsernameExist(true));
-      //   } else {
-      //     dispatch(setIsUsernameExist(false));
-      //     add?.setVisible(false);
-      //     setActiveTabKey(items[0].key);
-      //     form.resetFields();
-      //   }
-      // } catch (err) {
-      //   console.log(err);
-      // }
-    } else if (edit?.userInformation.visible) {
-    } else if (edit?.username.visible) {
-    } else if (edit?.password.visible) {
-    } else {
-      nextHandler();
-    }
-  };
+        if (add?.visible && activeTabKey === "user-authentication") {
+          try {
+            const response = await fetch("http://localhost:3000/signup", {
+              method: "POST",
+              headers: {
+                Authorization: "Bearer " + auth,
+              },
+              body: formData,
+            });
+            if (!response.ok) {
+              throw new Error("Failed to signup account.");
+            }
+            const data = await response.json();
+            // if username is already exist
+            if (data.statusCode === 409) {
+              dispatch(setIsUsernameExist(true));
+            } else {
+              dispatch(setIsUsernameExist(false));
+              add?.setVisible(false);
+              setActiveTabKey(items[0].key);
+              form.resetFields();
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        } else if (edit?.userInformation.visible) {
+        } else if (edit?.username.visible) {
+        } else if (edit?.password.visible) {
+        } else {
+          nextHandler();
+        }
+      }
+    },
+    [
+      isPassNotEqual,
+      activeTabKey,
+      add?.visible,
+      edit?.userInformation.visible,
+      edit?.username.visible,
+      edit?.password.visible,
+    ]
+  );
 
   useEffect(() => {
     // Form setField for Edit and View
-    if (edit?.userInformation.visible || view?.visible) {
+    if (
+      edit?.userInformation.visible ||
+      edit?.username.visible ||
+      view?.visible
+    ) {
       if (get) {
         form.setFieldsValue({
           profilePicture: get.profilePicture,
@@ -191,6 +222,7 @@ const AddAccountModal = () => {
           edit?.password.setVisible(false);
           view?.setVisible(false);
           form.resetFields();
+          dispatch(setIsPassNotEqual(false));
           dispatch(setIsUsernameExist(false));
           setActiveTabKey(items[0].key);
         }}

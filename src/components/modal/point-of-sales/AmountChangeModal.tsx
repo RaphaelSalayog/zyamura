@@ -130,7 +130,7 @@ const AmountChangeModal = () => {
           setValue(null);
           setChange(0);
         }}
-        centered={"centered"}
+        centered={true}
       >
         <Row
           justify={"space-between"}
