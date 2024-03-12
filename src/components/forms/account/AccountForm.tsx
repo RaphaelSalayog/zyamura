@@ -1,6 +1,7 @@
 import AccountDrawerVisibilityContext from "@/common/contexts/AccountDrawerVisibilityContext";
 import ImageUploader from "@/components/util/ImageUploader";
 import {
+  setIsPassDoesNotMatch,
   setIsPassNotEqual,
   setIsUsernameExist,
 } from "@/store/reducers/accountSlice";
@@ -178,6 +179,9 @@ const UserAuthentication = () => {
   const isPassNotEqual = useSelector(
     (store: any) => store.account.isPassNotEqual
   );
+  const isPassDoesNotMatch = useSelector(
+    (store: any) => store.account.isPassDoesNotMatch
+  );
 
   const dispatch = useDispatch();
   return (
@@ -223,14 +227,23 @@ const UserAuthentication = () => {
               },
             ]}
             help={
-              isUsernameExist.isError ? (
+              isPassNotEqual.isError && !isPassDoesNotMatch.isError ? (
                 <span style={{ color: "red" }}>
-                  {isUsernameExist.errorMessage}
+                  {isPassNotEqual.errorMessage}
                 </span>
               ) : undefined
             }
           >
-            <Input.Password /*readOnly={item?.view?.visible}*/ />
+            <Input.Password
+              onChange={() => {
+                dispatch(
+                  setIsPassNotEqual({ isError: false, errorMessage: "" })
+                );
+                dispatch(
+                  setIsPassDoesNotMatch({ isError: false, errorMessage: "" })
+                );
+              }}
+            />
           </Form.Item>
 
           <Form.Item
@@ -249,9 +262,9 @@ const UserAuthentication = () => {
               },
             ]}
             help={
-              isPassNotEqual.isError ? (
+              isPassDoesNotMatch.isError ? (
                 <span style={{ color: "red" }}>
-                  {isPassNotEqual.errorMessage}
+                  {isPassDoesNotMatch.errorMessage}
                 </span>
               ) : undefined
             }
@@ -261,7 +274,10 @@ const UserAuthentication = () => {
                 dispatch(
                   setIsPassNotEqual({ isError: false, errorMessage: "" })
                 );
-              }} /*readOnly={item?.view?.visible}*/
+                dispatch(
+                  setIsPassDoesNotMatch({ isError: false, errorMessage: "" })
+                );
+              }}
             />
           </Form.Item>
         </>

@@ -1,4 +1,4 @@
-import { Button, Dropdown, Row } from "antd";
+import { Button, Dropdown, Modal, Row } from "antd";
 import style from "@/styles/userCard.module.css";
 import { MailOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 import { DeleteTwoTone, EditTwoTone, EyeOutlined } from "@ant-design/icons";
@@ -59,7 +59,38 @@ const UserCard = ({ user }: { user: IUsers }) => {
       key: "delete",
       label: "Delete",
       icon: <DeleteTwoTone twoToneColor={"red"} />,
-      onClick: () => {},
+      onClick: () => {
+        Modal.confirm({
+          title: "Confirm Deletion",
+          content: (
+            <>
+              <p>Are you sure you want to delete this user?</p>
+              <p>This action cannot be undone.</p>
+            </>
+          ),
+          onOk: async () => {
+            try {
+              const auth = localStorage.getItem("token");
+              const response = await fetch(
+                "http://localhost:3000/user/" + user._id,
+                {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: "Bearer " + auth,
+                  },
+                }
+              );
+
+              if (!response.ok) {
+                throw new Error("Failed to delete user!");
+              }
+            } catch (err) {
+              console.log(err);
+            }
+          },
+          centered: true,
+        });
+      },
     },
     // {
     //   key: "archive",

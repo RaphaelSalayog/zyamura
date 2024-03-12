@@ -9,6 +9,10 @@ const initialState = {
     isError: false,
     errorMessage: "",
   },
+  isPassDoesNotMatch: {
+    isError: false,
+    errorMessage: "",
+  },
 };
 
 const accountSlice = createSlice({
@@ -23,8 +27,13 @@ const accountSlice = createSlice({
       state.isPassNotEqual.isError = payload.isError;
       state.isPassNotEqual.errorMessage = payload.errorMessage;
     },
+    setIsPassDoesNotMatch: (state, { payload }) => {
+      state.isPassDoesNotMatch.isError = payload.isError;
+      state.isPassDoesNotMatch.errorMessage = payload.errorMessage;
+    },
   },
 });
 
-export const { setIsUsernameExist, setIsPassNotEqual } = accountSlice.actions;
+export const { setIsUsernameExist, setIsPassNotEqual, setIsPassDoesNotMatch } =
+  accountSlice.actions;
 export default accountSlice.reducer;
