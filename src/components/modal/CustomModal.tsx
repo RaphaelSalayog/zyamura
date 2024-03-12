@@ -2,7 +2,7 @@ import { CloseCircleFilled } from "@ant-design/icons";
 import { Modal, Typography } from "antd";
 
 interface CustomModal {
-  title: string;
+  title?: string;
   open?: boolean;
   afterClose?: () => void;
   onClose?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;

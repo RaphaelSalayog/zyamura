@@ -78,14 +78,24 @@ const AddAccountModal = () => {
   const submitHandler = useCallback(
     async (data: any) => {
       if (data.confirmPassword !== data.password) {
-        dispatch(setIsPassNotEqual(true));
+        dispatch(
+          setIsPassNotEqual({
+            isError: true,
+            errorMessage: "Password does not match!",
+          })
+        );
       } else if (data.confirmNewPassword !== data.newPassword) {
-        dispatch(setIsPassNotEqual(true));
+        dispatch(
+          setIsPassNotEqual({
+            isError: true,
+            errorMessage: "Password does not match!",
+          })
+        );
       } else {
-        console.log("submit");
         // MongoDB
         const auth = localStorage.getItem("token");
         const formData = new FormData();
+
         data.firstName && formData.append("firstName", data.firstName);
         data.lastName && formData.append("lastName", data.lastName);
         data.address && formData.append("address", data.address);
@@ -100,21 +110,14 @@ const AddAccountModal = () => {
         data.username && formData.append("username", data.username);
         data.password && formData.append("password", data.password);
         // data.oldPassword && formData.append("oldPassword", data.oldPassword);
-        data.newPassword && formData.append("newPassword", data.newPassword);
-        data.firstName &&
-          formData.append("profilePicture", data.profilePicture[0]);
-
-        // if (edit?.visible) {
-        //   try {
-        //     const response = await fetch("http://localhost:3000/user/" + get._id, {
-        //       method: "PUT",
-        //       headers: {
-        //         Authorization: "Bearer " + auth,
-        //       },
-        //       body: formData,
-        //     });
-        //   } catch (err) {}
-        // }
+        // data.newPassword && formData.append("newPassword", data.newPassword);
+        data.profilePicture &&
+          formData.append(
+            "profilePicture",
+            typeof data.profilePicture[0] === "object"
+              ? data.profilePicture[0]
+              : data.profilePicture[0].split("localhost:3000/")[1]
+          );
 
         if (add?.visible && activeTabKey === "user-authentication") {
           try {
@@ -125,25 +128,105 @@ const AddAccountModal = () => {
               },
               body: formData,
             });
-            if (!response.ok) {
-              throw new Error("Failed to signup account.");
-            }
+
             const data = await response.json();
             // if username is already exist
-            if (data.statusCode === 409) {
-              dispatch(setIsUsernameExist(true));
+            if (data.statusCode) {
+              dispatch(
+                setIsUsernameExist({
+                  isError: true,
+                  errorMessage: data.message,
+                })
+              );
             } else {
-              dispatch(setIsUsernameExist(false));
               add?.setVisible(false);
-              setActiveTabKey(items[0].key);
-              form.resetFields();
             }
           } catch (err) {
             console.log(err);
           }
         } else if (edit?.userInformation.visible) {
+          try {
+            const response = await fetch(
+              "http://localhost:3000/user/information/" + get._id,
+              {
+                method: "PUT",
+                headers: {
+                  Authorization: "Bearer " + auth,
+                },
+                body: formData,
+              }
+            );
+
+            const data = await response.json();
+
+            // if username is already exist
+            if (!data.statusCode) {
+              edit?.userInformation.setVisible(false);
+            }
+          } catch (err) {
+            console.log(err);
+          }
         } else if (edit?.username.visible) {
+          try {
+            const response = await fetch(
+              "http://localhost:3000/user/username/" + get._id,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + auth,
+                },
+                body: JSON.stringify(data),
+              }
+            );
+
+            const result = await response.json();
+
+            // if username is already exist
+            if (result.statusCode) {
+              dispatch(
+                setIsUsernameExist({
+                  isError: true,
+                  errorMessage: result.message,
+                })
+              );
+            } else {
+              edit?.username.setVisible(false);
+            }
+          } catch (err) {
+            console.log(err);
+          }
         } else if (edit?.password.visible) {
+          try {
+            const response = await fetch(
+              "http://localhost:3000/user/password/" + get._id,
+              {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + auth,
+                },
+                body: JSON.stringify({ newPassword: data.newPassword }),
+              }
+            );
+
+            const result = await response.json();
+            console.log(result);
+
+            // if username is already exist
+            if (result.statusCode) {
+              dispatch(
+                setIsPassNotEqual({
+                  isError: true,
+                  errorMessage: result.message,
+                })
+              );
+            } else {
+              edit?.password.setVisible(false);
+            }
+          } catch (err) {
+            console.log(err);
+          }
         } else {
           nextHandler();
         }
@@ -184,14 +267,30 @@ const AddAccountModal = () => {
 
     // Clear form fields when closing modal
     if (
-      !(edit?.userInformation.visible || view?.visible) &&
-      !(edit?.userInformation.visible || view?.visible)
+      !(
+        edit?.userInformation.visible ||
+        edit?.username.visible ||
+        edit?.password.visible ||
+        view?.visible
+      )
     ) {
-      // resetState();
+      setActiveTabKey(items[0].key);
       form.resetFields();
       set(null);
+      dispatch(
+        setIsUsernameExist({
+          isError: false,
+          errorMessage: "",
+        })
+      );
     }
-  }, [get, edit?.userInformation.visible, view?.visible]);
+  }, [
+    get,
+    edit?.userInformation.visible,
+    edit?.username.visible,
+    edit?.password.visible,
+    view?.visible,
+  ]);
 
   return (
     <>
@@ -223,7 +322,12 @@ const AddAccountModal = () => {
           view?.setVisible(false);
           form.resetFields();
           dispatch(setIsPassNotEqual(false));
-          dispatch(setIsUsernameExist(false));
+          dispatch(
+            setIsUsernameExist({
+              isError: false,
+              errorMessage: "",
+            })
+          );
           setActiveTabKey(items[0].key);
         }}
       >

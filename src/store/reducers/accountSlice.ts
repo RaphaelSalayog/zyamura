@@ -1,8 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  isUsernameExist: false,
-  isPassNotEqual: false,
+  isUsernameExist: {
+    isError: false,
+    errorMessage: "",
+  },
+  isPassNotEqual: {
+    isError: false,
+    errorMessage: "",
+  },
 };
 
 const accountSlice = createSlice({
@@ -10,10 +16,12 @@ const accountSlice = createSlice({
   initialState: initialState,
   reducers: {
     setIsUsernameExist: (state, { payload }) => {
-      state.isUsernameExist = payload;
+      state.isUsernameExist.isError = payload.isError;
+      state.isUsernameExist.errorMessage = payload.errorMessage;
     },
     setIsPassNotEqual: (state, { payload }) => {
-      state.isPassNotEqual = payload;
+      state.isPassNotEqual.isError = payload.isError;
+      state.isPassNotEqual.errorMessage = payload.errorMessage;
     },
   },
 });

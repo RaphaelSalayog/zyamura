@@ -12,8 +12,6 @@ import { useContext } from "react";
 import InventoryDrawerVisiblityContext from "@/common/contexts/InventoryDrawerVisibilityContext";
 import SelectedDataContext from "@/common/contexts/SelectedDataContext";
 import { useDispatch } from "react-redux";
-import { removeInventoryItem } from "@/store/reducers/inventorySlice";
-import { removeOrderItem } from "@/store/reducers/pointOfSalesSlice";
 import { IInventory } from "@/common/model/inventory.model";
 
 const { Text } = Typography;
@@ -25,7 +23,6 @@ interface IProps {
 const ItemCard: React.FC<IProps> = ({ data }) => {
   const { pet, item } = useContext(InventoryDrawerVisiblityContext);
   const { set } = useContext(SelectedDataContext);
-  const dispatch = useDispatch();
   const {
     name,
     quantity,

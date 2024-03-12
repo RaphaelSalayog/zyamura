@@ -99,7 +99,12 @@ const AddItemForm = ({
     formData.append("sellingPrice", newData.itemSellingPrice);
     formData.append("investmentCost", newData.itemInvestmentCost);
     formData.append("quantity", newData.itemQuantity);
-    formData.append("imageUrl", newData.itemImage[0]);
+    formData.append(
+      "imageUrl",
+      typeof newData.itemImage[0] === "object"
+        ? newData.itemImage[0]
+        : newData.itemImage[0].split("localhost:3000/")[1]
+    );
 
     const auth = localStorage.getItem("token");
 

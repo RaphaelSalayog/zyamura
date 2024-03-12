@@ -192,14 +192,18 @@ const UserAuthentication = () => {
               message: "Please input your username!",
             },
           ]}
-          validateStatus={isUsernameExist ? "error" : ""}
-          help={isUsernameExist ? "Username already exist!" : undefined}
+          validateStatus={isUsernameExist.isError ? "error" : ""}
+          help={
+            isUsernameExist.isError ? isUsernameExist.errorMessage : undefined
+          }
         >
           <Input
             allowClear
             readOnly={view?.visible}
             onChange={() => {
-              dispatch(setIsUsernameExist(false));
+              dispatch(
+                setIsUsernameExist({ isError: false, errorMessage: "" })
+              );
             }}
           />
         </Form.Item>
@@ -218,6 +222,13 @@ const UserAuthentication = () => {
                   : "Please input your password!",
               },
             ]}
+            help={
+              isUsernameExist.isError ? (
+                <span style={{ color: "red" }}>
+                  {isUsernameExist.errorMessage}
+                </span>
+              ) : undefined
+            }
           >
             <Input.Password /*readOnly={item?.view?.visible}*/ />
           </Form.Item>
@@ -238,14 +249,18 @@ const UserAuthentication = () => {
               },
             ]}
             help={
-              isPassNotEqual ? (
-                <span style={{ color: "red" }}>Password does not match!</span>
+              isPassNotEqual.isError ? (
+                <span style={{ color: "red" }}>
+                  {isPassNotEqual.errorMessage}
+                </span>
               ) : undefined
             }
           >
             <Input.Password
               onChange={() => {
-                dispatch(setIsPassNotEqual(false));
+                dispatch(
+                  setIsPassNotEqual({ isError: false, errorMessage: "" })
+                );
               }} /*readOnly={item?.view?.visible}*/
             />
           </Form.Item>
