@@ -114,7 +114,7 @@ const AddItemForm = ({
       await dispatch(addItem(newData));
 
       try {
-        const response = await fetch("http://localhost:3000/inventory", {
+        const response = await fetch(`${process.env.API_URL}/inventory`, {
           method: "POST",
           body: formData,
           headers: {
@@ -148,7 +148,7 @@ const AddItemForm = ({
 
           try {
             const response = await fetch(
-              "http://localhost:3000/inventory/" + get._id,
+              `${process.env.API_URL}/inventory/` + get._id,
               {
                 method: "PUT",
                 body: formData,

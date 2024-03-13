@@ -72,7 +72,7 @@ const UserCard = ({ user }: { user: IUsers }) => {
             try {
               const auth = localStorage.getItem("token");
               const response = await fetch(
-                "http://localhost:3000/user/" + user._id,
+                `${process.env.API_URL}/user/` + user._id,
                 {
                   method: "DELETE",
                   headers: {

@@ -78,7 +78,7 @@ const ItemCard: React.FC<IProps> = ({ data }) => {
             try {
               const auth = localStorage.getItem("token");
               const response = await fetch(
-                "http://localhost:3000/inventory/" + data._id,
+                `${process.env.API_URL}/inventory/` + data._id,
                 {
                   method: "DELETE",
                   headers: {

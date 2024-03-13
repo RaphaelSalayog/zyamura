@@ -70,7 +70,7 @@ const MainNavigation = () => {
   const selectHandler = (item: any) => {
     if (item.key === "/login") {
       const auth = localStorage.getItem("token");
-      fetch("http://localhost:3000/logout", {
+      fetch(`${process.env.API_URL}/logout`, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + auth,

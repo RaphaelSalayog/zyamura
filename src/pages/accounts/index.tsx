@@ -32,7 +32,7 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
   const addUser = useCallback((data: IUsers) => {
     const newDataSocket = {
       ...data,
-      profilePicture: "http://localhost:3000/" + data.profilePicture,
+      profilePicture: `${process.env.API_URL}/` + data.profilePicture,
     };
     setUsers((prevState) => {
       return [...prevState, newDataSocket];
@@ -42,7 +42,7 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
   const updateUserInformation = useCallback((data: IUsers) => {
     const newDataSocket = {
       ...data,
-      profilePicture: "http://localhost:3000/" + data.profilePicture,
+      profilePicture: `${process.env.API_URL}/` + data.profilePicture,
     };
     setUsers((prevState) => {
       const updateUser = [...prevState];
@@ -85,7 +85,7 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
   }, []);
 
   useEffect(() => {
-    const socket = openSocket("http://localhost:3000", {
+    const socket = openSocket(`${process.env.API_URL}`, {
       transports: ["websocket"],
     });
 
@@ -174,7 +174,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   try {
     const getToken = ctx.req.headers.cookie;
     const token = getToken?.split("=")[1];
-    const response = await fetch("http://localhost:3000/users", {
+    const response = await fetch(`${process.env.API_URL}/users`, {
       headers: {
         Authorization: "Bearer " + token,
       },
@@ -184,7 +184,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const modifiedData = data.map((item: IUsers) => {
       return {
         ...item,
-        profilePicture: `http://localhost:3000/${item.profilePicture}`,
+        profilePicture: `${process.env.API_URL}/${item.profilePicture}`,
       };
     });
 

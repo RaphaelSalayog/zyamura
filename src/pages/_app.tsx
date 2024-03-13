@@ -14,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const isAuth = useCallback(async () => {
     const auth = localStorage.getItem("token");
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch(`${process.env.API_URL}/login`, {
         headers: {
           Authorization: "Bearer " + auth,
         },

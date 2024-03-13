@@ -78,7 +78,7 @@ const AmountChangeModal = () => {
 
           const auth = localStorage.getItem("token");
 
-          const response = await fetch("http://localhost:3000/transaction", {
+          const response = await fetch(`${process.env.API_URL}/transaction`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -98,7 +98,7 @@ const AmountChangeModal = () => {
           });
           const id = await response.json();
 
-          await fetch("http://localhost:3000/inventory/deductQuantity", {
+          await fetch(`${process.env.API_URL}/inventory/deductQuantity`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",

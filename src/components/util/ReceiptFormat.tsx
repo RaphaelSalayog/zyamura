@@ -22,7 +22,7 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
       const token = localStorage.getItem("token");
       try {
         const response = await fetch(
-          "http://localhost:3000/transaction/" + _id,
+          `${process.env.API_URL}/transaction/` + _id,
           {
             method: "GET",
             headers: {

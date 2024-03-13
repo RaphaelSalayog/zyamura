@@ -122,7 +122,7 @@ const AddAccountModal = () => {
         if (add?.visible && activeTabKey === "user-authentication") {
           setIsLoading(true);
           try {
-            const response = await fetch("http://localhost:3000/signup", {
+            const response = await fetch(`${process.env.API_URL}/signup`, {
               method: "POST",
               headers: {
                 Authorization: "Bearer " + auth,
@@ -153,7 +153,7 @@ const AddAccountModal = () => {
             onOk: async () => {
               try {
                 const response = await fetch(
-                  "http://localhost:3000/user/information/" + get._id,
+                  `${process.env.API_URL}/user/information/` + get._id,
                   {
                     method: "PUT",
                     headers: {
@@ -182,7 +182,7 @@ const AddAccountModal = () => {
             onOk: async () => {
               try {
                 const response = await fetch(
-                  "http://localhost:3000/user/username/" + get._id,
+                  `${process.env.API_URL}/user/username/` + get._id,
                   {
                     method: "PUT",
                     headers: {
@@ -219,7 +219,7 @@ const AddAccountModal = () => {
             onOk: async () => {
               try {
                 const response = await fetch(
-                  "http://localhost:3000/user/password/" + get._id,
+                  `${process.env.API_URL}/user/password/` + get._id,
                   {
                     method: "PUT",
                     headers: {

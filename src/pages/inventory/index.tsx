@@ -73,7 +73,7 @@ const Inventory: React.FC<IProps> = ({ dataDb }) => {
   const addInventory = useCallback((data: IInventory) => {
     const newDataSocket = {
       ...data,
-      imageUrl: "http://localhost:3000/" + data.imageUrl,
+      imageUrl: `${process.env.API_URL}/` + data.imageUrl,
     };
     setInventory((prevState) => [...prevState, newDataSocket]);
   }, []);
@@ -81,7 +81,7 @@ const Inventory: React.FC<IProps> = ({ dataDb }) => {
   const updateInventory = useCallback((data: IInventory) => {
     const newDataSocket = {
       ...data,
-      imageUrl: "http://localhost:3000/" + data.imageUrl,
+      imageUrl: `${process.env.API_URL}/` + data.imageUrl,
     };
     setInventory((prevState) => {
       const updateInventory = [...prevState];
@@ -105,7 +105,7 @@ const Inventory: React.FC<IProps> = ({ dataDb }) => {
   }, []);
 
   useEffect(() => {
-    const socket = openSocket("http://localhost:3000", {
+    const socket = openSocket(`${process.env.API_URL}`, {
       transports: ["websocket"],
     });
 
@@ -221,7 +221,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     // We use context.req.headers.cookie to access the token from Express.js middleware. ( Check it in Controllers > auth.js > res.setHeader("Set-Cookie", `token=${token}; Max-Age=${60 * 60 * 24}; HttpOnly; Secure;`); )
     const getToken = ctx.req.headers.cookie;
     const token = getToken?.split("=")[1];
-    const response = await fetch("http://localhost:3000/inventory", {
+    const response = await fetch(`${process.env.API_URL}/inventory`, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
@@ -235,7 +235,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
     const data = await response.json();
 
     const modifiedData = data.map((item: IInventory) => {
-      return { ...item, imageUrl: `http://localhost:3000/${item.imageUrl}` };
+      return { ...item, imageUrl: `${process.env.API_URL}/${item.imageUrl}` };
     });
 
     return {

@@ -58,9 +58,14 @@ const Transaction: React.FC<{ dataDb: ITransactionModified[] }> = ({
         transactionData: filteredData,
       };
     });
-    setSortedAndSearchedItems(sortedAndSearchedItem);
-  }, [transaction, searchItemOnChange, searchItemOnClick]);
 
+    const filterData = sortedAndSearchedItem.filter(
+      (item) => item.transactionData.length !== 0
+    );
+    setSortedAndSearchedItems(filterData);
+  }, [dataDb, transaction, searchItemOnChange, searchItemOnClick]);
+
+  const transactionExist = sortedAndSearchedItems?.length === 0;
   return (
     <PosModalVisibilityProvider value={{ receiptModal }}>
       <SelectedDataProvider value={selectedData}>
@@ -75,88 +80,69 @@ const Transaction: React.FC<{ dataDb: ITransactionModified[] }> = ({
             />
           </Row>
         </Row>
-        {sortedAndSearchedItems?.map((item) => (
-          <Row
-            key={item.date}
-            style={{
-              width: "100%",
-              height: "81vh",
-              marginTop: "1rem",
-              display: item.transactionData.length === 0 ? "flex" : "start",
-              justifyContent:
-                item.transactionData.length === 0 ? "center" : "start",
-              alignContent:
-                item.transactionData.length === 0 ? "center" : "start",
-              overflowY: "auto",
-            }}
-          >
-            {item.transactionData.length > 0 ? (
-              <Row style={{ width: "99.5%", marginBottom: "1.5rem" }}>
-                <Row
+
+        <Row
+          style={{
+            width: "100%",
+            height: "81vh",
+            marginTop: "1rem",
+            display: transactionExist ? "flex" : "start",
+            justifyContent: transactionExist ? "center" : "start",
+            alignContent: transactionExist ? "center" : "start",
+            overflowY: "auto",
+          }}
+        >
+          {sortedAndSearchedItems?.map((item) => (
+            <Row
+              key={item.date}
+              style={{ width: "99.5%", marginBottom: "1.5rem" }}
+            >
+              <Row
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                  marginBottom: "1rem",
+                }}
+              >
+                <p
                   style={{
-                    display: "flex",
-                    width: "100%",
-                    justifyContent: "space-between",
-                    marginBottom: "1rem",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    color: "#0958d9",
                   }}
                 >
-                  <p
-                    style={{
-                      fontSize: "1rem",
-                      fontWeight: "bold",
-                      color: "#0958d9",
-                    }}
-                  >
-                    {moment(item.date, "M/D/YYYY").format("MMM D, YYYY")}
-                  </p>
-                  <p
-                    style={{
-                      fontSize: "1rem",
-                      fontWeight: "bold",
-                      color: "#237804",
-                    }}
-                  >
-                    ₱{addCommas(item.totalPricePerDay)}
-                  </p>
-                </Row>
-                <Row
+                  {moment(item.date, "M/D/YYYY").format("MMM D, YYYY")}
+                </p>
+                <p
                   style={{
-                    width: "100%",
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    color: "#237804",
                   }}
                 >
-                  {item.transactionData.map((value) => (
-                    <TransactionCard key={value._id} data={value} />
-                  ))}
-                </Row>
+                  ₱{addCommas(item.totalPricePerDay)}
+                </p>
               </Row>
-            ) : (
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                style={{ marginBottom: "100px" }}
-              />
-            )}
-          </Row>
-        ))}
-        {sortedAndSearchedItems?.length === 0 && (
-          <Row
-            style={{
-              width: "100%",
-              height: "81vh",
-              marginTop: "1rem",
-              display: sortedAndSearchedItems?.length === 0 ? "flex" : "start",
-              justifyContent:
-                sortedAndSearchedItems?.length === 0 ? "center" : "start",
-              alignContent:
-                sortedAndSearchedItems?.length === 0 ? "center" : "start",
-              overflowY: "auto",
-            }}
-          >
+              <Row
+                style={{
+                  width: "100%",
+                }}
+              >
+                {item.transactionData.map((value) => (
+                  <TransactionCard key={value._id} data={value} />
+                ))}
+              </Row>
+            </Row>
+          ))}
+
+          {sortedAndSearchedItems?.length === 0 && (
             <Empty
               image={Empty.PRESENTED_IMAGE_SIMPLE}
               style={{ marginBottom: "100px" }}
             />
-          </Row>
-        )}
+          )}
+        </Row>
         <ReceiptModal />
       </SelectedDataProvider>
     </PosModalVisibilityProvider>
@@ -167,7 +153,7 @@ export const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
   try {
     const getToken = ctx.req.headers.cookie;
     const token = getToken?.split("=")[1];
-    const response = await fetch("http://localhost:3000/transaction", {
+    const response = await fetch(`${process.env.API_URL}/transaction`, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + token,
