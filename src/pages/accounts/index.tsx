@@ -4,17 +4,23 @@ import Typography from "antd/es/typography";
 import { AccountModal } from "@/components/modal/account/AccountModal";
 import UserCard from "@/components/card/UserCard";
 import { GetServerSidePropsContext } from "next";
-import { IUsers } from "@/common/model/account.model";
+import {
+  ISocketUser,
+  IUsers,
+  IUsersUsername,
+} from "@/common/model/account.model";
 import useSelectedData from "@/common/hooks/useSelectedData";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { AccountDrawerVisiblityProvider } from "@/common/contexts/AccountDrawerVisibilityContext";
 import useAccountDrawerVisibility from "@/common/hooks/useAccountDrawerVisibility";
+import openSocket from "socket.io-client";
 
 const { Title } = Typography;
 
 const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
+  const [users, setUsers] = useState(dataDb);
   const { add, edit, remove, view } = useAccountDrawerVisibility();
   const { selectedData } = useSelectedData();
 
@@ -23,9 +29,90 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
   const [sortedAndSearchedItems, setSortedAndSearchedItems] =
     useState<IUsers[]>();
 
+  const addUser = useCallback((data: IUsers) => {
+    const newDataSocket = {
+      ...data,
+      profilePicture: "http://localhost:3000/" + data.profilePicture,
+    };
+    setUsers((prevState) => {
+      return [...prevState, newDataSocket];
+    });
+  }, []);
+
+  const updateUserInformation = useCallback((data: IUsers) => {
+    const newDataSocket = {
+      ...data,
+      profilePicture: "http://localhost:3000/" + data.profilePicture,
+    };
+    setUsers((prevState) => {
+      const updateUser = [...prevState];
+      const index = updateUser.findIndex((item) => item._id === data._id);
+      if (index > -1) {
+        updateUser[index] = {
+          ...newDataSocket,
+          credentials: updateUser[index].credentials,
+        };
+      }
+      return updateUser;
+    });
+  }, []);
+
+  const updateUserUsername = useCallback((data: IUsersUsername) => {
+    setUsers((prevState) => {
+      const updateUser = [...prevState];
+      const index = updateUser.findIndex((item) => item._id === data._id);
+      if (index > -1) {
+        updateUser[index] = {
+          ...updateUser[index],
+          credentials: {
+            username: data.username,
+          },
+        };
+      }
+      return updateUser;
+    });
+  }, []);
+
+  const deleteUser = useCallback((data: string) => {
+    setUsers((prevState) => {
+      const updateUser = [...prevState];
+      const index = updateUser.findIndex((item) => item._id === data);
+      if (index > -1) {
+        updateUser.splice(index, 1);
+      }
+      return updateUser;
+    });
+  }, []);
+
+  useEffect(() => {
+    const socket = openSocket("http://localhost:3000", {
+      transports: ["websocket"],
+    });
+
+    const socketHandler = (socketData: ISocketUser) => {
+      if (socketData.action === "create") {
+        addUser(socketData.users);
+      }
+      if (socketData.action === "update information") {
+        updateUserInformation(socketData.users);
+      }
+      if (socketData.action === "update username") {
+        updateUserUsername(socketData.users);
+      }
+      if (socketData.action === "delete") {
+        deleteUser(socketData.users);
+      }
+    };
+
+    socket.on("user", socketHandler);
+    return () => {
+      socket.off("user", socketHandler);
+    };
+  }, []);
+
   useEffect(() => {
     // filter the sorted items by search key
-    const sortedAndSearchedItem = dataDb.filter((items) => {
+    const sortedAndSearchedItem = users.filter((items) => {
       if (searchItemOnClick == "") {
         return items.fullName
           .toLowerCase()
@@ -35,7 +122,7 @@ const Accounts: React.FC<{ dataDb: IUsers[] }> = ({ dataDb }) => {
       }
     });
     setSortedAndSearchedItems(sortedAndSearchedItem);
-  }, [dataDb, searchItemOnChange, searchItemOnClick]);
+  }, [users, searchItemOnChange, searchItemOnClick]);
 
   return (
     <>

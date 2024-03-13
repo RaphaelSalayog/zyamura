@@ -22,6 +22,7 @@ const AddAccountModal = () => {
   const { get, set } = useContext(SelectedDataContext);
   const dispatch = useDispatch();
   const [activeTabKey, setActiveTabKey] = useState("personal-information");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [form] = Form.useForm();
 
@@ -119,6 +120,7 @@ const AddAccountModal = () => {
           );
 
         if (add?.visible && activeTabKey === "user-authentication") {
+          setIsLoading(true);
           try {
             const response = await fetch("http://localhost:3000/signup", {
               method: "POST",
@@ -143,6 +145,7 @@ const AddAccountModal = () => {
           } catch (err) {
             console.log(err);
           }
+          setIsLoading(false);
         } else if (edit?.userInformation.visible) {
           Modal.confirm({
             title: "Confirm Update",
@@ -288,6 +291,7 @@ const AddAccountModal = () => {
     // Clear form fields when closing modal
     if (
       !(
+        add?.visible ||
         edit?.userInformation.visible ||
         edit?.username.visible ||
         edit?.password.visible ||
@@ -306,6 +310,7 @@ const AddAccountModal = () => {
     }
   }, [
     get,
+    add?.visible,
     edit?.userInformation.visible,
     edit?.username.visible,
     edit?.password.visible,
@@ -396,7 +401,7 @@ const AddAccountModal = () => {
                   : "Create Account"
               }
               prevHandler={prevHandler}
-              confirmLoading={false}
+              confirmLoading={isLoading}
             />
           )}
         </Form>

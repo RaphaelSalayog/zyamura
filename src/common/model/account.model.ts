@@ -11,3 +11,13 @@ export interface IUsers {
   credentials: { username: string };
   profilePicture: string;
 }
+
+export interface ISocketUser {
+  action: string;
+  users: any;
+}
+
+export interface IUsersUsername {
+  _id: string;
+  username: string;
+}
