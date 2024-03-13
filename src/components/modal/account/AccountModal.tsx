@@ -231,7 +231,6 @@ const AddAccountModal = () => {
                 );
 
                 const result = await response.json();
-                console.log(result);
 
                 // if username is already exist
                 if (result.statusCode) {

@@ -36,7 +36,6 @@ const ReceiptFormat = ({ type }: { type?: string }) => {
         }
 
         const data = await response.json();
-        console.log(data);
         setData(data);
       } catch (err) {
         console.log(err);

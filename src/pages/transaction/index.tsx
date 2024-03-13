@@ -2,8 +2,6 @@ import TransactionCard from "@/components/card/TransactionCard";
 import SearchBar from "@/components/filter/inventory/SearchBar";
 import { Empty, Row } from "antd";
 import Title from "antd/es/typography/Title";
-import { useSelector } from "react-redux";
-import { Transaction } from "@/store/reducers/transactionSlice";
 import { addCommas } from "@/components/util/customMethods";
 import moment from "moment";
 import { SelectedDataProvider } from "@/common/contexts/SelectedDataContext";
@@ -11,23 +9,26 @@ import useSelectedData from "@/common/hooks/useSelectedData";
 import ReceiptModal from "@/components/modal/point-of-sales/ReceiptModal";
 import { PosModalVisibilityProvider } from "@/common/contexts/PosModalVisibilityContext";
 import useModalVisibility from "@/common/hooks/useModalVisibility";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GetServerSidePropsContext } from "next";
 import {
+  ISocketTransaction,
   ITransaction,
   ITransactionModified,
 } from "@/common/model/transaction.model";
+import openSocket from "socket.io-client";
 
 const Transaction: React.FC<{ dataDb: ITransactionModified[] }> = ({
   dataDb,
 }) => {
-  const transaction: Transaction[] = useSelector(
-    (store: any) => store.transaction.transaction
-  );
+  // const transaction: Transaction[] = useSelector(
+  //   (store: any) => store.transaction.transaction
+  // );
 
   const { receiptModal } = useModalVisibility();
   const { selectedData } = useSelectedData();
 
+  const [transaction, setTransaction] = useState(dataDb);
   const [searchItemOnChange, setSearchItemOnChange] = useState("");
   const [searchItemOnClick, setSearchItemOnClick] = useState("");
   const [sortedAndSearchedItems, setSortedAndSearchedItems] =
@@ -41,9 +42,47 @@ const Transaction: React.FC<{ dataDb: ITransactionModified[] }> = ({
     setSearchItemOnClick(value);
   };
 
+  const addTransaction = useCallback((data: ITransaction) => {
+    setTransaction((prevState) => {
+      const updateTransaction = [...prevState];
+      const index = updateTransaction.findIndex(
+        (item) => item.date === data.date
+      );
+      if (index > -1) {
+        updateTransaction[index].transactionData.push(data.transactionData);
+        updateTransaction[index].totalPricePerDay +=
+          data.transactionData.totalPrice;
+      } else {
+        prevState.push({
+          ...data,
+          totalPricePerDay: data.transactionData.totalPrice,
+          transactionData: [data.transactionData],
+        });
+      }
+      return updateTransaction;
+    });
+  }, []);
+
+  useEffect(() => {
+    const socket = openSocket(`${process.env.API_URL}`, {
+      transports: ["websocket"],
+    });
+
+    const socketHandler = (data: ISocketTransaction) => {
+      if (data.action === "create") {
+        addTransaction(data.transaction);
+      }
+    };
+
+    socket.on("transaction", socketHandler);
+    return () => {
+      socket.off("transaction");
+    };
+  }, []);
+
   useEffect(() => {
     // filter the sorted items by search key
-    const sortedAndSearchedItem = dataDb.map((items) => {
+    const sortedAndSearchedItem = transaction.map((items) => {
       const filteredData = items.transactionData.filter((value) => {
         if (searchItemOnClick == "") {
           return value._id
@@ -63,7 +102,7 @@ const Transaction: React.FC<{ dataDb: ITransactionModified[] }> = ({
       (item) => item.transactionData.length !== 0
     );
     setSortedAndSearchedItems(filterData);
-  }, [dataDb, transaction, searchItemOnChange, searchItemOnClick]);
+  }, [transaction, searchItemOnChange, searchItemOnClick]);
 
   const transactionExist = sortedAndSearchedItems?.length === 0;
   return (

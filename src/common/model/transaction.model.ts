@@ -29,3 +29,8 @@ export interface ITransactionModified {
   totalPricePerDay: number;
   transactionData: TransactionData[];
 }
+
+export interface ISocketTransaction {
+  action: string;
+  transaction: any;
+}
