@@ -116,7 +116,7 @@ const AddAccountModal = () => {
             "profilePicture",
             typeof data.profilePicture[0] === "object"
               ? data.profilePicture[0]
-              : data.profilePicture[0].split("localhost:3000/")[1]
+              : data.profilePicture[0].split(`${process.env.API_URL}/`)[1]
           );
 
         if (add?.visible && activeTabKey === "user-authentication") {

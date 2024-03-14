@@ -187,7 +187,7 @@ const AddPetForm = ({
       "imageUrl",
       typeof newData.petImage[0] === "object"
         ? newData.petImage[0]
-        : newData.petImage[0].split("localhost:3000/")[1]
+        : newData.petImage[0].split(`${process.env.API_URL}/`)[1]
     );
 
     const auth = localStorage.getItem("token");
