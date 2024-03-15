@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }: AppProps) {
           router.pathname === "/" ||
           router.pathname === "/login"
         ) {
-          router.push("/dashboard").then(() => {
+          router.push("/inventory").then(() => {
             setHasMounted(true);
           });
         } else {

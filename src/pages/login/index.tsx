@@ -19,14 +19,14 @@ const Login = () => {
             justifyContent: "center",
           }}
         >
-          <div style={{ position: "absolute", left: "1rem", top: "1rem" }}>
+          {/* <div style={{ position: "absolute", left: "1rem", top: "1rem" }}>
             <p>
               <strong>Username:</strong> zyamura
             </p>
             <p>
               <strong>Password:</strong> zyamura
             </p>
-          </div>
+          </div> */}
           <LoginForms />
         </Col>
       </Row>

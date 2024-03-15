@@ -48,7 +48,7 @@ const LoginForms = () => {
         localStorage.setItem("username", data.username);
         localStorage.setItem("user", data.user);
         localStorage.setItem("role", data.role);
-        router.push("/dashboard").then(() => {
+        router.push("/inventory").then(() => {
           setIsLoading(false);
         });
       } else {
@@ -120,7 +120,7 @@ const LoginForms = () => {
               setIsPasswordError(false);
               setUsername(event.target.value);
             }}
-            placeholder="zyamura"
+            // placeholder="zyamura"
             style={{ borderRadius: "0px" }}
           />
         </Form.Item>
@@ -138,7 +138,7 @@ const LoginForms = () => {
               setIsPasswordError(false);
               setPassword(event.target.value);
             }}
-            placeholder="zyamura"
+            // placeholder="zyamura"
             style={{ borderRadius: "0px" }}
           />
         </Form.Item>
